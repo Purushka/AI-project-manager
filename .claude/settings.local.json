@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"D:\\\\github repositories\\\\AI_pm\\\\ai-pm-skills\\\\skills\\\\ai-pm-core\\\\scripts\" \"D:\\\\github repositories\\\\AI_pm\\\\ai-pm-skills\\\\skills\\\\ai-pm-decomposer\\\\scripts\" \"D:\\\\github repositories\\\\AI_pm\\\\ai-pm-skills\\\\skills\\\\ai-pm-decomposer\\\\references\" \"D:\\\\github repositories\\\\AI_pm\\\\ai-pm-skills\\\\skills\\\\ai-pm-hyperspace\\\\scripts\" \"D:\\\\github repositories\\\\AI_pm\\\\ai-pm-skills\\\\skills\\\\ai-pm-comparator\\\\scripts\" \"D:\\\\github repositories\\\\AI_pm\\\\ai-pm-skills\\\\skills\\\\ai-pm-challenger\\\\scripts\" \"D:\\\\github repositories\\\\AI_pm\\\\ai-pm-skills\\\\skills\\\\ai-pm-backprop\\\\scripts\" \"D:\\\\github repositories\\\\AI_pm\\\\ai-pm-skills\\\\skills\\\\ai-pm-context\\\\scripts\" \"D:\\\\github repositories\\\\AI_pm\\\\ai-pm-skills\\\\skills\\\\ai-pm-memory\\\\scripts\" \"D:\\\\github repositories\\\\AI_pm\\\\ai-pm-skills\\\\shared\" \"D:\\\\github repositories\\\\AI_pm\\\\ai-pm-skills\\\\tests\\\\fixtures\" \"D:\\\\github repositories\\\\AI_pm\\\\ai-pm-skills\\\\docs\")",
+      "Bash(python -m pytest tests/ -v)",
+      "Bash(pip install *)",
+      "Bash(where openclaw *)",
+      "Bash(openclaw --version)",
+      "Bash(openclaw skill *)",
+      "Bash(openclaw skills *)",
+      "Bash(openclaw help *)",
+      "Bash(bash install_skills.sh)"
+    ]
+  }
+}
