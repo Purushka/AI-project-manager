@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HyperspaceVector",
+  "description": "超空间向量标签，用于多维聚类和复用发现。每个节点在分解时同步生成。",
+  "type": "object",
+  "properties": {
+    "domain": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "功能域标签。例如：['用户管理', '订单处理', '支付']"
+    },
+    "entities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "涉及的核心数据实体。例如：['User', 'Order', 'Product']"
+    },
+    "patterns": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "使用的设计模式。例如：['CQRS', 'Event Sourcing', 'Repository']"
+    },
+    "api_shape": {
+      "type": "object",
+      "properties": {
+        "inputs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "输入参数类型。例如：['user_id: string', 'filter: OrderFilter']"
+        },
+        "outputs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "输出类型。例如：['OrderList', 'PaginatedResponse']"
+        },
+        "side_effects": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "副作用。例如：['send_notification', 'update_inventory']"
+        }
+      },
+      "required": ["inputs", "outputs", "side_effects"]
+    },
+    "tech_traits": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "技术特征。例如：['real_time', 'high_throughput', 'idempotent']"
+    },
+    "actors": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "涉及的用户角色。例如：['consumer', 'merchant', 'rider', 'admin']"
+    },
+    "nfr": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "非功能需求。例如：['low_latency', 'high_availability', 'GDPR']"
+    },
+    "rule_fingerprint": {
+      "type": "string",
+      "description": "一句话概括核心业务规则链。例如：'订单创建 -> 商户确认 -> 骑手接单 -> 配送 -> 完成'"
+    }
+  },
+  "required": ["domain", "entities", "patterns", "api_shape", "tech_traits", "actors", "nfr", "rule_fingerprint"]
+}
