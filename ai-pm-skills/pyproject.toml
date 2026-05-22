@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "ai-pm-skills"
+version = "0.1.0"
+description = "AI Product Manager: adaptive interview + forward-backward decomposition for complex projects"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+keywords = [
+    "ai", "product-manager", "project-planning", "decomposition",
+    "llm", "agent", "openclaw", "requirements-analysis",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Office/Business :: Scheduling",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "anthropic>=0.30.0",
+    "chromadb>=0.4.0",
+    "requests>=2.31.0",
+]
+
+[project.scripts]
+ai-pm = "cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Purushka/AI_pm"
+Repository = "https://github.com/Purushka/AI_pm"
+Issues = "https://github.com/Purushka/AI_pm/issues"
+
+[tool.setuptools.packages.find]
+include = ["shared*", "skills*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
