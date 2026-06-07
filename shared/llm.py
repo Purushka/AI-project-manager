@@ -1,9 +1,8 @@
 """LLM API calling wrapper for ai-pm-skills.
 
-Supports three providers:
+Supports two providers:
 - "openai": OpenAI-compatible API (default, works with local proxies)
 - "anthropic": Anthropic Claude API
-- "codex": OpenAI Codex CLI relay (for APIs that require codex client auth)
 
 Configured via config.json: llm_provider, openai_base_url, openai_api_key.
 """
@@ -35,8 +34,6 @@ def call_llm(
 
     if config.llm_provider == "anthropic":
         return _call_anthropic(prompt, model, system_prompt, max_tokens, temperature)
-    if config.llm_provider == "codex":
-        return _call_codex(prompt, model, system_prompt)
     return _call_openai(prompt, model, system_prompt, max_tokens, temperature, config)
 
 
@@ -131,60 +128,6 @@ def _call_anthropic(
                 raise
 
     raise RuntimeError(f"LLM call failed after {MAX_RETRIES} retries: {last_error}")
-
-
-def _call_codex(
-    prompt: str,
-    model: str,
-    system_prompt: str,
-) -> str:
-    """Call LLM via Codex CLI relay (for APIs requiring codex client auth)."""
-    import json
-    import shutil
-    import subprocess
-
-    full_prompt = prompt
-    if system_prompt:
-        full_prompt = f"{system_prompt}\n\n{prompt}"
-
-    codex_cmd = shutil.which("codex") or shutil.which("codex.cmd") or "codex"
-    use_shell = codex_cmd.endswith(".cmd")
-
-    last_error: Exception | None = None
-    for attempt in range(MAX_RETRIES):
-        try:
-            cmd = [codex_cmd, "exec", "-m", model, "--json", "-"]
-            result = subprocess.run(
-                cmd if not use_shell else " ".join(cmd),
-                capture_output=True, text=True, timeout=300,
-                input=full_prompt, shell=use_shell,
-            )
-            if result.returncode != 0:
-                raise RuntimeError(f"codex exec failed: {result.stderr[:500]}")
-
-            text_parts = []
-            for line in result.stdout.strip().splitlines():
-                try:
-                    event = json.loads(line)
-                    if event.get("type") == "item.completed":
-                        item = event.get("item", {})
-                        if item.get("type") == "agent_message":
-                            text_parts.append(item.get("text", ""))
-                except json.JSONDecodeError:
-                    continue
-
-            response = "\n".join(text_parts)
-            if not response:
-                raise RuntimeError(f"No agent_message in codex output: {result.stdout[:300]}")
-            return response
-
-        except (subprocess.TimeoutExpired, RuntimeError) as e:
-            last_error = e
-            delay = RETRY_DELAYS[min(attempt, len(RETRY_DELAYS) - 1)]
-            logger.warning(f"Codex CLI error (attempt {attempt + 1}): {e}, retrying in {delay}s")
-            time.sleep(delay)
-
-    raise RuntimeError(f"Codex CLI call failed after {MAX_RETRIES} retries: {last_error}")
 
 
 def call_llm_with_json(
