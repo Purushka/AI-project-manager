@@ -52,10 +52,12 @@ class TestPromptTemplates:
         assert schema_path.exists()
         schema = json.loads(schema_path.read_text(encoding="utf-8"))
         assert "properties" in schema
-        expected_axes = ["domain", "entities", "patterns", "api_shape",
-                        "tech_traits", "actors", "nfr", "rule_fingerprint"]
-        for axis in expected_axes:
-            assert axis in schema["properties"], f"Missing axis: {axis}"
+        # Must contain at least the high-weight axes
+        required_axes = ["domain", "entity", "pattern", "actor", "nfr", "biz_metrics"]
+        for axis in required_axes:
+            # Schema may use plural legacy names — check both
+            found = axis in schema["properties"] or f"{axis}s" in schema["properties"]
+            assert found, f"Missing axis: {axis}"
 
 
 class TestResponseParsing:
@@ -91,31 +93,49 @@ class TestVectorExtraction:
             "title": "Test",
             "vector": {
                 "domain": ["payments"],
-                "entities": ["Order", "Payment"],
-                "patterns": ["Saga"],
-                "api_shape": {"inputs": ["order_id"], "outputs": ["receipt"], "side_effects": ["charge"]},
-                "tech_traits": ["idempotent"],
-                "actors": ["consumer"],
+                "entity": ["Order", "Payment"],
+                "pattern": ["Saga"],
+                "tech_stack": ["backend"],
+                "actor": ["consumer"],
                 "nfr": ["low_latency"],
-                "rule_fingerprint": "order -> payment -> confirmation",
+                "biz_metrics": ["revenue"],
             },
         }
         vec = extract_vector_from_child(child)
         assert vec.domain == ["payments"]
-        assert vec.entities == ["Order", "Payment"]
-        assert vec.rule_fingerprint == "order -> payment -> confirmation"
+        assert vec.entity == ["Order", "Payment"]
+        assert vec.tech_stack == ["backend"]
+
+    def test_extract_vector_legacy_fields(self):
+        """Legacy field names (entities, patterns, actors, tech_traits) are mapped to new names."""
+        child = {
+            "title": "Test",
+            "vector": {
+                "domain": ["payments"],
+                "entities": ["Order"],
+                "patterns": ["Saga"],
+                "tech_traits": ["idempotent"],
+                "actors": ["consumer"],
+            },
+        }
+        vec = extract_vector_from_child(child)
+        assert vec.domain == ["payments"]
+        assert vec.entity == ["Order"]
+        assert vec.pattern == ["Saga"]
+        assert vec.tech_stack == ["idempotent"]
+        assert vec.actor == ["consumer"]
 
     def test_extract_empty_vector(self):
         child = {"title": "Test"}
         vec = extract_vector_from_child(child)
         assert vec.domain == []
-        assert vec.rule_fingerprint == ""
+        assert vec.entity == []
 
     def test_flat_tags(self):
         vec = HyperspaceVector(
             domain=["payments", "orders"],
-            entities=["Order"],
-            actors=["consumer", "merchant"],
+            entity=["Order"],
+            actor=["consumer", "merchant"],
         )
         tags = vec.flat_tags()
         assert ("domain", "payments") in tags

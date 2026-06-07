@@ -40,15 +40,15 @@ class TestStructuralCluster:
         vectors = {
             "node_a": HyperspaceVector(
                 domain=["payments", "orders"],
-                entities=["Order", "Payment"],
-                patterns=["Saga"],
-                actors=["consumer"],
+                entity=["Order", "Payment"],
+                pattern=["Saga"],
+                actor=["consumer"],
             ),
             "node_b": HyperspaceVector(
                 domain=["payments", "orders"],
-                entities=["Order", "Refund"],
-                patterns=["Saga"],
-                actors=["consumer"],
+                entity=["Order", "Refund"],
+                pattern=["Saga"],
+                actor=["consumer"],
             ),
         }
         clusters = structural_cluster(vectors)
@@ -59,15 +59,15 @@ class TestStructuralCluster:
         vectors = {
             "node_a": HyperspaceVector(
                 domain=["payments"],
-                entities=["Payment"],
-                patterns=["Saga"],
-                actors=["consumer"],
+                entity=["Payment"],
+                pattern=["Saga"],
+                actor=["consumer"],
             ),
             "node_b": HyperspaceVector(
                 domain=["logistics"],
-                entities=["Delivery"],
-                patterns=["Observer"],
-                actors=["rider"],
+                entity=["Delivery"],
+                pattern=["Observer"],
+                actor=["rider"],
             ),
         }
         clusters = structural_cluster(vectors)
@@ -77,21 +77,21 @@ class TestStructuralCluster:
         vectors = {
             "node_a": HyperspaceVector(
                 domain=["payments"],
-                entities=["Order"],
-                patterns=["Repository"],
-                actors=["consumer"],
+                entity=["Order"],
+                pattern=["Repository"],
+                actor=["consumer"],
             ),
             "node_b": HyperspaceVector(
                 domain=["payments"],
-                entities=["Order"],
-                patterns=["Repository"],
-                actors=["merchant"],
+                entity=["Order"],
+                pattern=["Repository"],
+                actor=["merchant"],
             ),
             "node_c": HyperspaceVector(
                 domain=["analytics"],
-                entities=["Report"],
-                patterns=["CQRS"],
-                actors=["admin"],
+                entity=["Report"],
+                pattern=["CQRS"],
+                actor=["admin"],
             ),
         }
         clusters = structural_cluster(vectors)

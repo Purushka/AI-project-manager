@@ -314,25 +314,33 @@ Tests use `tempfile` for isolation and do not require external services (no LLM 
 
 ## Design Decisions
 
-1. **Forward-backward separation** — Independent decomposition avoids O(N^2) alignment at every step. Cost reduction ~35%, speed improvement ~58% (parallelizable), fidelity improvement ~25%.
+1. **Forward-backward separation** — Independent decomposition avoids O(N^2) alignment at every step. Forward pass is embarrassingly parallel (each branch only needs parent + project summary). Trade-off: clustering quality in Phase 2 depends on tag vocabulary consistency across branches (see Known Limitations).
 
 2. **Content-rewriting backward optimization** — Not just edge creation: detects overlap between nodes, extracts shared components into new nodes, rewrites originals to reference shared content. Handles the a+b / b+c → shared(b) + a + c pattern.
 
-3. **Weighted clustering** — Axis weights (domain=3.0, complexity=0.3) replace equal-weight Jaccard. Adaptive DBSCAN eps (`median(pairwise_distance) * 0.7`, clamped to [0.1, 0.5]) replaces fixed threshold.
+3. **Weighted clustering** — Axis weights (domain=3.0, complexity=0.3) replace equal-weight Jaccard. Adaptive DBSCAN eps (`median(pairwise_distance) * 0.7`, clamped to [0.1, 0.5]) replaces fixed threshold. Embedding-based semantic clustering serves as fallback when tag vocabulary diverges.
 
 4. **Adaptive depth, not fixed layers** — Decomposition depth is driven by content complexity. Some branches finish at depth-2, others at depth-12.
 
-5. **Constraints survive all compaction** — Negative requirements are preserved at every compression level to prevent downstream assumptions from lossy summaries.
+5. **No alignment during forward pass; edges only in backward/maintenance** — Alignment, edge creation, and cross-node comparison happen exclusively in Phase 2 (backward optimization) and during post-delivery maintenance. Phase 1 produces no edges and no cross-branch communication.
 
-6. **RAG knowledge base with topic mutex** — All nodes share a knowledge base for background context. Topic-level uniqueness prevents conflicting entries; amendment workflow handles cross-owner modifications.
+6. **Constraints survive all compaction** — Negative requirements are preserved at every compression level to prevent downstream assumptions from lossy summaries.
 
-7. **Write locks for concurrency** — TTL-based locks prevent two modules from simultaneously modifying the same node. Lock holder identity + automatic expiry prevent deadlocks.
+7. **RAG knowledge base with topic mutex** — All nodes share a knowledge base for background context. Topic-level uniqueness prevents conflicting entries; amendment workflow handles cross-owner modifications.
 
-8. **Always compress from original** — Compaction always reads the full version, never re-compresses from a previous compaction, preventing telephone-game information loss.
+8. **Write locks for concurrency** — TTL-based locks prevent two modules from simultaneously modifying the same node. Lock holder identity + automatic expiry prevent deadlocks.
 
-9. **Convergence control** — Edges track `alignment_count`. After 4 failed convergence attempts, the system generates a concrete LLM resolution and applies it rather than looping forever.
+9. **Always compress from original** — Compaction always reads the full version, never re-compresses from a previous compaction, preventing telephone-game information loss.
 
-10. **Quality floor** — If minimum context (850 tokens) cannot be loaded, the system stops rather than producing unreliable output.
+10. **Convergence control** — Edges track `alignment_count`. After 4 failed convergence attempts, the system generates a concrete LLM resolution and applies it rather than looping forever.
+
+11. **Quality floor** — If minimum context (850 tokens of mandatory Tier 1 material) cannot fit in the model window, the system stops rather than producing unreliable output.
+
+## Known Limitations
+
+1. **Tag vocabulary drift** — Forward decomposition generates tags independently per branch with minimal shared context. The same concept may produce `auth` / `login` / `authentication` across branches, degrading Jaccard clustering precision. Mitigations: (a) semantic clustering via embeddings catches synonyms that tags miss; (b) future work: controlled vocabulary or post-hoc tag normalization pass before clustering.
+
+2. **No benchmark data** — Efficiency claims (parallelizability, complexity reduction) are architectural arguments, not measured results. No production workload benchmarks exist yet.
 
 ## License
 

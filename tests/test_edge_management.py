@@ -106,8 +106,8 @@ class TestHyperspaceVectorBizMetrics:
             biz_metrics=["conversion_rate", "arpu"],
         )
         tags = vec.flat_tags()
-        assert ("biz_metric", "conversion_rate") in tags
-        assert ("biz_metric", "arpu") in tags
+        assert ("biz_metrics", "conversion_rate") in tags
+        assert ("biz_metrics", "arpu") in tags
         assert ("domain", "payments") in tags
 
     def test_to_dict_includes_biz_metrics(self):

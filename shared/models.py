@@ -75,63 +75,69 @@ class Node:
 
 @dataclass
 class HyperspaceVector:
+    """Multi-axis tag vector for clustering. Axes match AXIS_WEIGHTS in cluster.py.
+
+    All axes are list[str] — a node can have multiple values per axis.
+    The DB stores these as flat (key, value) tuples in the tags table.
+    """
     domain: list[str] = field(default_factory=list)
-    entities: list[str] = field(default_factory=list)
-    patterns: list[str] = field(default_factory=list)
-    api_shape: dict[str, list[str]] = field(default_factory=lambda: {
-        "inputs": [],
-        "outputs": [],
-        "side_effects": [],
-    })
-    tech_traits: list[str] = field(default_factory=list)
-    actors: list[str] = field(default_factory=list)
+    entity: list[str] = field(default_factory=list)
+    pattern: list[str] = field(default_factory=list)
+    actor: list[str] = field(default_factory=list)
     nfr: list[str] = field(default_factory=list)
     biz_metrics: list[str] = field(default_factory=list)
-    rule_fingerprint: str = ""
+    tech_stack: list[str] = field(default_factory=list)
+    data_sensitivity: list[str] = field(default_factory=list)
+    revenue_impact: list[str] = field(default_factory=list)
+    dependency: list[str] = field(default_factory=list)
+    complexity: list[str] = field(default_factory=list)
+    user_facing: list[str] = field(default_factory=list)
+    timeline_priority: list[str] = field(default_factory=list)
+
+    # Legacy compat: these are accepted in from_dict but mapped to new axes
+    _LEGACY_MAP = {
+        "entities": "entity",
+        "patterns": "pattern",
+        "actors": "actor",
+        "tech_traits": "tech_stack",
+        "rule_fingerprint": None,  # dropped — use biz_metrics or entity instead
+        "api_shape": None,  # dropped — not representable as flat tags
+    }
+
+    AXES = [
+        "domain", "entity", "pattern", "actor", "nfr", "biz_metrics",
+        "tech_stack", "data_sensitivity", "revenue_impact", "dependency",
+        "complexity", "user_facing", "timeline_priority",
+    ]
 
     def to_dict(self) -> dict[str, Any]:
-        return {
-            "domain": self.domain,
-            "entities": self.entities,
-            "patterns": self.patterns,
-            "api_shape": self.api_shape,
-            "tech_traits": self.tech_traits,
-            "actors": self.actors,
-            "nfr": self.nfr,
-            "biz_metrics": self.biz_metrics,
-            "rule_fingerprint": self.rule_fingerprint,
-        }
+        return {axis: getattr(self, axis) for axis in self.AXES}
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> HyperspaceVector:
-        return cls(
-            domain=data.get("domain", []),
-            entities=data.get("entities", []),
-            patterns=data.get("patterns", []),
-            api_shape=data.get("api_shape", {"inputs": [], "outputs": [], "side_effects": []}),
-            tech_traits=data.get("tech_traits", []),
-            actors=data.get("actors", []),
-            nfr=data.get("nfr", []),
-            biz_metrics=data.get("biz_metrics", []),
-            rule_fingerprint=data.get("rule_fingerprint", ""),
-        )
+    def from_dict(cls, data: dict[str, Any]) -> "HyperspaceVector":
+        kwargs: dict[str, Any] = {}
+        for key, value in data.items():
+            # Map legacy field names
+            mapped = cls._LEGACY_MAP.get(key, key)
+            if mapped is None:
+                continue  # dropped field
+            if mapped not in cls.AXES:
+                continue  # unknown field
+            if isinstance(value, str):
+                kwargs.setdefault(mapped, []).append(value)
+            elif isinstance(value, list):
+                kwargs.setdefault(mapped, []).extend(
+                    v for v in value if isinstance(v, str)
+                )
+            # dicts (like old api_shape) are silently dropped
+        return cls(**{k: v for k, v in kwargs.items() if k in cls.AXES})
 
     def flat_tags(self) -> list[tuple[str, str]]:
+        """Convert to flat (axis, value) tuples for DB storage and clustering."""
         tags: list[tuple[str, str]] = []
-        for d in self.domain:
-            tags.append(("domain", d))
-        for e in self.entities:
-            tags.append(("entity", e))
-        for p in self.patterns:
-            tags.append(("pattern", p))
-        for t in self.tech_traits:
-            tags.append(("tech_trait", t))
-        for a in self.actors:
-            tags.append(("actor", a))
-        for n in self.nfr:
-            tags.append(("nfr", n))
-        for b in self.biz_metrics:
-            tags.append(("biz_metric", b))
+        for axis in self.AXES:
+            for value in getattr(self, axis):
+                tags.append((axis, value))
         return tags
 
 
