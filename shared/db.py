@@ -433,6 +433,36 @@ class Database:
             to_version=row["to_version"] if "to_version" in row.keys() else 0,
         )
 
+    def get_all_nodes(self, project: str) -> list[Node]:
+        with self._connect() as conn:
+            rows = conn.execute(
+                "SELECT * FROM nodes WHERE project = ? ORDER BY level, node_id",
+                (project,),
+            ).fetchall()
+            return [self._row_to_node(r, conn) for r in rows]
+
+    def get_leaf_nodes(self, project: str) -> list[Node]:
+        """Get nodes that have no children (leaf nodes)."""
+        with self._connect() as conn:
+            rows = conn.execute(
+                """SELECT n.* FROM nodes n
+                   WHERE n.project = ?
+                     AND NOT EXISTS (
+                         SELECT 1 FROM nodes c WHERE c.parent_id = n.node_id
+                     )
+                   ORDER BY n.level, n.node_id""",
+                (project,),
+            ).fetchall()
+            return [self._row_to_node(r, conn) for r in rows]
+
+    def get_max_depth(self, project: str) -> int:
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT COALESCE(MAX(level), 0) as max_level FROM nodes WHERE project = ?",
+                (project,),
+            ).fetchone()
+            return row["max_level"]
+
     def count_nodes(self, project: str) -> int:
         with self._connect() as conn:
             row = conn.execute(

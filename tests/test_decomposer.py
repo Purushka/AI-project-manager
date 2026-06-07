@@ -27,14 +27,18 @@ from decompose import (
 
 
 class TestPromptTemplates:
-    def test_all_templates_exist(self):
+    def test_unified_template_exists(self):
         refs = DECOMPOSER_DIR / "references"
-        for level in range(10):
-            templates = list(refs.glob(f"prompt_L{level}_*.md"))
-            assert len(templates) == 1, f"Expected 1 template for L{level}, found {len(templates)}"
+        template_path = refs / "prompt_decompose.md"
+        assert template_path.exists(), "Unified decompose template not found"
+
+    def test_no_fixed_layer_templates(self):
+        refs = DECOMPOSER_DIR / "references"
+        old_templates = list(refs.glob("prompt_L*_*.md"))
+        assert len(old_templates) == 0, f"Found legacy fixed-layer templates: {old_templates}"
 
     def test_load_template(self):
-        template = load_prompt_template(0)
+        template = load_prompt_template()
         assert "{{ global_summary }}" in template
         assert "{{ current_task }}" in template
 

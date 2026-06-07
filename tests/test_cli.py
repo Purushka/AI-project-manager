@@ -341,7 +341,7 @@ class TestClusterCLI:
                           ("pattern", "Repository")])
         with patch("cli.load_config", return_value=seeded):
             result = capture_json(cmd_cluster_run,
-                                  argparse.Namespace(project="test_proj", level="1"))
+                                  argparse.Namespace(project="test_proj", depth="1"))
         assert result["total_nodes"] == 2
         assert result["clusters_found"] >= 1
 
@@ -351,7 +351,7 @@ class TestClusterCLI:
         db.set_tags("b", [("domain", "logistics")])
         with patch("cli.load_config", return_value=seeded):
             result = capture_json(cmd_cluster_run,
-                                  argparse.Namespace(project="test_proj", level="1"))
+                                  argparse.Namespace(project="test_proj", depth="1"))
         assert result["clusters_found"] == 0
 
     def test_cluster_insufficient_nodes(self, seeded):
@@ -360,7 +360,7 @@ class TestClusterCLI:
                             parent_id="a", title="Solo"))
         with patch("cli.load_config", return_value=seeded):
             result = capture_json(cmd_cluster_run,
-                                  argparse.Namespace(project="test_proj", level="5"))
+                                  argparse.Namespace(project="test_proj", depth="5"))
         assert "Need at least 2" in result.get("message", "")
 
 
@@ -393,10 +393,10 @@ class TestNodeCLI:
     def test_node_add(self, seeded):
         with patch("cli.load_config", return_value=seeded):
             result = capture_json(cmd_node_add,
-                                  argparse.Namespace(project="test_proj", level="2",
+                                  argparse.Namespace(project="test_proj", depth="2",
                                                      title="Sub Module", parent="a"))
         assert result["project"] == "test_proj"
-        assert result["level"] == "2"
+        assert result["depth"] == 2
         assert result["title"] == "Sub Module"
 
     def test_node_get(self, seeded):
@@ -409,5 +409,5 @@ class TestNodeCLI:
     def test_node_list(self, seeded):
         with patch("cli.load_config", return_value=seeded):
             result = capture_json(cmd_node_list,
-                                  argparse.Namespace(project="test_proj", level="1"))
+                                  argparse.Namespace(project="test_proj", depth="1"))
         assert result["count"] == 2

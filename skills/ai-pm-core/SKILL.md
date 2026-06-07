@@ -2,10 +2,11 @@
 name: ai-pm-core
 description: >
   AI产品经理主入口。接收产品idea后，先进行多轮需求访谈（目标用户、核心价值、
-  范围边界、技术约束、业务上下文），确认需求后再启动十层递归分解。
-  管理状态机调度，协调前向分解、超空间聚类、对比验证、反向传播等阶段。
+  范围边界、技术约束、业务上下文），确认需求后启动自适应迭代分解。
+  每个节点按内容复杂度自适应展开，分到可执行粒度为止，深度不固定。
+  管理状态机调度，协调前向分解和反向优化。
   使用关键词：产品分解、idea分析、AI PM、启动项目、项目规划。
-version: 0.2.0
+version: 0.3.0
 user-invocable: true
 triggers:
   - "产品分解"
@@ -54,17 +55,29 @@ triggers:
 - **确认**：进入分解阶段
 - **提修改意见**：更新记录后重新生成确认书
 
-### 阶段三：十层分解（DECOMPOSING -> CLUSTERING -> ... -> DONE）
+### 阶段三：前向分解（FORWARD）
 
-确认后才创建根节点并启动前向分解。后续阶段同原流程：
-- V1 前向分解（L0-L9）
-- V3 超空间聚类 + 对比验证（检查点 L2/L4/L6/L9）
-- V2 反向传播
+确认后创建根节点并启动自适应迭代分解：
+- 每次取最浅的 pending 叶节点批量分解
+- 每个节点按内容复杂度自适应展开，不预设层数
+- LLM 判断子节点是否已达可执行粒度（一人一 sprint），是则标记 terminal
+- 所有叶节点均为 terminal 时前向分解结束
+- 各分支独立终止，深度可以不同
+
+### 阶段四：反向优化（BACKWARD）
+
+前向分解完成后，执行一次 cluster-first 反向优化：
+1. 叶节点标签 Jaccard + DBSCAN 聚类
+2. 簇代表比对
+3. 簇内/跨簇 LLM 对齐
+4. 创建 6 种类型边
+5. 自底向上约束传播
+6. 根一致性校验
 
 ## 状态机
 
 ```
-INIT -> INTERVIEWING -> CONFIRMING -> DECOMPOSING -> CLUSTERING -> COMPARING -> CHALLENGING -> BACKPROP -> DECOMPOSING -> ... -> DONE
+INIT -> INTERVIEWING -> CONFIRMING -> FORWARD -> BACKWARD -> DONE
 ```
 
 每个状态转换都持久化到数据库，支持断点续跑。
@@ -81,37 +94,10 @@ INIT -> INTERVIEWING -> CONFIRMING -> DECOMPOSING -> CLUSTERING -> COMPARING -> 
 用户确认或修订需求确认书。确认后才进入分解阶段。
 
 ### run_decomposition_step(project) -> dict
-执行一步分解。如果还在访谈/确认阶段会返回错误提示。
+执行一步分解。返回当前批次的 pending 叶节点列表。
 
 ### get_project_status(project) -> dict
-获取项目当前状态，包括访谈进度或分解进度。
-
-## 执行方式
-
-```bash
-cd "D:\github repositories\AI_pm\ai-pm-skills"
-
-# 1. 初始化项目（返回第一个访谈问题）
-python -c "
-import sys; sys.path.insert(0, '.')
-from skills.ai_pm_core.scripts.main import init_project
-import json; print(json.dumps(init_project('你的产品idea...', 'my_project'), indent=2, ensure_ascii=False))
-"
-
-# 2. 提交访谈回答（循环调用直到进入确认阶段）
-python -c "
-import sys; sys.path.insert(0, '.')
-from skills.ai_pm_core.scripts.main import submit_interview_answer
-import json; print(json.dumps(submit_interview_answer('my_project', '用户的回答...'), indent=2, ensure_ascii=False))
-"
-
-# 3. 确认需求（回复'确认'开始分解，或提修改意见）
-python -c "
-import sys; sys.path.insert(0, '.')
-from skills.ai_pm_core.scripts.main import confirm_requirements
-import json; print(json.dumps(confirm_requirements('my_project', '确认'), indent=2, ensure_ascii=False))
-"
-```
+获取项目当前状态，包括访谈进度、分解深度、叶节点数等。
 
 ## 输入
 
@@ -123,4 +109,4 @@ import json; print(json.dumps(confirm_requirements('my_project', '确认'), inde
 
 - 多轮访谈问题（5 个维度 + 可能的追问）
 - 结构化需求确认书（requirements.md）
-- 确认后：完整的十层分解树
+- 确认后：自适应深度分解树（各分支深度不同）

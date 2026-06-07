@@ -5,16 +5,16 @@ Usage:
     python cli.py project init <name> <idea_text>
     python cli.py project status <name>
     python cli.py project list
-    python cli.py node add <project> <level> <title> [--parent <id>]
+    python cli.py node add <project> <title> [--parent <id>] [--depth <n>]
     python cli.py node get <id>
     python cli.py node children <id>
     python cli.py node ancestors <id>
     python cli.py node status <id> <new_status>
-    python cli.py node list <project> [--level <n>]
+    python cli.py node list <project> [--depth <n>]
     python cli.py tag set <node_id> <key=value> [key=value ...]
     python cli.py tag get <node_id>
     python cli.py tag find <key> <value>
-    python cli.py cluster run <project> <level>
+    python cli.py cluster run <project> [--depth <n>]
     python cli.py search similar <node_id> [--n <count>]
 """
 
@@ -56,7 +56,7 @@ def cmd_project_init(args: argparse.Namespace) -> None:
         idea_text = Path(idea_text).read_text(encoding="utf-8")
     idea_path.write_text(idea_text, encoding="utf-8")
 
-    root_id = f"{project}_L0_root"
+    root_id = f"{project}_root_{uuid.uuid4().hex[:6]}"
     root = Node(
         id=root_id, project=project, level=0, parent_id=None,
         status=NodeStatus.PENDING, title="Product Vision",
@@ -66,7 +66,7 @@ def cmd_project_init(args: argparse.Namespace) -> None:
 
     status_path = config.data_dir / project / "status.md"
     status_path.write_text(
-        f"# {project}\n- 阶段: 访谈\n- 当前层级: L0\n- 已完成: 无\n",
+        f"# {project}\n- 阶段: 访谈\n- 根节点: {root_id}\n",
         encoding="utf-8",
     )
     _json_out({"project": project, "root_node": root_id, "idea_path": str(idea_path)})
@@ -77,16 +77,27 @@ def cmd_project_status(args: argparse.Namespace) -> None:
     db = Database(config)
     project = args.name
     total = db.count_nodes(project)
-    levels = {}
-    for lv in range(10):
-        nodes = db.get_nodes_by_level(project, lv)
-        if nodes:
-            levels[f"L{lv}"] = {
-                "total": len(nodes),
-                "done": sum(1 for n in nodes if n.status == NodeStatus.DONE),
-                "pending": sum(1 for n in nodes if n.status == NodeStatus.PENDING),
-            }
-    _json_out({"project": project, "total_nodes": total, "levels": levels})
+    all_nodes = db.get_all_nodes(project)
+    depth_stats = {}
+    for n in all_nodes:
+        d = n.level
+        if d not in depth_stats:
+            depth_stats[d] = {"total": 0, "done": 0, "pending": 0}
+        depth_stats[d]["total"] += 1
+        if n.status == NodeStatus.DONE:
+            depth_stats[d]["done"] += 1
+        elif n.status == NodeStatus.PENDING:
+            depth_stats[d]["pending"] += 1
+    depths = {f"depth_{d}": s for d, s in sorted(depth_stats.items())}
+    leaf_nodes = db.get_leaf_nodes(project)
+    pending_leaves = [n for n in leaf_nodes if n.status == NodeStatus.PENDING]
+    _json_out({
+        "project": project,
+        "total_nodes": total,
+        "max_depth": db.get_max_depth(project),
+        "pending_leaves": len(pending_leaves),
+        "depths": depths,
+    })
 
 
 def cmd_project_list(args: argparse.Namespace) -> None:
@@ -105,13 +116,18 @@ def cmd_project_list(args: argparse.Namespace) -> None:
 def cmd_node_add(args: argparse.Namespace) -> None:
     config = load_config()
     db = Database(config)
-    node_id = f"{args.project}_L{args.level}_{uuid.uuid4().hex[:6]}"
+    depth = int(args.depth) if args.depth is not None else 0
+    if args.parent:
+        parent = db.get_node(args.parent)
+        if parent:
+            depth = parent.level + 1
+    node_id = f"{args.project}_{uuid.uuid4().hex[:8]}"
     node = Node(
-        id=node_id, project=args.project, level=int(args.level),
+        id=node_id, project=args.project, level=depth,
         parent_id=args.parent, status=NodeStatus.PENDING, title=args.title,
     )
     db.insert_node(node)
-    _json_out({"node_id": node_id, "project": args.project, "level": args.level, "title": args.title})
+    _json_out({"node_id": node_id, "project": args.project, "depth": depth, "title": args.title})
 
 
 def cmd_node_get(args: argparse.Namespace) -> None:
@@ -163,12 +179,10 @@ def cmd_node_update_status(args: argparse.Namespace) -> None:
 def cmd_node_list(args: argparse.Namespace) -> None:
     config = load_config()
     db = Database(config)
-    if args.level is not None:
-        nodes = db.get_nodes_by_level(args.project, int(args.level))
+    if args.depth is not None:
+        nodes = db.get_nodes_by_level(args.project, int(args.depth))
     else:
-        nodes = []
-        for lv in range(10):
-            nodes.extend(db.get_nodes_by_level(args.project, lv))
+        nodes = db.get_all_nodes(args.project)
     _json_out({"project": args.project, "count": len(nodes), "nodes": [
         {"id": n.id, "level": n.level, "title": n.title, "status": n.status.value}
         for n in nodes
@@ -210,8 +224,10 @@ def cmd_tag_find(args: argparse.Namespace) -> None:
 def cmd_cluster_run(args: argparse.Namespace) -> None:
     config = load_config()
     db = Database(config)
-    level = int(args.level)
-    nodes = db.get_nodes_by_level(args.project, level)
+    if args.depth is not None:
+        nodes = db.get_nodes_by_level(args.project, int(args.depth))
+    else:
+        nodes = db.get_leaf_nodes(args.project)
 
     if len(nodes) < 2:
         _json_out({"message": "Need at least 2 nodes to cluster", "node_count": len(nodes)})
@@ -259,7 +275,7 @@ def cmd_cluster_run(args: argparse.Namespace) -> None:
             })
 
     _json_out({
-        "project": args.project, "level": level,
+        "project": args.project, "depth_filter": args.depth,
         "total_nodes": len(nodes), "clusters_found": len(clusters),
         "clusters": clusters,
     })
@@ -468,12 +484,7 @@ def cmd_reconcile(args: argparse.Namespace) -> None:
             if f.is_file() and f.suffix == ".md":
                 valid_ids.add(f.stem)
 
-    node_rows = db.get_nodes_by_level(args.project, -1)
-    if not node_rows:
-        for lv in range(100):
-            node_rows.extend(db.get_nodes_by_level(args.project, lv))
-            if not db.get_nodes_by_level(args.project, lv):
-                break
+    node_rows = db.get_all_nodes(args.project)
     for n in node_rows:
         valid_ids.add(n.id)
 
@@ -504,9 +515,9 @@ def build_parser() -> argparse.ArgumentParser:
     nsub = ng.add_subparsers(dest="cmd")
     na = nsub.add_parser("add")
     na.add_argument("project")
-    na.add_argument("level")
     na.add_argument("title")
     na.add_argument("--parent", default=None)
+    na.add_argument("--depth", default=None)
     nget = nsub.add_parser("get")
     nget.add_argument("id")
     nc = nsub.add_parser("children")
@@ -518,7 +529,7 @@ def build_parser() -> argparse.ArgumentParser:
     nus.add_argument("new_status")
     nl = nsub.add_parser("list")
     nl.add_argument("project")
-    nl.add_argument("--level", default=None)
+    nl.add_argument("--depth", default=None)
 
     # tag
     tg = sub.add_parser("tag")
@@ -537,7 +548,7 @@ def build_parser() -> argparse.ArgumentParser:
     csub = cg.add_subparsers(dest="cmd")
     cr = csub.add_parser("run")
     cr.add_argument("project")
-    cr.add_argument("level")
+    cr.add_argument("--depth", default=None)
 
     # search
     sg = sub.add_parser("search")

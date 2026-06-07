@@ -35,9 +35,12 @@ def jaccard_similarity(set_a: set[str], set_b: set[str]) -> float:
 
 
 def load_node_vectors(
-    project: str, level: int, db: Database, config: Config
+    project: str, depth: int | None, db: Database, config: Config
 ) -> dict[str, HyperspaceVector]:
-    nodes = db.get_nodes_by_level(project, level)
+    if depth is not None:
+        nodes = db.get_nodes_by_level(project, depth)
+    else:
+        nodes = db.get_leaf_nodes(project)
     vectors: dict[str, HyperspaceVector] = {}
     for node in nodes:
         if node.status == NodeStatus.INVALIDATED:
@@ -145,7 +148,7 @@ def structural_cluster(
 
 def semantic_cluster(
     project: str,
-    level: int,
+    depth: int | None,
     config: Config,
 ) -> list[Cluster]:
     try:
@@ -158,7 +161,10 @@ def semantic_cluster(
 
     vs = VectorStore(config)
     db = Database(config)
-    nodes = db.get_nodes_by_level(project, level)
+    if depth is not None:
+        nodes = db.get_nodes_by_level(project, depth)
+    else:
+        nodes = db.get_leaf_nodes(project)
     valid_nodes = [n for n in nodes if n.status != NodeStatus.INVALIDATED]
 
     if len(valid_nodes) < MIN_CLUSTER_SIZE:
@@ -201,23 +207,25 @@ def semantic_cluster(
 
 def run_clustering(
     project: str,
-    level: int,
+    depth: int | None = None,
     config: Config | None = None,
 ) -> list[Cluster]:
+    """Cluster nodes at a given depth, or leaf nodes if depth is None."""
     config = config or load_config()
     db = Database(config)
-    vectors = load_node_vectors(project, level, db, config)
+    vectors = load_node_vectors(project, depth, db, config)
 
+    target = f"depth {depth}" if depth is not None else "leaf nodes"
     if len(vectors) < MIN_CLUSTER_SIZE:
-        logger.info(f"Too few nodes at level {level} for clustering")
+        logger.info(f"Too few nodes at {target} for clustering")
         return []
 
     struct_clusters = structural_cluster(vectors)
-    sem_clusters = semantic_cluster(project, level, config)
+    sem_clusters = semantic_cluster(project, depth, config)
 
     all_clusters = struct_clusters + sem_clusters
     logger.info(
-        f"Clustering L{level}: {len(struct_clusters)} structural, "
+        f"Clustering {target}: {len(struct_clusters)} structural, "
         f"{len(sem_clusters)} semantic clusters"
     )
     return all_clusters

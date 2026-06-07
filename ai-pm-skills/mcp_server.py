@@ -57,7 +57,8 @@ def project_init(name: str, idea: str) -> dict:
     idea_path = project_dir / "idea.md"
     idea_path.write_text(idea, encoding="utf-8")
 
-    root_id = f"{name}_L0_root"
+    import uuid as _uuid
+    root_id = f"{name}_root_{_uuid.uuid4().hex[:6]}"
     root = Node(
         id=root_id, project=name, level=0, parent_id=None,
         status=NodeStatus.PENDING, title="Product Vision",
@@ -69,45 +70,59 @@ def project_init(name: str, idea: str) -> dict:
 
 @mcp.tool()
 def project_status(name: str) -> dict:
-    """Get project status with node counts per level.
+    """Get project status with node counts per depth.
 
     Args:
         name: Project name
     """
     db = _get_db()
     total = db.count_nodes(name)
-    levels = {}
-    for lv in range(20):
-        nodes = db.get_nodes_by_level(name, lv)
-        if nodes:
-            levels[f"L{lv}"] = {
-                "total": len(nodes),
-                "done": sum(1 for n in nodes if n.status == NodeStatus.DONE),
-                "pending": sum(1 for n in nodes if n.status == NodeStatus.PENDING),
-            }
-    return {"project": name, "total_nodes": total, "levels": levels}
+    all_nodes = db.get_all_nodes(name)
+    depth_stats = {}
+    for n in all_nodes:
+        d = n.level
+        if d not in depth_stats:
+            depth_stats[d] = {"total": 0, "done": 0, "pending": 0}
+        depth_stats[d]["total"] += 1
+        if n.status == NodeStatus.DONE:
+            depth_stats[d]["done"] += 1
+        elif n.status == NodeStatus.PENDING:
+            depth_stats[d]["pending"] += 1
+    leaf_nodes = db.get_leaf_nodes(name)
+    pending_leaves = [n for n in leaf_nodes if n.status == NodeStatus.PENDING]
+    return {
+        "project": name,
+        "total_nodes": total,
+        "max_depth": db.get_max_depth(name),
+        "pending_leaves": len(pending_leaves),
+        "depths": {f"depth_{d}": s for d, s in sorted(depth_stats.items())},
+    }
 
 
 # ── Node tools ───────────────────────────────────────────────────────
 
 
 @mcp.tool()
-def node_add(project: str, level: int, title: str, parent_id: str | None = None) -> dict:
-    """Add a new node to the project tree.
+def node_add(project: str, title: str, parent_id: str | None = None) -> dict:
+    """Add a new node to the project tree. Depth is auto-computed from parent.
 
     Args:
         project: Project name
-        level: Depth level (0 = root)
         title: Node title
-        parent_id: Parent node ID (optional)
+        parent_id: Parent node ID (optional, omit for root)
     """
     import uuid
     db = _get_db()
-    node_id = f"{project}_L{level}_{uuid.uuid4().hex[:6]}"
-    node = Node(id=node_id, project=project, level=level,
+    depth = 0
+    if parent_id:
+        parent = db.get_node(parent_id)
+        if parent:
+            depth = parent.level + 1
+    node_id = f"{project}_{uuid.uuid4().hex[:8]}"
+    node = Node(id=node_id, project=project, level=depth,
                 parent_id=parent_id, status=NodeStatus.PENDING, title=title)
     db.insert_node(node)
-    return {"node_id": node_id, "project": project, "level": level, "title": title}
+    return {"node_id": node_id, "project": project, "depth": depth, "title": title}
 
 
 @mcp.tool()
