@@ -1,48 +1,95 @@
 ---
 name: ai-pm-backprop
 description: >
-  反向传播引擎。将批准的合并决策反向传播到上层节点，修正受影响的分支。
-  管理节点失效、重新分解、共享组件引用的更新。
-  使用关键词：反向传播、修正分支、应用合并、更新引用、回传修正。
-version: 0.1.0
+  内容重写反向优化引擎。对聚类发现的重叠节点执行实际内容重写：
+  检测内容重叠 → 提取共享组件 → 重写原始节点 → 解决卡死冲突 → 重新推导父摘要。
+  使用写锁保证并发安全，同步知识库。不依赖挑刺 Agent 批准即可执行。
+  使用关键词：反向优化、内容重写、提取共享、冲突解决、回传修正。
+version: 0.2.0
 user-invocable: true
 triggers:
-  - "反向传播"
-  - "应用合并"
-  - "修正分支"
+  - "反向优化"
+  - "内容重写"
+  - "提取共享组件"
   - "backpropagate"
-  - "apply merge"
+  - "backward optimize"
 ---
 
-# AI PM Backprop - 反向传播引擎
+# AI PM Backprop - 内容重写反向优化引擎
 
 ## 触发场景
 
-挑刺 Agent 批准合并方案后，将合并决策的影响传播回分解树的上层节点。
+前向分解完成后，聚类引擎发现节点间内容重叠。Backprop 对重叠节点执行实际内容修改（不仅仅是创建边）。
+
+## 核心原则
+
+- **实际重写内容**：不只是标记关系，而是修改节点 detail.md/summary.md
+- **写锁保护**：修改任何节点前必须获取锁，防止并发冲突
+- **知识库同步**：每次内容变更自动同步到 KB
+- **收敛控制**：alignment_count > 4 时强制 LLM 生成具体解决方案
 
 ## 工作流程
 
-1. **收集批准的合并方案**：筛选 approved=True 的 MergePlan
-2. **创建共享组件**：在数据库中创建新的共享组件节点
-3. **更新引用**：将被合并节点的引用指向新的共享组件
-4. **失效处理**：将被合并的原始节点标记为 invalidated
-5. **反向传播**：沿分解树向上遍历
-   - 更新父节点的 summary.md（反映子节点的合并变更）
-   - 更新父节点的 vector.json（重新计算标签）
-   - 如果变更足够大，标记父节点为需要重新审查
-6. **触发重跑**：对需要重新审查的节点标记为 pending
+```
+detect_overlap → extract_shared_component → rewrite_node_content → resolve_conflict → rederive_parent
+```
+
+1. **检测重叠** (detect_overlap)：LLM 分析同一聚类中两个节点的内容，识别共享部分
+   - 输入：node_a detail + node_b detail
+   - 输出：shared_content 描述 + overlap_type (data_model/api_interface/business_logic/user_flow)
+
+2. **提取共享组件** (extract_shared_component)：
+   - 获取写锁
+   - 创建新的共享节点（包含公共内容）
+   - 写入 detail.md 和 summary.md
+   - 同步到知识库
+   - 创建 shared_ref 边
+
+3. **重写原始节点** (rewrite_node_content)：
+   - 获取写锁
+   - 从原始节点中移除已提取的内容
+   - 添加对共享组件的引用
+   - 更新 summary.md
+   - 同步知识库
+
+4. **解决卡死冲突** (resolve_conflict)：
+   - 当 edge.alignment_count > 4：两个节点反复对齐但无法收敛
+   - LLM 生成具体的解决方案（不是抽象建议）
+   - 获取写锁，应用解决方案到两个节点
+   - 重置 alignment_count
+
+5. **重新推导父摘要** (rederive_parent)：
+   - 收集所有子节点的当前 summary
+   - LLM 重新生成父节点摘要
+   - 约束向上传播（constraints 不丢失）
+
+## 写锁协议
+
+```python
+CALLER_ID = "backprop"
+
+with db.locked(node_id, CALLER_ID):
+    db.update_node_content(node_id, new_detail, new_summary, CALLER_ID)
+    kb.sync_node(node_id, project, title, new_content)
+```
+
+- TTL: 300 秒（默认）
+- 获取失败：等待并重试，不跳过
+- 释放：操作完成后立即释放
 
 ## 脚本
 
-- `scripts/propagate.py`：反向传播逻辑
+- `scripts/propagate.py`：完整的反向优化管线
 
 ## 输入
 
-- 批准的 MergePlan 列表
 - project：项目名称
+- clusters：聚类结果列表（来自 ai-pm-hyperspace）
+- config：LLM 和数据库配置
 
 ## 输出
 
-- 更新后的节点状态
 - 新创建的共享组件节点列表
-- 需要重跑的节点列表
+- 被重写的原始节点列表
+- 解决的冲突列表
+- 重新推导的父节点列表

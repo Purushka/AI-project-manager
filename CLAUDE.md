@@ -10,7 +10,7 @@ ai-pm-skills is the Python CLI toolchain for the AI Product Manager system. It p
 The agent evaluates a 10-dimension completeness checklist (weighted 1-3) against user input. It self-iterates: asks targeted questions about the weakest dimensions, re-evaluates after each answer, and only produces a requirements document when the weighted score ≥ 70 (or after 8 rounds with assumptions marked).
 
 ### Phase 1: Forward Decomposition
-**Independent parallel decomposition with NO cross-node alignment.** No fixed layers or layer semantics. Nodes decompose by detail granularity: depth-0 is coarsest, depth-N is executable (one person, one sprint). Breadth-first with depth-first sprints. Each node gets 9-axis hyperspace tags. Only parent edges created. Completed subtrees compacted early to free context budget.
+**Independent parallel decomposition with NO cross-node alignment.** No fixed layers or layer semantics. Nodes decompose by detail granularity: depth-0 is coarsest, depth-N is executable (one person, one sprint). Breadth-first with depth-first sprints. Each node gets weighted multi-axis hyperspace tags. Only parent edges created. Completed subtrees compacted early to free context budget.
 
 ### Phase 2: Backward Optimization (Cluster-First)
 Once forward pass completes, a single bottom-up optimization runs:
@@ -29,7 +29,6 @@ Three-tier budget per LLM call:
 - Tier 1 mandatory (~850t): project summary + current node full + parent compacted
 - Tier 2 important (~800t): top-5 related node interfaces + contracts
 - Tier 3 auxiliary: sibling titles + ancestor interfaces
-- Current task detail: <=60K tokens
 
 The `ai-pm-context` skill handles assembly and truncation.
 
