@@ -147,6 +147,19 @@ def get_edges(project: str):
     ]
 
 
+@app.get("/api/export/{project}")
+def export_project(project: str):
+    """Export project tree as a structured markdown document."""
+    import subprocess
+    result = subprocess.run(
+        ["python", str(Path(__file__).resolve().parents[1] / "cli.py"),
+         "export", project],
+        capture_output=True, text=True, encoding="utf-8",
+    )
+    from fastapi.responses import PlainTextResponse
+    return PlainTextResponse(result.stdout, media_type="text/markdown; charset=utf-8")
+
+
 @app.get("/api/stream/{project}")
 async def event_stream(project: str):
     """SSE endpoint — polls DB for changes and pushes updates."""

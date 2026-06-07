@@ -16,6 +16,7 @@ Usage:
     python cli.py tag find <key> <value>
     python cli.py cluster run <project> [--depth <n>]
     python cli.py search similar <node_id> [--n <count>]
+    python cli.py export <project> [-o output.md]
 """
 
 from __future__ import annotations
@@ -470,6 +471,175 @@ def cmd_checkpoint_rollback(args: argparse.Namespace) -> None:
                "removed_checkpoints": removed_cps})
 
 
+# ── Export command ────────────────────────────────────────────────
+
+def cmd_export(args: argparse.Namespace) -> None:
+    config = load_config()
+    db = Database(config)
+    project = args.project
+    nodes = db.get_all_nodes(project)
+    if not nodes:
+        _json_out({"error": f"No nodes found for project '{project}'"})
+        return
+
+    node_map: dict[str, Node] = {n.id: n for n in nodes}
+    children_map: dict[str, list[Node]] = {}
+    roots: list[Node] = []
+
+    for n in nodes:
+        if n.parent_id and n.parent_id in node_map:
+            children_map.setdefault(n.parent_id, []).append(n)
+        else:
+            roots.append(n)
+
+    for children in children_map.values():
+        children.sort(key=lambda n: n.id)
+
+    files_dir = config.data_dir / project / "files"
+    projects_dir = config.data_dir / "projects" / project
+
+    def _find_content(node: Node) -> str:
+        if node.detail_path:
+            p = Path(node.detail_path)
+            if p.exists():
+                return p.read_text(encoding="utf-8").strip()
+
+        candidate = files_dir / f"{node.id}_detail.md"
+        if candidate.exists():
+            return candidate.read_text(encoding="utf-8").strip()
+
+        candidate = files_dir / f"{node.id}_summary.md"
+        if candidate.exists():
+            return candidate.read_text(encoding="utf-8").strip()
+
+        if node.compacted:
+            return node.compacted.strip()
+
+        return ""
+
+    def _format_tags(node: Node) -> str:
+        tags = db.get_tags(node.id)
+        if not tags:
+            return ""
+        grouped: dict[str, list[str]] = {}
+        for k, v in tags:
+            grouped.setdefault(k, []).append(v)
+        parts = [f"**{k}**: {', '.join(vs)}" for k, vs in grouped.items()]
+        return " | ".join(parts)
+
+    lines: list[str] = []
+    fmt = args.format if hasattr(args, "format") and args.format else "markdown"
+
+    lines.append(f"# {project}")
+    lines.append("")
+    lines.append(f"> Exported from AI PM decomposition tree")
+    lines.append(f"> Total nodes: {len(nodes)} | Max depth: {db.get_max_depth(project)}")
+    lines.append("")
+    lines.append("---")
+    lines.append("")
+
+    # Include requirements doc if exists
+    req_path = projects_dir / "requirements.md"
+    if req_path.exists():
+        req_text = req_path.read_text(encoding="utf-8").strip()
+        req_lines = req_text.split("\n")
+        # Use first heading as section title, skip it from body
+        if req_lines and req_lines[0].startswith("# "):
+            lines.append(f"## {req_lines[0].lstrip('# ').strip()}")
+            req_lines = req_lines[1:]
+        else:
+            lines.append("## Requirements Summary")
+        lines.append("")
+        # Only first section (before first ---) as overview
+        body = "\n".join(req_lines).strip()
+        sections = body.split("\n---\n")
+        lines.append(sections[0].strip() if sections else body)
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+
+    polish = hasattr(args, "polish") and args.polish
+
+    def _polish_section(node: Node, raw_content: str) -> str:
+        """Polish one node's content via LLM. Context = parent + siblings only."""
+        if not raw_content.strip():
+            return raw_content
+
+        from shared.llm import call_llm
+
+        parent_title = node_map[node.parent_id].title if node.parent_id and node.parent_id in node_map else project
+        siblings = children_map.get(node.parent_id or "", [])
+        sibling_titles = [s.title for s in siblings if s.id != node.id]
+
+        context = f"所属上级模块: {parent_title}\n"
+        if sibling_titles:
+            context += f"同级模块: {', '.join(sibling_titles)}\n"
+        children = children_map.get(node.id, [])
+        if children:
+            context += f"下级模块: {', '.join(c.title for c in children)}\n"
+
+        system = (
+            "你是技术文档润色助手。对以下模块描述进行润色，要求：\n"
+            "1. 保留所有事实信息，不添加、不删除内容\n"
+            "2. 让表达更清晰、更专业、更有条理\n"
+            "3. 如果原文已经很好，只做微调即可\n"
+            "4. 输出纯 markdown，不要加代码块包裹\n"
+            "5. 不要输出与润色无关的话"
+        )
+        prompt = f"## 上下文\n{context}\n## 当前模块: {node.title}\n\n## 原始内容\n{raw_content}"
+
+        try:
+            result = call_llm(prompt, config, depth=node.level, system_prompt=system, max_tokens=2048)
+            return result.strip()
+        except Exception as e:
+            import logging
+            logging.warning(f"Polish failed for {node.id}: {e}")
+            return raw_content
+
+    def _render_node(node: Node, heading_level: int) -> None:
+        prefix = "#" * min(heading_level, 6)
+        title = node.title or node.id
+        lines.append(f"{prefix} {title}")
+        lines.append("")
+
+        tag_line = _format_tags(node)
+        if tag_line:
+            lines.append(f"> {tag_line}")
+            lines.append("")
+
+        content = _find_content(node)
+        if content:
+            content_lines = content.split("\n")
+            if content_lines and content_lines[0].startswith("# "):
+                content = "\n".join(content_lines[1:]).strip()
+            if polish:
+                content = _polish_section(node, content)
+            lines.append(content)
+            lines.append("")
+
+        children = children_map.get(node.id, [])
+        if children and not content:
+            lines.append(f"*({len(children)} sub-nodes)*")
+            lines.append("")
+
+        for child in children:
+            _render_node(child, heading_level + 1)
+
+    for root in roots:
+        _render_node(root, 2)
+
+    output = "\n".join(lines)
+
+    out_path = args.output if hasattr(args, "output") and args.output else None
+    if out_path:
+        Path(out_path).write_text(output, encoding="utf-8")
+        _json_out({"project": project, "exported": out_path,
+                   "nodes": len(nodes), "size_bytes": len(output.encode("utf-8")),
+                   "polished": polish})
+    else:
+        print(output)
+
+
 # ── Reconcile command ─────────────────────────────────────────────
 
 def cmd_reconcile(args: argparse.Namespace) -> None:
@@ -607,6 +777,13 @@ def build_parser() -> argparse.ArgumentParser:
     rec = sub.add_parser("reconcile")
     rec.add_argument("project")
 
+    # export
+    exp = sub.add_parser("export")
+    exp.add_argument("project")
+    exp.add_argument("--output", "-o", default=None, help="Output file path (stdout if omitted)")
+    exp.add_argument("--format", default="markdown", choices=["markdown"])
+    exp.add_argument("--polish", action="store_true", help="Polish each section via LLM")
+
     return p
 
 
@@ -642,6 +819,7 @@ def main() -> None:
     single_dispatch = {
         "compact": cmd_compact,
         "reconcile": cmd_reconcile,
+        "export": cmd_export,
     }
 
     if args.group in single_dispatch:
