@@ -1,10 +1,12 @@
 """AI PM Context - context assembly engine.
 
-Builds LLM call context from four layers with strict token budgets:
-- Global summary (<=10K tokens)
-- Ancestor chain summaries (<=20K tokens)
-- Shared component interfaces (<=30K tokens)
-- Current task detail (<=60K tokens)
+Builds LLM call context with three-tier priority:
+- Tier 1 (mandatory): project summary + current node + parent compacted
+- Tier 2 (important): related node interfaces + edge contracts
+- Tier 3 (auxiliary): sibling titles + ancestor interfaces
+
+Token budgets are configured via config.json context_budget dict.
+Quality floor: if Tier 1 cannot fit, stop rather than degrade.
 """
 
 from __future__ import annotations

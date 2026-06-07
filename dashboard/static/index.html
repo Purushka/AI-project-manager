@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>AI PM - Decomposition Monitor</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #c9d1d9; overflow: hidden; }
+
+.layout { display: grid; grid-template-columns: 280px 1fr 320px; grid-template-rows: 56px 1fr; height: 100vh; }
+.header { grid-column: 1 / -1; background: #161b22; border-bottom: 1px solid #30363d; display: flex; align-items: center; padding: 0 20px; gap: 20px; }
+.header h1 { font-size: 16px; font-weight: 600; color: #f0f6fc; }
+.header .stats { display: flex; gap: 16px; margin-left: auto; }
+.stat { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.stat .num { font-weight: 700; font-size: 18px; color: #58a6ff; }
+.stat.done .num { color: #3fb950; }
+.stat.pending .num { color: #d29922; }
+
+.sidebar { background: #161b22; border-right: 1px solid #30363d; overflow-y: auto; padding: 12px; }
+.sidebar h3 { font-size: 12px; text-transform: uppercase; color: #8b949e; margin-bottom: 8px; letter-spacing: 0.5px; }
+.project-btn { width: 100%; text-align: left; background: #21262d; border: 1px solid #30363d; color: #c9d1d9; padding: 8px 12px; border-radius: 6px; cursor: pointer; margin-bottom: 6px; font-size: 13px; }
+.project-btn:hover { border-color: #58a6ff; }
+.project-btn.active { border-color: #58a6ff; background: #1c2128; }
+
+.depth-chart { margin-top: 16px; }
+.depth-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; font-size: 12px; }
+.depth-bar .label { width: 50px; text-align: right; color: #8b949e; }
+.depth-bar .bar { height: 16px; background: #1f6feb; border-radius: 3px; min-width: 2px; transition: width 0.5s; }
+.depth-bar .count { color: #8b949e; font-size: 11px; }
+
+.event-log { margin-top: 16px; }
+.event-item { font-size: 11px; padding: 4px 0; border-bottom: 1px solid #21262d; color: #8b949e; }
+.event-item .node-title { color: #58a6ff; }
+
+.canvas { overflow: hidden; position: relative; }
+#tree-container { width: 100%; height: 100%; }
+svg { width: 100%; height: 100%; }
+
+.node circle { cursor: pointer; transition: all 0.3s; }
+.node text { font-size: 11px; fill: #c9d1d9; }
+.node.status-pending circle { fill: #d29922; stroke: #d29922; }
+.node.status-done circle { fill: #3fb950; stroke: #3fb950; }
+.node.status-in_progress circle { fill: #1f6feb; stroke: #1f6feb; }
+.node.status-invalidated circle { fill: #f85149; stroke: #f85149; }
+.node.status-root circle { fill: #bc8cff; stroke: #bc8cff; }
+.node circle.pulse { animation: pulse 1.5s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { r: 6; opacity: 1; } 50% { r: 9; opacity: 0.7; } }
+
+.link { fill: none; stroke: #30363d; stroke-width: 1.5px; }
+
+.detail-panel { background: #161b22; border-left: 1px solid #30363d; overflow-y: auto; padding: 16px; }
+.detail-panel h3 { font-size: 14px; color: #f0f6fc; margin-bottom: 12px; }
+.detail-panel .field { margin-bottom: 10px; }
+.detail-panel .field-label { font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; }
+.detail-panel .field-value { font-size: 13px; margin-top: 2px; }
+.tag { display: inline-block; background: #1c2128; border: 1px solid #30363d; border-radius: 12px; padding: 2px 8px; font-size: 11px; margin: 2px; }
+.breadcrumb { font-size: 11px; color: #8b949e; margin-bottom: 12px; }
+.breadcrumb span { color: #58a6ff; cursor: pointer; }
+.children-list { list-style: none; }
+.children-list li { padding: 4px 8px; font-size: 12px; border-left: 2px solid #30363d; margin-bottom: 4px; cursor: pointer; }
+.children-list li:hover { border-color: #58a6ff; }
+.status-badge { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 10px; font-weight: 600; }
+.status-badge.pending { background: #d2992233; color: #d29922; }
+.status-badge.done { background: #3fb95033; color: #3fb950; }
+.status-badge.in_progress { background: #1f6feb33; color: #58a6ff; }
+
+.empty-state { display: flex; align-items: center; justify-content: center; height: 100%; color: #8b949e; font-size: 14px; flex-direction: column; gap: 8px; }
+
+#project-select { background: #21262d; border: 1px solid #30363d; color: #c9d1d9; padding: 4px 8px; border-radius: 4px; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <header class="header">
+    <h1>AI PM Monitor</h1>
+    <select id="project-select"><option value="">Select project...</option></select>
+    <div class="stats">
+      <div class="stat"><span>Nodes</span><span class="num" id="stat-total">0</span></div>
+      <div class="stat done"><span>Done</span><span class="num" id="stat-done">0</span></div>
+      <div class="stat pending"><span>Pending</span><span class="num" id="stat-pending">0</span></div>
+      <div class="stat"><span>Depth</span><span class="num" id="stat-depth">0</span></div>
+    </div>
+  </header>
+
+  <aside class="sidebar">
+    <h3>Depth Distribution</h3>
+    <div class="depth-chart" id="depth-chart"></div>
+    <div class="event-log">
+      <h3>Live Events</h3>
+      <div id="event-list"></div>
+    </div>
+  </aside>
+
+  <main class="canvas" id="tree-container"></main>
+
+  <aside class="detail-panel" id="detail-panel">
+    <div class="empty-state">
+      <div>Click a node to inspect</div>
+    </div>
+  </aside>
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+const API = '';
+let currentProject = null;
+let eventSource = null;
+let treeData = null;
+
+async function loadProjects() {
+  const res = await fetch(`${API}/api/projects`);
+  const projects = await res.json();
+  const select = document.getElementById('project-select');
+  select.innerHTML = '<option value="">Select project...</option>';
+  projects.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p; opt.textContent = p;
+    select.appendChild(opt);
+  });
+  if (projects.length === 1) {
+    select.value = projects[0];
+    selectProject(projects[0]);
+  }
+}
+
+function selectProject(project) {
+  currentProject = project;
+  if (eventSource) eventSource.close();
+  loadTree();
+  eventSource = new EventSource(`${API}/api/stream/${project}`);
+  eventSource.addEventListener('stats', e => updateStats(JSON.parse(e.data)));
+  eventSource.addEventListener('node_added', e => {
+    const node = JSON.parse(e.data);
+    addEvent(`New: ${node.title} (depth ${node.depth})`);
+    loadTree();
+  });
+}
+
+document.getElementById('project-select').addEventListener('change', e => {
+  if (e.target.value) selectProject(e.target.value);
+});
+
+async function loadTree() {
+  if (!currentProject) return;
+  const res = await fetch(`${API}/api/tree/${currentProject}`);
+  const data = await res.json();
+  if (!data.tree) return;
+  treeData = data;
+  updateStats(data.stats);
+  renderTree(data.tree);
+  renderDepthChart(data.stats.by_depth);
+}
+
+function updateStats(stats) {
+  document.getElementById('stat-total').textContent = stats.total_nodes || 0;
+  document.getElementById('stat-done').textContent = stats.by_status?.done || 0;
+  document.getElementById('stat-pending').textContent = stats.by_status?.pending || 0;
+  document.getElementById('stat-depth').textContent = stats.max_depth || 0;
+}
+
+function renderDepthChart(byDepth) {
+  const el = document.getElementById('depth-chart');
+  if (!byDepth) { el.innerHTML = ''; return; }
+  const max = Math.max(...Object.values(byDepth), 1);
+  el.innerHTML = Object.entries(byDepth).sort((a,b) => +a[0] - +b[0]).map(([d, c]) =>
+    `<div class="depth-bar"><span class="label">D${d}</span><div class="bar" style="width:${(c/max)*140}px"></div><span class="count">${c}</span></div>`
+  ).join('');
+}
+
+function addEvent(text) {
+  const el = document.getElementById('event-list');
+  const item = document.createElement('div');
+  item.className = 'event-item';
+  const time = new Date().toLocaleTimeString();
+  item.innerHTML = `<span style="color:#484f58">${time}</span> <span class="node-title">${text}</span>`;
+  el.prepend(item);
+  while (el.children.length > 30) el.lastChild.remove();
+}
+
+function renderTree(root) {
+  const container = document.getElementById('tree-container');
+  container.innerHTML = '';
+  const width = container.clientWidth;
+  const height = container.clientHeight;
+
+  const svg = d3.select(container).append('svg')
+    .attr('width', width).attr('height', height);
+
+  const g = svg.append('g');
+  const zoom = d3.zoom().scaleExtent([0.2, 4]).on('zoom', e => g.attr('transform', e.transform));
+  svg.call(zoom);
+
+  const hierarchy = d3.hierarchy(root, d => d.children);
+  const nodeCount = hierarchy.descendants().length;
+  const leafCount = hierarchy.leaves().length;
+  const treeWidth = Math.max(width - 100, leafCount * 100);
+  const treeHeight = Math.max(height - 100, (hierarchy.height + 1) * 140);
+
+  const treeLayout = d3.tree().size([treeWidth, treeHeight]).separation((a, b) => a.parent === b.parent ? 1 : 1.2);
+  treeLayout(hierarchy);
+
+  // Center and fit
+  const scale = Math.min(1, (width - 60) / (treeWidth + 60), (height - 60) / (treeHeight + 60));
+  svg.call(zoom.transform, d3.zoomIdentity.translate(30, 30).scale(scale));
+
+  // Links
+  g.selectAll('.link').data(hierarchy.links()).enter().append('path')
+    .attr('class', 'link')
+    .attr('d', d3.linkVertical().x(d => d.x).y(d => d.y));
+
+  // Nodes
+  const nodes = g.selectAll('.node').data(hierarchy.descendants()).enter().append('g')
+    .attr('class', d => `node status-${d.data.status}`)
+    .attr('transform', d => `translate(${d.x},${d.y})`)
+    .on('click', (e, d) => showDetail(d.data.id));
+
+  nodes.append('circle')
+    .attr('r', d => d.data.status === 'pending' ? 6 : 5)
+    .classed('pulse', d => d.data.status === 'pending');
+
+  nodes.append('text')
+    .attr('dy', -12).attr('text-anchor', 'middle')
+    .text(d => d.data.title?.substring(0, 14) || '');
+}
+
+async function showDetail(nodeId) {
+  const res = await fetch(`${API}/api/node/${nodeId}`);
+  const node = await res.json();
+  if (node.error) return;
+
+  const panel = document.getElementById('detail-panel');
+  const tags = Object.entries(node.tags || {}).map(([k,v]) => `<span class="tag">${k}: ${v}</span>`).join('');
+  const crumbs = (node.ancestors || []).map(a => `<span onclick="showDetail('${a.id}')">${a.title}</span>`).join(' → ');
+  const children = (node.children || []).map(c =>
+    `<li onclick="showDetail('${c.id}')"><span class="status-badge ${c.status}">${c.status}</span> ${c.title}</li>`
+  ).join('');
+
+  panel.innerHTML = `
+    <h3>${node.title}</h3>
+    <div class="breadcrumb">${crumbs}</div>
+    <div class="field"><div class="field-label">Status</div><div class="field-value"><span class="status-badge ${node.status}">${node.status}</span></div></div>
+    <div class="field"><div class="field-label">Depth</div><div class="field-value">${node.depth}</div></div>
+    <div class="field"><div class="field-label">ID</div><div class="field-value" style="font-size:11px;color:#8b949e;word-break:break-all">${node.id}</div></div>
+    ${tags ? `<div class="field"><div class="field-label">Tags</div><div class="field-value">${tags}</div></div>` : ''}
+    ${children ? `<div class="field"><div class="field-label">Children (${node.children.length})</div><ul class="children-list">${children}</ul></div>` : ''}
+    ${node.detail ? `<div class="field"><div class="field-label">Detail</div><div class="field-value" style="white-space:pre-wrap;font-size:12px;max-height:300px;overflow-y:auto;background:#0d1117;padding:8px;border-radius:4px">${escapeHtml(node.detail)}</div></div>` : ''}
+  `;
+}
+
+function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// Init
+loadProjects();
+setInterval(() => { if (currentProject) loadTree(); }, 10000);
+</script>
+</body>
+</html>

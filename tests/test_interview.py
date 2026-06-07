@@ -86,7 +86,7 @@ class TestInterviewFlow:
         init_project("外卖平台", "proj", config=tmp_config)
         state_mgr = ProjectState("proj", tmp_config)
         state = state_mgr.load()
-        state["phase"] = Phase.DECOMPOSING.value
+        state["phase"] = Phase.FORWARD.value
         state_mgr.save(state)
 
         result = submit_interview_answer("proj", "回答", config=tmp_config)
@@ -125,7 +125,7 @@ class TestConfirmRequirements:
         state_mgr.save(state)
 
         result = confirm_requirements("proj", "确认", config=tmp_config)
-        assert result["status"] == "decomposing"
+        assert result["status"] == "forward"
 
         db = Database(tmp_config)
         assert db.count_nodes("proj") == 1
@@ -140,7 +140,7 @@ class TestConfirmRequirements:
             state_mgr.save(state)
 
             result = confirm_requirements(proj_name, word, config=tmp_config)
-            assert result["status"] == "decomposing", f"Failed for word: {word}"
+            assert result["status"] == "forward", f"Failed for word: {word}"
 
 
 class TestProjectStatus:

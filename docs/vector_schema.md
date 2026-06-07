@@ -1,68 +1,55 @@
 # Hyperspace Vector Schema
 
-Each node in the decomposition tree carries an 8-axis hyperspace vector tag. These tags enable multi-dimensional clustering to discover reuse opportunities across subsystem boundaries.
+Each node carries weighted multi-axis tags stored in the `tags` table as (node_id, key, value) tuples. Axes have discriminative weights that control their influence on clustering.
 
-## Axes
+## Axes and Weights
 
-### 1. domain (string[])
-Functional domain labels. Identifies which business domains this node belongs to.
+| Axis | Weight | Type | Purpose |
+|------|--------|------|---------|
+| domain | 3.0 | string | Business domain (strongest clustering signal) |
+| entity | 2.5 | string | Core data entities involved |
+| pattern | 2.0 | string | Architecture/design patterns |
+| actor | 1.5 | string | User roles or system actors |
+| nfr | 1.0 | string | Non-functional requirements |
+| biz_metrics | 1.0 | string | Business metrics this node affects |
+| tech_stack | 0.8 | string | Technology layer (frontend/backend/ai-model/etc) |
+| data_sensitivity | 0.5 | string | public / internal / sensitive / critical |
+| revenue_impact | 0.5 | string | direct / indirect / supporting / none |
+| dependency | 0.4 | string | independent / light-dependency / heavy-dependency |
+| complexity | 0.3 | string | low / medium / high / very-high |
+| user_facing | 0.3 | string | user-facing / internal / hybrid |
+| timeline_priority | 0.2 | string | mvp / phase-1 / phase-2 / phase-3 |
 
-Examples: `["payments", "order_management"]`, `["user_auth", "security"]`
+Weights reflect discriminative power: `domain=3.0` means "same domain is a strong reuse signal", while `complexity=0.3` means "same complexity is nearly meaningless for clustering."
 
-### 2. entities (string[])
-Core data entities involved. Names the domain objects this node reads, writes, or transforms.
+## Examples
 
-Examples: `["Order", "Payment", "Refund"]`, `["User", "Session"]`
-
-### 3. patterns (string[])
-Design patterns used or recommended. Captures architectural and design pattern choices.
-
-Examples: `["CQRS", "Event Sourcing"]`, `["Repository", "Unit of Work"]`
-
-### 4. api_shape (object)
-Interface shape descriptor with three sub-fields:
-- **inputs**: Parameter types the node accepts
-- **outputs**: Return types the node produces
-- **side_effects**: External effects (notifications, writes, charges)
-
-Example:
-```json
-{
-  "inputs": ["order_id: string", "amount: decimal"],
-  "outputs": ["PaymentResult", "Receipt"],
-  "side_effects": ["charge_payment_gateway", "send_confirmation_email"]
-}
+```
+domain=payments, entity=Order, entity=Payment, pattern=event-driven,
+actor=consumer, nfr=idempotent, tech_stack=backend, complexity=medium,
+data_sensitivity=critical, revenue_impact=direct, timeline_priority=mvp
 ```
 
-### 5. tech_traits (string[])
-Technical characteristics and quality attributes.
+A single node can have multiple values per axis (multiple entity tags, multiple pattern tags, etc.).
 
-Examples: `["real_time", "idempotent", "high_throughput"]`, `["batch_processing", "eventually_consistent"]`
+## Clustering Usage
 
-### 6. actors (string[])
-User roles or system actors that interact with this node.
+### Weighted Jaccard (Tag-based)
 
-Examples: `["consumer", "merchant", "rider"]`, `["admin", "system_scheduler"]`
+Per-axis Jaccard weighted by axis weights. Two nodes with matching `domain` tags contribute 3x more to similarity than matching `complexity` tags.
 
-### 7. nfr (string[])
-Non-functional requirements relevant to this node.
+```
+similarity = Σ(weight_i × jaccard(axis_i_A, axis_i_B)) / Σ(weight_i)
+```
 
-Examples: `["low_latency", "high_availability", "GDPR_compliant"]`, `["audit_trail", "rate_limited"]`
+Threshold: 0.35 (pairs below this are never clustered together).
 
-### 8. rule_fingerprint (string)
-One-sentence summary of the core business rule chain. Used for deduplication of business logic.
+### Adaptive DBSCAN (Embedding-based)
 
-Examples:
-- `"order_create -> merchant_confirm -> rider_assign -> deliver -> complete"`
-- `"user_register -> verify_phone -> set_password -> activate"`
+Node summaries embedded in ChromaDB. DBSCAN with adaptive eps:
+- `eps = median(pairwise_cosine_distance) × 0.7`
+- Clamped to [0.1, 0.5]
 
-## Usage in Clustering
+### Hybrid
 
-### Structural Clustering
-Tags are stored in the `tags` SQLite table as key-value pairs. Set operations (intersection, Jaccard similarity) identify nodes sharing domain/entity/pattern/actor overlaps.
-
-### Semantic Clustering
-The `rule_fingerprint` and full vector description are embedded into ChromaDB. DBSCAN clustering on these embeddings discovers semantically similar nodes even when tag labels differ.
-
-### Cross-Validation
-Structural and semantic clusters are cross-referenced to increase precision and reduce false positives.
+Tag clusters and semantic clusters are merged. If a semantic cluster is a superset of a tag cluster, the tag cluster is subsumed.

@@ -10,7 +10,7 @@ ai-pm-skills is the Python CLI toolchain for the AI Product Manager system. It p
 The agent evaluates a 10-dimension completeness checklist (weighted 1-3) against user input. It self-iterates: asks targeted questions about the weakest dimensions, re-evaluates after each answer, and only produces a requirements document when the weighted score ≥ 70 (or after 8 rounds with assumptions marked).
 
 ### Phase 1: Forward Decomposition
-**Independent parallel decomposition with NO cross-node alignment.** No fixed layers or layer semantics. Nodes decompose by detail granularity: depth-0 is coarsest, depth-N is executable (one person, one sprint). Breadth-first with depth-first sprints. Each node gets 9-axis hyperspace tags. Only parent edges created. Completed subtrees compacted early to free context budget.
+**Independent parallel decomposition with NO cross-node alignment.** No fixed layers or layer semantics. Nodes decompose by detail granularity: depth-0 is coarsest, depth-N is executable (one person, one sprint). Breadth-first with depth-first sprints. Each node gets weighted multi-axis hyperspace tags. Only parent edges created. Completed subtrees compacted early to free context budget.
 
 ### Phase 2: Backward Optimization (Cluster-First)
 Once forward pass completes, a single bottom-up optimization runs:
@@ -25,11 +25,12 @@ Once forward pass completes, a single bottom-up optimization runs:
 3-level compaction (full ~500t → compacted ~150t → interface ~80t). Constraints survive all compression levels. Always compress from original, never iteratively. Quality floor: minimum 850t context or stop.
 
 ## Context Management
-Three-tier budget per LLM call:
-- Tier 1 mandatory (~850t): project summary + current node full + parent compacted
-- Tier 2 important (~800t): top-5 related node interfaces + contracts
-- Tier 3 auxiliary: sibling titles + ancestor interfaces
-- Current task detail: <=60K tokens
+Three-tier priority per LLM call. Tiers are priority bands, not token caps — the actual sizes depend on node content:
+- Tier 1 mandatory (minimum ~850t, unbounded upward): project summary + current node FULL content + parent compacted. Quality floor: if this alone exceeds model window, stop.
+- Tier 2 important (target ~800t): top-5 related node interfaces + edge contracts. Truncated if Tier 1 is large.
+- Tier 3 auxiliary (fills remaining window): sibling titles + ancestor interfaces.
+
+Note: "~850t" is the minimum viable context, not an allocation cap. A complex node's full content (Tier 1) may be 5K+ tokens. The system fills Tier 1 completely, then fits Tier 2/3 into whatever remains.
 
 The `ai-pm-context` skill handles assembly and truncation.
 
@@ -129,8 +130,8 @@ Tests cover: prompt template loading/rendering, JSON response parsing, vector ex
 ## Key Design Decisions
 
 1. **Adaptive depth, not fixed layers**: Decomposition depth is driven by content complexity. Some branches finish at depth-2, others go to depth-12. Layers are granularity levels, not semantic categories.
-2. **Breadth-first with sprints**: All branches advance together at each depth level. Cross-branch alignment happens naturally because same-depth nodes exist simultaneously. Shallow branches that finish early get compacted, freeing context budget for deeper branches.
-3. **Constraints survive all compaction**: Negative requirements ("only supports X", "must not Y") are preserved even at interface-only compression level. This prevents downstream nodes from making assumptions based on lossy summaries.
-4. **Event-driven alignment**: Alignment isn't a phase — it's a continuous event. Triggered on node creation, interface change, shared component modification, and as a baseline after each depth level completes.
-5. **Edge lifecycle with convergence control**: Edges track alignment_count. If two nodes keep re-aligning without converging (>4 attempts), the system forces a conflict and escalates to the user rather than looping forever.
+2. **Forward pass: zero cross-node alignment**: Branches decompose independently. No alignment during Phase 1. This makes forward pass embarrassingly parallel but relies on Phase 2 clustering to catch divergence.
+3. **Backward pass: cluster-first content rewriting**: After all leaves complete, one backward optimization rewrites content (not just creates edges). Detects overlap → extracts shared components → rewrites originals.
+4. **Edge lifecycle (backward/maintenance only)**: Edges and alignment are created exclusively in Phase 2 and during post-delivery maintenance. They are NOT triggered during forward decomposition. alignment_count > 4 → force resolution.
+5. **Constraints survive all compaction**: Negative requirements preserved at every compression level.
 6. **File-based state sharing**: SQLite + filesystem for persistence. CLI returns JSON for agent consumption. Checkpoints enable rollback. Snapshots enable session resumption.

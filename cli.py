@@ -5,17 +5,18 @@ Usage:
     python cli.py project init <name> <idea_text>
     python cli.py project status <name>
     python cli.py project list
-    python cli.py node add <project> <level> <title> [--parent <id>]
+    python cli.py node add <project> <title> [--parent <id>] [--depth <n>]
     python cli.py node get <id>
     python cli.py node children <id>
     python cli.py node ancestors <id>
     python cli.py node status <id> <new_status>
-    python cli.py node list <project> [--level <n>]
+    python cli.py node list <project> [--depth <n>]
     python cli.py tag set <node_id> <key=value> [key=value ...]
     python cli.py tag get <node_id>
     python cli.py tag find <key> <value>
-    python cli.py cluster run <project> <level>
+    python cli.py cluster run <project> [--depth <n>]
     python cli.py search similar <node_id> [--n <count>]
+    python cli.py export <project> [-o output.md]
 """
 
 from __future__ import annotations
@@ -56,7 +57,7 @@ def cmd_project_init(args: argparse.Namespace) -> None:
         idea_text = Path(idea_text).read_text(encoding="utf-8")
     idea_path.write_text(idea_text, encoding="utf-8")
 
-    root_id = f"{project}_L0_root"
+    root_id = f"{project}_root_{uuid.uuid4().hex[:6]}"
     root = Node(
         id=root_id, project=project, level=0, parent_id=None,
         status=NodeStatus.PENDING, title="Product Vision",
@@ -66,7 +67,7 @@ def cmd_project_init(args: argparse.Namespace) -> None:
 
     status_path = config.data_dir / project / "status.md"
     status_path.write_text(
-        f"# {project}\n- 阶段: 访谈\n- 当前层级: L0\n- 已完成: 无\n",
+        f"# {project}\n- 阶段: 访谈\n- 根节点: {root_id}\n",
         encoding="utf-8",
     )
     _json_out({"project": project, "root_node": root_id, "idea_path": str(idea_path)})
@@ -77,16 +78,27 @@ def cmd_project_status(args: argparse.Namespace) -> None:
     db = Database(config)
     project = args.name
     total = db.count_nodes(project)
-    levels = {}
-    for lv in range(10):
-        nodes = db.get_nodes_by_level(project, lv)
-        if nodes:
-            levels[f"L{lv}"] = {
-                "total": len(nodes),
-                "done": sum(1 for n in nodes if n.status == NodeStatus.DONE),
-                "pending": sum(1 for n in nodes if n.status == NodeStatus.PENDING),
-            }
-    _json_out({"project": project, "total_nodes": total, "levels": levels})
+    all_nodes = db.get_all_nodes(project)
+    depth_stats = {}
+    for n in all_nodes:
+        d = n.level
+        if d not in depth_stats:
+            depth_stats[d] = {"total": 0, "done": 0, "pending": 0}
+        depth_stats[d]["total"] += 1
+        if n.status == NodeStatus.DONE:
+            depth_stats[d]["done"] += 1
+        elif n.status == NodeStatus.PENDING:
+            depth_stats[d]["pending"] += 1
+    depths = {f"depth_{d}": s for d, s in sorted(depth_stats.items())}
+    leaf_nodes = db.get_leaf_nodes(project)
+    pending_leaves = [n for n in leaf_nodes if n.status == NodeStatus.PENDING]
+    _json_out({
+        "project": project,
+        "total_nodes": total,
+        "max_depth": db.get_max_depth(project),
+        "pending_leaves": len(pending_leaves),
+        "depths": depths,
+    })
 
 
 def cmd_project_list(args: argparse.Namespace) -> None:
@@ -105,13 +117,18 @@ def cmd_project_list(args: argparse.Namespace) -> None:
 def cmd_node_add(args: argparse.Namespace) -> None:
     config = load_config()
     db = Database(config)
-    node_id = f"{args.project}_L{args.level}_{uuid.uuid4().hex[:6]}"
+    depth = int(args.depth) if args.depth is not None else 0
+    if args.parent:
+        parent = db.get_node(args.parent)
+        if parent:
+            depth = parent.level + 1
+    node_id = f"{args.project}_{uuid.uuid4().hex[:8]}"
     node = Node(
-        id=node_id, project=args.project, level=int(args.level),
+        id=node_id, project=args.project, level=depth,
         parent_id=args.parent, status=NodeStatus.PENDING, title=args.title,
     )
     db.insert_node(node)
-    _json_out({"node_id": node_id, "project": args.project, "level": args.level, "title": args.title})
+    _json_out({"node_id": node_id, "project": args.project, "depth": depth, "title": args.title})
 
 
 def cmd_node_get(args: argparse.Namespace) -> None:
@@ -163,12 +180,10 @@ def cmd_node_update_status(args: argparse.Namespace) -> None:
 def cmd_node_list(args: argparse.Namespace) -> None:
     config = load_config()
     db = Database(config)
-    if args.level is not None:
-        nodes = db.get_nodes_by_level(args.project, int(args.level))
+    if args.depth is not None:
+        nodes = db.get_nodes_by_level(args.project, int(args.depth))
     else:
-        nodes = []
-        for lv in range(10):
-            nodes.extend(db.get_nodes_by_level(args.project, lv))
+        nodes = db.get_all_nodes(args.project)
     _json_out({"project": args.project, "count": len(nodes), "nodes": [
         {"id": n.id, "level": n.level, "title": n.title, "status": n.status.value}
         for n in nodes
@@ -210,8 +225,10 @@ def cmd_tag_find(args: argparse.Namespace) -> None:
 def cmd_cluster_run(args: argparse.Namespace) -> None:
     config = load_config()
     db = Database(config)
-    level = int(args.level)
-    nodes = db.get_nodes_by_level(args.project, level)
+    if args.depth is not None:
+        nodes = db.get_nodes_by_level(args.project, int(args.depth))
+    else:
+        nodes = db.get_leaf_nodes(args.project)
 
     if len(nodes) < 2:
         _json_out({"message": "Need at least 2 nodes to cluster", "node_count": len(nodes)})
@@ -259,7 +276,7 @@ def cmd_cluster_run(args: argparse.Namespace) -> None:
             })
 
     _json_out({
-        "project": args.project, "level": level,
+        "project": args.project, "depth_filter": args.depth,
         "total_nodes": len(nodes), "clusters_found": len(clusters),
         "clusters": clusters,
     })
@@ -454,6 +471,175 @@ def cmd_checkpoint_rollback(args: argparse.Namespace) -> None:
                "removed_checkpoints": removed_cps})
 
 
+# ── Export command ────────────────────────────────────────────────
+
+def cmd_export(args: argparse.Namespace) -> None:
+    config = load_config()
+    db = Database(config)
+    project = args.project
+    nodes = db.get_all_nodes(project)
+    if not nodes:
+        _json_out({"error": f"No nodes found for project '{project}'"})
+        return
+
+    node_map: dict[str, Node] = {n.id: n for n in nodes}
+    children_map: dict[str, list[Node]] = {}
+    roots: list[Node] = []
+
+    for n in nodes:
+        if n.parent_id and n.parent_id in node_map:
+            children_map.setdefault(n.parent_id, []).append(n)
+        else:
+            roots.append(n)
+
+    for children in children_map.values():
+        children.sort(key=lambda n: n.id)
+
+    files_dir = config.data_dir / project / "files"
+    projects_dir = config.data_dir / "projects" / project
+
+    def _find_content(node: Node) -> str:
+        if node.detail_path:
+            p = Path(node.detail_path)
+            if p.exists():
+                return p.read_text(encoding="utf-8").strip()
+
+        candidate = files_dir / f"{node.id}_detail.md"
+        if candidate.exists():
+            return candidate.read_text(encoding="utf-8").strip()
+
+        candidate = files_dir / f"{node.id}_summary.md"
+        if candidate.exists():
+            return candidate.read_text(encoding="utf-8").strip()
+
+        if node.compacted:
+            return node.compacted.strip()
+
+        return ""
+
+    def _format_tags(node: Node) -> str:
+        tags = db.get_tags(node.id)
+        if not tags:
+            return ""
+        grouped: dict[str, list[str]] = {}
+        for k, v in tags:
+            grouped.setdefault(k, []).append(v)
+        parts = [f"**{k}**: {', '.join(vs)}" for k, vs in grouped.items()]
+        return " | ".join(parts)
+
+    lines: list[str] = []
+    fmt = args.format if hasattr(args, "format") and args.format else "markdown"
+
+    lines.append(f"# {project}")
+    lines.append("")
+    lines.append(f"> Exported from AI PM decomposition tree")
+    lines.append(f"> Total nodes: {len(nodes)} | Max depth: {db.get_max_depth(project)}")
+    lines.append("")
+    lines.append("---")
+    lines.append("")
+
+    # Include requirements doc if exists
+    req_path = projects_dir / "requirements.md"
+    if req_path.exists():
+        req_text = req_path.read_text(encoding="utf-8").strip()
+        req_lines = req_text.split("\n")
+        # Use first heading as section title, skip it from body
+        if req_lines and req_lines[0].startswith("# "):
+            lines.append(f"## {req_lines[0].lstrip('# ').strip()}")
+            req_lines = req_lines[1:]
+        else:
+            lines.append("## Requirements Summary")
+        lines.append("")
+        # Only first section (before first ---) as overview
+        body = "\n".join(req_lines).strip()
+        sections = body.split("\n---\n")
+        lines.append(sections[0].strip() if sections else body)
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+
+    polish = hasattr(args, "polish") and args.polish
+
+    def _polish_section(node: Node, raw_content: str) -> str:
+        """Polish one node's content via LLM. Context = parent + siblings only."""
+        if not raw_content.strip():
+            return raw_content
+
+        from shared.llm import call_llm
+
+        parent_title = node_map[node.parent_id].title if node.parent_id and node.parent_id in node_map else project
+        siblings = children_map.get(node.parent_id or "", [])
+        sibling_titles = [s.title for s in siblings if s.id != node.id]
+
+        context = f"所属上级模块: {parent_title}\n"
+        if sibling_titles:
+            context += f"同级模块: {', '.join(sibling_titles)}\n"
+        children = children_map.get(node.id, [])
+        if children:
+            context += f"下级模块: {', '.join(c.title for c in children)}\n"
+
+        system = (
+            "你是技术文档润色助手。对以下模块描述进行润色，要求：\n"
+            "1. 保留所有事实信息，不添加、不删除内容\n"
+            "2. 让表达更清晰、更专业、更有条理\n"
+            "3. 如果原文已经很好，只做微调即可\n"
+            "4. 输出纯 markdown，不要加代码块包裹\n"
+            "5. 不要输出与润色无关的话"
+        )
+        prompt = f"## 上下文\n{context}\n## 当前模块: {node.title}\n\n## 原始内容\n{raw_content}"
+
+        try:
+            result = call_llm(prompt, config, depth=node.level, system_prompt=system, max_tokens=2048)
+            return result.strip()
+        except Exception as e:
+            import logging
+            logging.warning(f"Polish failed for {node.id}: {e}")
+            return raw_content
+
+    def _render_node(node: Node, heading_level: int) -> None:
+        prefix = "#" * min(heading_level, 6)
+        title = node.title or node.id
+        lines.append(f"{prefix} {title}")
+        lines.append("")
+
+        tag_line = _format_tags(node)
+        if tag_line:
+            lines.append(f"> {tag_line}")
+            lines.append("")
+
+        content = _find_content(node)
+        if content:
+            content_lines = content.split("\n")
+            if content_lines and content_lines[0].startswith("# "):
+                content = "\n".join(content_lines[1:]).strip()
+            if polish:
+                content = _polish_section(node, content)
+            lines.append(content)
+            lines.append("")
+
+        children = children_map.get(node.id, [])
+        if children and not content:
+            lines.append(f"*({len(children)} sub-nodes)*")
+            lines.append("")
+
+        for child in children:
+            _render_node(child, heading_level + 1)
+
+    for root in roots:
+        _render_node(root, 2)
+
+    output = "\n".join(lines)
+
+    out_path = args.output if hasattr(args, "output") and args.output else None
+    if out_path:
+        Path(out_path).write_text(output, encoding="utf-8")
+        _json_out({"project": project, "exported": out_path,
+                   "nodes": len(nodes), "size_bytes": len(output.encode("utf-8")),
+                   "polished": polish})
+    else:
+        print(output)
+
+
 # ── Reconcile command ─────────────────────────────────────────────
 
 def cmd_reconcile(args: argparse.Namespace) -> None:
@@ -468,12 +654,7 @@ def cmd_reconcile(args: argparse.Namespace) -> None:
             if f.is_file() and f.suffix == ".md":
                 valid_ids.add(f.stem)
 
-    node_rows = db.get_nodes_by_level(args.project, -1)
-    if not node_rows:
-        for lv in range(100):
-            node_rows.extend(db.get_nodes_by_level(args.project, lv))
-            if not db.get_nodes_by_level(args.project, lv):
-                break
+    node_rows = db.get_all_nodes(args.project)
     for n in node_rows:
         valid_ids.add(n.id)
 
@@ -504,9 +685,9 @@ def build_parser() -> argparse.ArgumentParser:
     nsub = ng.add_subparsers(dest="cmd")
     na = nsub.add_parser("add")
     na.add_argument("project")
-    na.add_argument("level")
     na.add_argument("title")
     na.add_argument("--parent", default=None)
+    na.add_argument("--depth", default=None)
     nget = nsub.add_parser("get")
     nget.add_argument("id")
     nc = nsub.add_parser("children")
@@ -518,7 +699,7 @@ def build_parser() -> argparse.ArgumentParser:
     nus.add_argument("new_status")
     nl = nsub.add_parser("list")
     nl.add_argument("project")
-    nl.add_argument("--level", default=None)
+    nl.add_argument("--depth", default=None)
 
     # tag
     tg = sub.add_parser("tag")
@@ -537,7 +718,7 @@ def build_parser() -> argparse.ArgumentParser:
     csub = cg.add_subparsers(dest="cmd")
     cr = csub.add_parser("run")
     cr.add_argument("project")
-    cr.add_argument("level")
+    cr.add_argument("--depth", default=None)
 
     # search
     sg = sub.add_parser("search")
@@ -596,6 +777,13 @@ def build_parser() -> argparse.ArgumentParser:
     rec = sub.add_parser("reconcile")
     rec.add_argument("project")
 
+    # export
+    exp = sub.add_parser("export")
+    exp.add_argument("project")
+    exp.add_argument("--output", "-o", default=None, help="Output file path (stdout if omitted)")
+    exp.add_argument("--format", default="markdown", choices=["markdown"])
+    exp.add_argument("--polish", action="store_true", help="Polish each section via LLM")
+
     return p
 
 
@@ -631,6 +819,7 @@ def main() -> None:
     single_dispatch = {
         "compact": cmd_compact,
         "reconcile": cmd_reconcile,
+        "export": cmd_export,
     }
 
     if args.group in single_dispatch:

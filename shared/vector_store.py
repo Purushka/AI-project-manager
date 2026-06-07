@@ -20,6 +20,7 @@ COLLECTION_NAMES = [
     "node_summaries",
     "rule_fingerprints",
     "project_patterns",
+    "knowledge_base",
 ]
 
 

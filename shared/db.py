@@ -59,12 +59,20 @@ CREATE TABLE IF NOT EXISTS edges (
     PRIMARY KEY (from_id, to_id, edge_type)
 );
 
+CREATE TABLE IF NOT EXISTS write_locks (
+    resource_id     TEXT PRIMARY KEY,
+    locked_by       TEXT NOT NULL,
+    locked_at       TEXT NOT NULL,
+    expires_at      TEXT NOT NULL
+);
+
 CREATE INDEX IF NOT EXISTS idx_nodes_project ON nodes(project);
 CREATE INDEX IF NOT EXISTS idx_nodes_level ON nodes(level);
 CREATE INDEX IF NOT EXISTS idx_nodes_status ON nodes(status);
 CREATE INDEX IF NOT EXISTS idx_nodes_parent ON nodes(parent_id);
 CREATE INDEX IF NOT EXISTS idx_tags_key_value ON tags(tag_key, tag_value);
 CREATE INDEX IF NOT EXISTS idx_edges_type ON edges(edge_type);
+CREATE INDEX IF NOT EXISTS idx_locks_by ON write_locks(locked_by);
 """
 
 MIGRATION_COLUMNS = {
@@ -124,6 +132,104 @@ class Database:
         finally:
             conn.close()
 
+    # ── Write lock (node-level mutex) ─────────────────────────────────
+
+    LOCK_TTL_SECONDS = 300  # 5 minutes default lock timeout
+
+    def acquire_lock(self, resource_id: str, caller_id: str, ttl: int | None = None) -> bool:
+        """Acquire exclusive write lock on a resource (node_id, edge key, etc).
+
+        Returns True if lock acquired, False if already held by another caller.
+        Expired locks are automatically released.
+        """
+        from datetime import timedelta
+        now = datetime.now()
+        ttl_sec = ttl or self.LOCK_TTL_SECONDS
+        expires = (now + timedelta(seconds=ttl_sec)).isoformat()
+
+        with self._connect() as conn:
+            # Clean expired locks
+            conn.execute(
+                "DELETE FROM write_locks WHERE expires_at < ?", (now.isoformat(),)
+            )
+
+            existing = conn.execute(
+                "SELECT locked_by, expires_at FROM write_locks WHERE resource_id = ?",
+                (resource_id,),
+            ).fetchone()
+
+            if existing:
+                if existing["locked_by"] == caller_id:
+                    # Extend own lock
+                    conn.execute(
+                        "UPDATE write_locks SET expires_at = ? WHERE resource_id = ?",
+                        (expires, resource_id),
+                    )
+                    return True
+                # Held by someone else
+                return False
+
+            conn.execute(
+                "INSERT INTO write_locks (resource_id, locked_by, locked_at, expires_at) VALUES (?, ?, ?, ?)",
+                (resource_id, caller_id, now.isoformat(), expires),
+            )
+            return True
+
+    def release_lock(self, resource_id: str, caller_id: str) -> None:
+        """Release a write lock. Only the holder can release."""
+        with self._connect() as conn:
+            conn.execute(
+                "DELETE FROM write_locks WHERE resource_id = ? AND locked_by = ?",
+                (resource_id, caller_id),
+            )
+
+    def release_all_locks(self, caller_id: str) -> int:
+        """Release all locks held by a caller (e.g. on module exit)."""
+        with self._connect() as conn:
+            cursor = conn.execute(
+                "DELETE FROM write_locks WHERE locked_by = ?", (caller_id,)
+            )
+            return cursor.rowcount
+
+    def is_locked(self, resource_id: str) -> str | None:
+        """Check if a resource is locked. Returns lock holder or None."""
+        now = datetime.now().isoformat()
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT locked_by FROM write_locks WHERE resource_id = ? AND expires_at > ?",
+                (resource_id, now),
+            ).fetchone()
+            return row["locked_by"] if row else None
+
+    def check_lock_or_fail(self, resource_id: str, caller_id: str) -> None:
+        """Verify caller holds the lock. Raises if not."""
+        holder = self.is_locked(resource_id)
+        if holder is None:
+            raise RuntimeError(
+                f"Resource '{resource_id}' is not locked. "
+                f"Caller '{caller_id}' must acquire_lock() before writing."
+            )
+        if holder != caller_id:
+            raise PermissionError(
+                f"Resource '{resource_id}' locked by '{holder}', "
+                f"cannot be written by '{caller_id}'."
+            )
+
+    @contextmanager
+    def locked(self, resource_id: str, caller_id: str, ttl: int | None = None) -> Generator[None, None, None]:
+        """Context manager: acquire lock, yield, release on exit."""
+        if not self.acquire_lock(resource_id, caller_id, ttl):
+            holder = self.is_locked(resource_id)
+            raise PermissionError(
+                f"Cannot lock '{resource_id}': held by '{holder}'"
+            )
+        try:
+            yield
+        finally:
+            self.release_lock(resource_id, caller_id)
+
+    # ── Node operations ───────────────────────────────────────────────
+
     def insert_node(self, node: Node) -> None:
         now = datetime.now().isoformat()
         with self._connect() as conn:
@@ -180,7 +286,10 @@ class Database:
             ).fetchall()
             return [self._row_to_node(r, conn) for r in rows]
 
-    def update_node_status(self, node_id: str, status: NodeStatus) -> None:
+    def update_node_status(self, node_id: str, status: NodeStatus, caller_id: str = "") -> None:
+        """Update node status. If caller_id is set, lock is checked."""
+        if caller_id:
+            self.check_lock_or_fail(node_id, caller_id)
         now = datetime.now().isoformat()
         with self._connect() as conn:
             conn.execute(
@@ -188,7 +297,37 @@ class Database:
                 (status.value, now, node_id),
             )
 
-    def set_tags(self, node_id: str, tags: list[tuple[str, str]]) -> None:
+    def update_node_content(
+        self, node_id: str, caller_id: str, *,
+        title: str | None = None,
+        detail_path: str | None = None,
+        summary_path: str | None = None,
+    ) -> None:
+        """Update node content fields. REQUIRES lock."""
+        self.check_lock_or_fail(node_id, caller_id)
+        now = datetime.now().isoformat()
+        updates: list[str] = ["updated_at = ?", "version = version + 1"]
+        params: list[str] = [now]
+        if title is not None:
+            updates.append("title = ?")
+            params.append(title)
+        if detail_path is not None:
+            updates.append("detail_path = ?")
+            params.append(detail_path)
+        if summary_path is not None:
+            updates.append("summary_path = ?")
+            params.append(summary_path)
+        params.append(node_id)
+        with self._connect() as conn:
+            conn.execute(
+                f"UPDATE nodes SET {', '.join(updates)} WHERE node_id = ?",
+                params,
+            )
+
+    def set_tags(self, node_id: str, tags: list[tuple[str, str]], caller_id: str = "") -> None:
+        """Set tags on a node. If caller_id is set, lock is checked."""
+        if caller_id:
+            self.check_lock_or_fail(node_id, caller_id)
         with self._connect() as conn:
             conn.execute("DELETE FROM tags WHERE node_id = ?", (node_id,))
             conn.executemany(
@@ -368,7 +507,10 @@ class Database:
             ).fetchone()
             return row["version"] if row else 0
 
-    def update_compacted(self, node_id: str, compacted: str, constraints: str) -> None:
+    def update_compacted(self, node_id: str, compacted: str, constraints: str, caller_id: str = "") -> None:
+        """Update compacted summary. If caller_id is set, lock is checked."""
+        if caller_id:
+            self.check_lock_or_fail(node_id, caller_id)
         now = datetime.now().isoformat()
         with self._connect() as conn:
             conn.execute(
@@ -432,6 +574,36 @@ class Database:
             from_version=row["from_version"] if "from_version" in row.keys() else 0,
             to_version=row["to_version"] if "to_version" in row.keys() else 0,
         )
+
+    def get_all_nodes(self, project: str) -> list[Node]:
+        with self._connect() as conn:
+            rows = conn.execute(
+                "SELECT * FROM nodes WHERE project = ? ORDER BY level, node_id",
+                (project,),
+            ).fetchall()
+            return [self._row_to_node(r, conn) for r in rows]
+
+    def get_leaf_nodes(self, project: str) -> list[Node]:
+        """Get nodes that have no children (leaf nodes)."""
+        with self._connect() as conn:
+            rows = conn.execute(
+                """SELECT n.* FROM nodes n
+                   WHERE n.project = ?
+                     AND NOT EXISTS (
+                         SELECT 1 FROM nodes c WHERE c.parent_id = n.node_id
+                     )
+                   ORDER BY n.level, n.node_id""",
+                (project,),
+            ).fetchall()
+            return [self._row_to_node(r, conn) for r in rows]
+
+    def get_max_depth(self, project: str) -> int:
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT COALESCE(MAX(level), 0) as max_level FROM nodes WHERE project = ?",
+                (project,),
+            ).fetchone()
+            return row["max_level"]
 
     def count_nodes(self, project: str) -> int:
         with self._connect() as conn:

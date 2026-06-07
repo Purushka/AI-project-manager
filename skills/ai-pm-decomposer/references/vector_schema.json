@@ -1,64 +1,74 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "HyperspaceVector",
-  "description": "超空间向量标签，用于多维聚类和复用发现。每个节点在分解时同步生成。",
+  "description": "加权多轴标签，用于聚类和复用发现。轴按区分力加权（domain=3.0 最强，complexity=0.3 最弱）。",
   "type": "object",
   "properties": {
     "domain": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "功能域标签。例如：['用户管理', '订单处理', '支付']"
+      "description": "业务领域（权重3.0）。例如：['payments', 'user-management']"
     },
-    "entities": {
+    "entity": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "涉及的核心数据实体。例如：['User', 'Order', 'Product']"
+      "description": "核心数据实体（权重2.5）。例如：['Order', 'Payment', 'User']"
     },
-    "patterns": {
+    "pattern": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "使用的设计模式。例如：['CQRS', 'Event Sourcing', 'Repository']"
+      "description": "架构/设计模式（权重2.0）。例如：['event-driven', 'CQRS', 'repository']"
     },
-    "api_shape": {
-      "type": "object",
-      "properties": {
-        "inputs": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "输入参数类型。例如：['user_id: string', 'filter: OrderFilter']"
-        },
-        "outputs": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "输出类型。例如：['OrderList', 'PaginatedResponse']"
-        },
-        "side_effects": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "副作用。例如：['send_notification', 'update_inventory']"
-        }
-      },
-      "required": ["inputs", "outputs", "side_effects"]
-    },
-    "tech_traits": {
+    "actor": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "技术特征。例如：['real_time', 'high_throughput', 'idempotent']"
-    },
-    "actors": {
-      "type": "array",
-      "items": { "type": "string" },
-      "description": "涉及的用户角色。例如：['consumer', 'merchant', 'rider', 'admin']"
+      "description": "用户角色/系统参与者（权重1.5）。例如：['consumer', 'admin', 'scheduler']"
     },
     "nfr": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "非功能需求。例如：['low_latency', 'high_availability', 'GDPR']"
+      "description": "非功能需求（权重1.0）。例如：['low_latency', 'idempotent', 'GDPR']"
     },
-    "rule_fingerprint": {
-      "type": "string",
-      "description": "一句话概括核心业务规则链。例如：'订单创建 -> 商户确认 -> 骑手接单 -> 配送 -> 完成'"
+    "biz_metrics": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "业务指标（权重1.0）。例如：['conversion-rate', 'retention', 'revenue']"
+    },
+    "tech_stack": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "技术层（权重0.8）。例如：['frontend', 'backend', 'ai-model', 'database']"
+    },
+    "data_sensitivity": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["public", "internal", "sensitive", "critical"] },
+      "description": "数据敏感度（权重0.5）"
+    },
+    "revenue_impact": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["direct", "indirect", "supporting", "none"] },
+      "description": "营收影响（权重0.5）"
+    },
+    "dependency": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["independent", "light-dependency", "heavy-dependency"] },
+      "description": "依赖程度（权重0.4）"
+    },
+    "complexity": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["low", "medium", "high", "very-high"] },
+      "description": "复杂度（权重0.3）"
+    },
+    "user_facing": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["user-facing", "internal", "hybrid"] },
+      "description": "面向用户/内部（权重0.3）"
+    },
+    "timeline_priority": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["mvp", "phase-1", "phase-2", "phase-3"] },
+      "description": "时间优先级（权重0.2）"
     }
   },
-  "required": ["domain", "entities", "patterns", "api_shape", "tech_traits", "actors", "nfr", "rule_fingerprint"]
+  "required": ["domain", "entity", "pattern"]
 }

@@ -28,7 +28,6 @@ DEFAULT_CONFIG: dict[str, Any] = {
         "shared_interfaces": 30000,
         "current_task": 60000,
     },
-    "clustering_checkpoints": [2, 4, 6, 9],
     "ollama_base_url": "http://localhost:11434",
     "ollama_model": "nomic-embed-text",
     "openai_embedding_model": "text-embedding-3-small",
@@ -51,7 +50,6 @@ class Config:
         "shared_interfaces": 30000,
         "current_task": 60000,
     })
-    clustering_checkpoints: list[int] = field(default_factory=lambda: [2, 4, 6, 9])
     ollama_base_url: str = "http://localhost:11434"
     ollama_model: str = "nomic-embed-text"
     openai_embedding_model: str = "text-embedding-3-small"
@@ -72,9 +70,9 @@ class Config:
     def vector_dir(self) -> Path:
         return self.data_dir / "vector_store"
 
-    def get_model_for_level(self, level: int) -> str:
-        level_key = f"L{level}"
-        return self.model_overrides.get(level_key, self.default_model)
+    def get_model_for_depth(self, depth: int) -> str:
+        depth_key = f"depth_{depth}"
+        return self.model_overrides.get(depth_key, self.default_model)
 
 
 def load_config(config_path: Path | None = None) -> Config:
@@ -98,7 +96,6 @@ def load_config(config_path: Path | None = None) -> Config:
         workspace_path=merged["workspace_path"],
         max_context_tokens=merged["max_context_tokens"],
         context_budget=merged.get("context_budget", DEFAULT_CONFIG["context_budget"]),
-        clustering_checkpoints=merged.get("clustering_checkpoints", [2, 4, 6, 9]),
         ollama_base_url=merged.get("ollama_base_url", DEFAULT_CONFIG["ollama_base_url"]),
         ollama_model=merged.get("ollama_model", DEFAULT_CONFIG["ollama_model"]),
         openai_embedding_model=merged.get("openai_embedding_model", DEFAULT_CONFIG["openai_embedding_model"]),

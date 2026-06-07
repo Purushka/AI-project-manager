@@ -25,12 +25,12 @@ RETRY_DELAYS = [2, 5, 15]
 def call_llm(
     prompt: str,
     config: "Config",
-    level: int = 0,
+    depth: int = 0,
     system_prompt: str = "",
     max_tokens: int = 8192,
     temperature: float = 0.3,
 ) -> str:
-    model = config.get_model_for_level(level)
+    model = config.get_model_for_depth(depth)
 
     if config.llm_provider == "anthropic":
         return _call_anthropic(prompt, model, system_prompt, max_tokens, temperature)
@@ -133,7 +133,7 @@ def _call_anthropic(
 def call_llm_with_json(
     prompt: str,
     config: "Config",
-    level: int = 0,
+    depth: int = 0,
     system_prompt: str = "",
     max_tokens: int = 8192,
 ) -> str:
@@ -144,7 +144,7 @@ def call_llm_with_json(
     return call_llm(
         prompt=prompt,
         config=config,
-        level=level,
+        depth=depth,
         system_prompt=full_system,
         max_tokens=max_tokens,
     )

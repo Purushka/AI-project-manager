@@ -128,9 +128,9 @@ def search_by_vector(
 ) -> list[PatternRecord]:
     description = (
         f"Domain: {', '.join(vector.domain)}. "
-        f"Entities: {', '.join(vector.entities)}. "
-        f"Patterns: {', '.join(vector.patterns)}. "
-        f"Rule: {vector.rule_fingerprint}"
+        f"Entity: {', '.join(vector.entity)}. "
+        f"Pattern: {', '.join(vector.pattern)}. "
+        f"Actor: {', '.join(vector.actor)}"
     )
     return search_patterns(description, n_results, config)
 

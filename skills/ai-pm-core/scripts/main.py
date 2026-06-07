@@ -1,9 +1,10 @@
 """AI PM Core - main orchestrator.
 
 Manages the full pipeline:
-1. Multi-round requirements interview (INTERVIEWING)
+1. Adaptive requirements interview (INTERVIEWING)
 2. Requirements confirmation (CONFIRMING)
-3. Three-phase decomposition: V1 forward -> V3 clustering -> V2 backprop
+3. Forward decomposition — iterative, depth-adaptive (FORWARD)
+4. Backward optimization — cluster-first (BACKWARD)
 """
 
 from __future__ import annotations
@@ -25,21 +26,6 @@ from shared.llm import call_llm, call_llm_with_json, estimate_tokens
 from shared.models import Node, NodeStatus
 
 logger = logging.getLogger(__name__)
-
-LEVEL_NAMES = [
-    "L0_vision",
-    "L1_subsystems",
-    "L2_modules",
-    "L3_features",
-    "L4_api",
-    "L5_tech",
-    "L6_design",
-    "L7_skeleton",
-    "L8_code",
-    "L9_deploy",
-]
-
-MAX_LEVEL = 9
 
 INTERVIEW_DIMENSIONS = [
     {
@@ -145,18 +131,15 @@ REQUIREMENTS_DOC_PROMPT = """你是一位资深产品经理。基于原始 idea 
 7. **关键风险**：已识别的风险点
 8. **成功指标**：如何判断产品成功
 
-这份文档将作为后续十层分解的输入，所以要尽可能具体和可操作。"""
+这份文档将作为后续自适应分解的输入，所以要尽可能具体和可操作。"""
 
 
 class Phase(str, Enum):
     INIT = "init"
     INTERVIEWING = "interviewing"
     CONFIRMING = "confirming"
-    DECOMPOSING = "decomposing"
-    CLUSTERING = "clustering"
-    COMPARING = "comparing"
-    CHALLENGING = "challenging"
-    BACKPROP = "backprop"
+    FORWARD = "forward"
+    BACKWARD = "backward"
     DONE = "done"
 
 
@@ -172,9 +155,7 @@ class ProjectState:
                 return json.load(f)
         return {
             "phase": Phase.INIT.value,
-            "current_level": 0,
-            "completed_levels": [],
-            "clustering_done": [],
+            "decompose_iterations": 0,
             "interview": {
                 "current_dimension": 0,
                 "round": 1,
@@ -191,10 +172,7 @@ class ProjectState:
 
 
 def init_project(idea_text: str, project_name: str | None = None, config: Config | None = None) -> dict:
-    """Initialize a project and return the first interview question.
-
-    Does NOT jump to decomposition. Returns the first question for the user.
-    """
+    """Initialize a project and return the first interview question."""
     config = config or load_config()
     project = project_name or f"project_{uuid.uuid4().hex[:8]}"
 
@@ -208,9 +186,7 @@ def init_project(idea_text: str, project_name: str | None = None, config: Config
     state_mgr = ProjectState(project, config)
     state_mgr.save({
         "phase": Phase.INTERVIEWING.value,
-        "current_level": 0,
-        "completed_levels": [],
-        "clustering_done": [],
+        "decompose_iterations": 0,
         "interview": {
             "current_dimension": 0,
             "round": 1,
@@ -320,7 +296,7 @@ def _analyze_interview(project: str, config: Config) -> dict:
         records_text,
     )
 
-    response = call_llm_with_json(prompt, config, level=0)
+    response = call_llm_with_json(prompt, config, depth=0)
     analysis = _extract_json(response)
 
     interview["analysis"] = analysis
@@ -378,7 +354,7 @@ def _generate_requirements_doc(project: str, config: Config) -> dict:
         records_text,
     )
 
-    response = call_llm(prompt, config, level=0, max_tokens=16384)
+    response = call_llm(prompt, config, depth=0, max_tokens=16384)
 
     req_path = config.data_dir / project / "files" / "requirements.md"
     with open(req_path, "w", encoding="utf-8") as f:
@@ -393,7 +369,7 @@ def _generate_requirements_doc(project: str, config: Config) -> dict:
             f"{response}\n\n"
             "---\n\n"
             "请确认以上内容是否准确：\n"
-            "- 回复 **确认** 或 **yes** 开始十层分解\n"
+            "- 回复 **确认** 或 **yes** 开始自适应分解\n"
             "- 回复修改意见，我会更新后重新确认"
         ),
         "requirements_path": str(req_path),
@@ -433,19 +409,12 @@ def confirm_requirements(
 
 
 def _start_decomposition(project: str, config: Config) -> dict:
-    """Transition from confirming to decomposition phase."""
+    """Transition from confirming to forward decomposition."""
     db = Database(config)
     state_mgr = ProjectState(project, config)
     state = state_mgr.load()
 
-    idea_text = _load_idea(project, config)
-    req_path = config.data_dir / project / "files" / "requirements.md"
-    requirements_text = ""
-    if req_path.exists():
-        with open(req_path, "r", encoding="utf-8") as f:
-            requirements_text = f.read()
-
-    root_id = f"{project}_L0_root"
+    root_id = f"{project}_root_{uuid.uuid4().hex[:6]}"
     root = Node(
         id=root_id,
         project=project,
@@ -457,18 +426,18 @@ def _start_decomposition(project: str, config: Config) -> dict:
     )
     db.insert_node(root)
 
-    state["phase"] = Phase.DECOMPOSING.value
-    state["current_level"] = 0
+    state["phase"] = Phase.FORWARD.value
+    state["decompose_iterations"] = 0
     state_mgr.save(state)
 
-    logger.info(f"Project '{project}' requirements confirmed, starting decomposition")
+    logger.info(f"Project '{project}' requirements confirmed, starting adaptive decomposition")
     return {
-        "status": "decomposing",
+        "status": "forward",
         "message": (
-            "需求已确认！现在开始十层递归分解。\n\n"
+            "需求已确认！开始自适应迭代分解。\n\n"
             f"项目根节点: {root_id}\n"
-            f"分解层级: L0 (产品愿景) -> L9 (部署方案)\n"
-            f"聚类检查点: L2, L4, L6, L9"
+            "分解策略: 每个节点按内容复杂度自适应展开，分到可执行粒度为止\n"
+            "深度不固定，各分支独立终止"
         ),
         "root_node": root_id,
     }
@@ -493,34 +462,45 @@ def get_project_status(project: str, config: Config | None = None) -> dict:
             result["completeness_score"] = interview["analysis"].get("completeness_score", 0)
         return result
 
-    result["current_level"] = state.get("current_level", 0)
     result["total_nodes"] = db.count_nodes(project)
+    result["max_depth"] = db.get_max_depth(project)
+    result["decompose_iterations"] = state.get("decompose_iterations", 0)
 
-    level_counts = {}
-    for level in range(MAX_LEVEL + 1):
-        nodes = db.get_nodes_by_level(project, level)
-        if nodes:
-            level_counts[LEVEL_NAMES[level]] = {
-                "total": len(nodes),
-                "done": sum(1 for n in nodes if n.status == NodeStatus.DONE),
-                "pending": sum(1 for n in nodes if n.status == NodeStatus.PENDING),
-            }
-    result["levels"] = level_counts
+    all_nodes = db.get_all_nodes(project)
+    depth_counts: dict[int, dict[str, int]] = {}
+    for n in all_nodes:
+        d = n.level
+        if d not in depth_counts:
+            depth_counts[d] = {"total": 0, "done": 0, "pending": 0}
+        depth_counts[d]["total"] += 1
+        if n.status == NodeStatus.DONE:
+            depth_counts[d]["done"] += 1
+        elif n.status == NodeStatus.PENDING:
+            depth_counts[d]["pending"] += 1
+    result["depths"] = {f"depth_{d}": s for d, s in sorted(depth_counts.items())}
+
+    leaf_nodes = db.get_leaf_nodes(project)
+    pending_leaves = [n for n in leaf_nodes if n.status == NodeStatus.PENDING]
+    result["pending_leaves"] = len(pending_leaves)
+    result["total_leaves"] = len(leaf_nodes)
+
     return result
 
 
-def should_cluster(level: int, config: Config) -> bool:
-    return level in config.clustering_checkpoints
-
-
 def run_decomposition_step(project: str, config: Config | None = None) -> dict:
-    """Execute one step of the decomposition pipeline."""
+    """Execute one step of the adaptive decomposition pipeline.
+
+    Forward phase: pick pending leaf nodes at the shallowest depth,
+    return them for decomposition. No fixed layer count — branches
+    terminate independently when nodes reach executable granularity.
+
+    Backward phase: cluster-first optimization after forward completes.
+    """
     config = config or load_config()
     db = Database(config)
     state_mgr = ProjectState(project, config)
     state = state_mgr.load()
     phase = Phase(state["phase"])
-    current_level = state.get("current_level", 0)
 
     if phase in (Phase.INTERVIEWING, Phase.CONFIRMING):
         return {
@@ -532,78 +512,49 @@ def run_decomposition_step(project: str, config: Config | None = None) -> dict:
     if phase == Phase.DONE:
         return {"status": "done", "message": "Project decomposition complete"}
 
-    if phase == Phase.DECOMPOSING:
-        pending = db.get_nodes_by_status(project, NodeStatus.PENDING)
-        level_pending = [n for n in pending if n.level == current_level]
+    if phase == Phase.FORWARD:
+        pending_leaves = [
+            n for n in db.get_leaf_nodes(project)
+            if n.status == NodeStatus.PENDING
+        ]
 
-        if not level_pending:
-            state["completed_levels"].append(current_level)
-
-            if should_cluster(current_level, config):
-                state["phase"] = Phase.CLUSTERING.value
-                state_mgr.save(state)
-                return {
-                    "status": "transition",
-                    "message": f"Level {current_level} done, entering clustering phase",
-                    "next_phase": "clustering",
-                }
-
-            if current_level >= MAX_LEVEL:
-                state["phase"] = Phase.DONE.value
-                state_mgr.save(state)
-                return {"status": "done", "message": "All levels complete"}
-
-            state["current_level"] = current_level + 1
+        if not pending_leaves:
+            state["phase"] = Phase.BACKWARD.value
             state_mgr.save(state)
             return {
-                "status": "advancing",
-                "message": f"Advancing to level {current_level + 1}",
+                "status": "transition",
+                "message": "前向分解完成，所有叶节点已到可执行粒度。进入反向优化阶段。",
+                "next_phase": "backward",
+                "total_nodes": db.count_nodes(project),
+                "max_depth": db.get_max_depth(project),
             }
 
+        shallowest = min(n.level for n in pending_leaves)
+        batch = [n for n in pending_leaves if n.level == shallowest]
+
+        state["decompose_iterations"] = state.get("decompose_iterations", 0) + 1
+        state_mgr.save(state)
+
         return {
-            "status": "decomposing",
-            "message": f"Level {current_level}: {len(level_pending)} nodes pending",
-            "pending_nodes": [n.id for n in level_pending],
+            "status": "forward",
+            "message": (
+                f"迭代 #{state['decompose_iterations']}: "
+                f"{len(batch)} 个待分解节点 (depth={shallowest}), "
+                f"共 {len(pending_leaves)} 个待处理叶节点"
+            ),
+            "pending_nodes": [n.id for n in batch],
+            "batch_depth": shallowest,
+            "total_pending_leaves": len(pending_leaves),
         }
 
-    if phase == Phase.CLUSTERING:
-        state["clustering_done"].append(current_level)
-        state["phase"] = Phase.COMPARING.value
+    if phase == Phase.BACKWARD:
+        state["phase"] = Phase.DONE.value
         state_mgr.save(state)
         return {
-            "status": "transition",
-            "message": f"Clustering done for level {current_level}, entering comparison",
-            "next_phase": "comparing",
-        }
-
-    if phase == Phase.COMPARING:
-        state["phase"] = Phase.CHALLENGING.value
-        state_mgr.save(state)
-        return {
-            "status": "transition",
-            "message": "Comparison done, entering challenge phase",
-            "next_phase": "challenging",
-        }
-
-    if phase == Phase.CHALLENGING:
-        state["phase"] = Phase.BACKPROP.value
-        state_mgr.save(state)
-        return {
-            "status": "transition",
-            "message": "Challenge complete, entering backpropagation",
-            "next_phase": "backprop",
-        }
-
-    if phase == Phase.BACKPROP:
-        if current_level >= MAX_LEVEL:
-            state["phase"] = Phase.DONE.value
-        else:
-            state["current_level"] = current_level + 1
-            state["phase"] = Phase.DECOMPOSING.value
-        state_mgr.save(state)
-        return {
-            "status": "transition",
-            "message": f"Backprop done, advancing to level {current_level + 1}",
+            "status": "done",
+            "message": "反向优化完成。项目分解已结束。",
+            "total_nodes": db.count_nodes(project),
+            "max_depth": db.get_max_depth(project),
         }
 
     return {"status": "error", "message": f"Unknown phase: {phase}"}

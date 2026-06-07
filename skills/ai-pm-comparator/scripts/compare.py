@@ -112,7 +112,7 @@ def analyze_cluster(
         member_details=member_details,
     )
 
-    response = call_llm(prompt, config, level=0)
+    response = call_llm(prompt, config, depth=0)
 
     json_match = re.search(r"```json\s*([\s\S]*?)```", response)
     if json_match:
