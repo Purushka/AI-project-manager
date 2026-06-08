@@ -1,6 +1,6 @@
 # AI 创业解决方案平台 — 完整分解报告
 
-生成时间: 2026-06-08 14:36:26
+生成时间: 2026-06-08 19:09:32
 总节点数: 533 | 叶子节点: 469 | 共享组件: 82 | 最大深度: 4
 深度分布: L0=1, L1=12, L2=62, L3=235, L4=223
 
@@ -3319,13 +3319,7 @@ AI 驱动的市场调研模块，自动收集行业数据、分析竞品、生�
       > 🎫 **Ticket #304** `ai-entrepreneurship-platform_19ff4e67`
       > **执行者**: system | **技术栈**: typescript | **复杂度**: low | **领域**: api-codegen | **非功能需求**: debuggability, type-safety
 
-      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置
-
-## 声明文件生成
-
-### 1. 自动生成（推荐）
-
-在** (`ai-entrepreneurship-platform_shared_044a5f1f`)
+      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置** (`ai-entrepreneurship-platform_shared_044a5f1f`)
 
       ↗ 共享组件: **API 规范解析与代码生成器** (`ai-entrepreneurship-platform_shared_1ac9b941`)
 
@@ -3344,13 +3338,7 @@ AI 驱动的市场调研模块，自动收集行业数据、分析竞品、生�
       > 🎫 **Ticket #305** `ai-entrepreneurship-platform_1d92ec0a`
       > **执行者**: system | **技术栈**: typescript | **复杂度**: low | **领域**: api-codegen | **非功能需求**: performance, portability
 
-      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置
-
-## 声明文件生成
-
-### 1. 自动生成（推荐）
-
-在** (`ai-entrepreneurship-platform_shared_044a5f1f`)
+      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置** (`ai-entrepreneurship-platform_shared_044a5f1f`)
 
       ↗ 共享组件: **API 规范解析与代码生成器** (`ai-entrepreneurship-platform_shared_1ac9b941`)
 
@@ -3369,13 +3357,7 @@ AI 驱动的市场调研模块，自动收集行业数据、分析竞品、生�
       > 🎫 **Ticket #306** `ai-entrepreneurship-platform_25483791`
       > **执行者**: system | **技术栈**: typescript | **复杂度**: medium | **领域**: api-codegen | **非功能需求**: readability, type-safety
 
-      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置
-
-## 声明文件生成
-
-### 1. 自动生成（推荐）
-
-在** (`ai-entrepreneurship-platform_shared_044a5f1f`)
+      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置** (`ai-entrepreneurship-platform_shared_044a5f1f`)
 
       ↗ 共享组件: **API 规范解析与代码生成器** (`ai-entrepreneurship-platform_shared_1ac9b941`)
 
@@ -3394,13 +3376,7 @@ AI 驱动的市场调研模块，自动收集行业数据、分析竞品、生�
       > 🎫 **Ticket #307** `ai-entrepreneurship-platform_269d64be`
       > **执行者**: system | **技术栈**: typescript | **复杂度**: low | **领域**: api-codegen | **非功能需求**: performance, reliability
 
-      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置
-
-## 声明文件生成
-
-### 1. 自动生成（推荐）
-
-在** (`ai-entrepreneurship-platform_shared_044a5f1f`)
+      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置** (`ai-entrepreneurship-platform_shared_044a5f1f`)
 
       ↗ 共享组件: **API 规范解析与代码生成器** (`ai-entrepreneurship-platform_shared_1ac9b941`)
 
@@ -3419,13 +3395,7 @@ AI 驱动的市场调研模块，自动收集行业数据、分析竞品、生�
       > 🎫 **Ticket #308** `ai-entrepreneurship-platform_4fce69bc`
       > **执行者**: system | **技术栈**: typescript | **复杂度**: low | **领域**: api-codegen | **非功能需求**: reliability, resilience
 
-      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置
-
-## 声明文件生成
-
-### 1. 自动生成（推荐）
-
-在** (`ai-entrepreneurship-platform_shared_044a5f1f`)
+      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置** (`ai-entrepreneurship-platform_shared_044a5f1f`)
 
       ↗ 共享组件: **API 规范解析与代码生成器** (`ai-entrepreneurship-platform_shared_1ac9b941`)
 
@@ -3444,13 +3414,7 @@ AI 驱动的市场调研模块，自动收集行业数据、分析竞品、生�
       > 🎫 **Ticket #309** `ai-entrepreneurship-platform_613d7191`
       > **执行者**: system | **技术栈**: typescript | **复杂度**: low | **领域**: api-codegen | **非功能需求**: reliability, responsiveness
 
-      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置
-
-## 声明文件生成
-
-### 1. 自动生成（推荐）
-
-在** (`ai-entrepreneurship-platform_shared_044a5f1f`)
+      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置** (`ai-entrepreneurship-platform_shared_044a5f1f`)
 
       ↗ 共享组件: **API 规范解析与代码生成器** (`ai-entrepreneurship-platform_shared_1ac9b941`)
 
@@ -3468,13 +3432,7 @@ AI 驱动的市场调研模块，自动收集行业数据、分析竞品、生�
       > 🎫 **Ticket #310** `ai-entrepreneurship-platform_b4ec1be1`
       > **执行者**: system | **技术栈**: typescript | **复杂度**: low | **领域**: api-codegen | **非功能需求**: extensibility, reusability
 
-      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置
-
-## 声明文件生成
-
-### 1. 自动生成（推荐）
-
-在** (`ai-entrepreneurship-platform_shared_044a5f1f`)
+      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置** (`ai-entrepreneurship-platform_shared_044a5f1f`)
 
       ↗ 共享组件: **API 规范解析与代码生成器** (`ai-entrepreneurship-platform_shared_1ac9b941`)
 
@@ -3493,13 +3451,7 @@ AI 驱动的市场调研模块，自动收集行业数据、分析竞品、生�
       > 🎫 **Ticket #311** `ai-entrepreneurship-platform_c0ecd298`
       > **执行者**: system | **技术栈**: typescript | **复杂度**: medium | **领域**: api-codegen | **非功能需求**: correctness, extensibility
 
-      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置
-
-## 声明文件生成
-
-### 1. 自动生成（推荐）
-
-在** (`ai-entrepreneurship-platform_shared_044a5f1f`)
+      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置** (`ai-entrepreneurship-platform_shared_044a5f1f`)
 
       ↗ 共享组件: **API 规范解析与代码生成器** (`ai-entrepreneurship-platform_shared_1ac9b941`)
 
@@ -3518,13 +3470,7 @@ AI 驱动的市场调研模块，自动收集行业数据、分析竞品、生�
       > 🎫 **Ticket #312** `ai-entrepreneurship-platform_c65b901b`
       > **执行者**: system | **技术栈**: typescript | **复杂度**: medium | **领域**: api-codegen | **非功能需求**: maintainability, type-safety
 
-      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置
-
-## 声明文件生成
-
-### 1. 自动生成（推荐）
-
-在** (`ai-entrepreneurship-platform_shared_044a5f1f`)
+      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置** (`ai-entrepreneurship-platform_shared_044a5f1f`)
 
       ↗ 共享组件: **API 规范解析与代码生成器** (`ai-entrepreneurship-platform_shared_1ac9b941`)
 
@@ -3543,13 +3489,7 @@ AI 驱动的市场调研模块，自动收集行业数据、分析竞品、生�
       > 🎫 **Ticket #313** `ai-entrepreneurship-platform_fc2ffe5c`
       > **执行者**: system | **技术栈**: typescript | **复杂度**: medium | **领域**: api-codegen | **非功能需求**: correctness, performance
 
-      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置
-
-## 声明文件生成
-
-### 1. 自动生成（推荐）
-
-在** (`ai-entrepreneurship-platform_shared_044a5f1f`)
+      ↗ 共享组件: **TypeScript 声明文件生成与 types 字段配置** (`ai-entrepreneurship-platform_shared_044a5f1f`)
 
       ↗ 共享组件: **API 规范解析与代码生成器** (`ai-entrepreneurship-platform_shared_1ac9b941`)
 
@@ -4577,20 +4517,8 @@ N日留存率计算(次日/7日/30日)、按用户分组(cohort)计算留存、�
 按来源渠道维度统计和分析收入数据
 
 ### `ai-entrepreneurship-platform_shared_044a5f1f`
-**TypeScript 声明文件生成与 types 字段配置
+**TypeScript 声明文件生成与 types 字段配置**
 
-## 声明文件生成
-
-### 1. 自动生成（推荐）
-
-在**
-
-
-## 声明文件生成
-
-### 1. 自动生成（推荐）
-
-在
 
 TypeScript 声明文件(.d.ts)生成与 package.json types 字段配置
 
@@ -4838,10 +4766,10 @@ prompt执行后的质量评分与指标记录
 | # | 模块 | Ticket | 复杂度 | 技术栈 | 执行者 |
 |---|------|--------|--------|--------|--------|
 | 1 | 产品设计工作台 | 原型设计与建议 | high | react-typescript-tailwind | product-manager, designer |
-| 2 | 产品设计工作台 | 协作与评审工作流 | medium | react-fastapi-postgresql-redis | team-member, reviewer |
-| 3 | 产品设计工作台 | 需求文档管理 | medium | react-postgresql-redis | product-manager, team-member |
+| 2 | 产品设计工作台 | 协作与评审工作流 | medium | react-fastapi-postgresql-redis | reviewer, team-member |
+| 3 | 产品设计工作台 | 需求文档管理 | medium | react-postgresql-redis | team-member, product-manager |
 | 4 | 产品设计工作台 | 版本管理与回滚 | medium | python-postgresql | team-member |
-| 5 | 产品设计工作台 | 导出与集成 | medium | python-fastapi | team-member, external-system |
+| 5 | 产品设计工作台 | 导出与集成 | medium | python-fastapi | external-system, team-member |
 | 6 | 产品设计工作台 | 情绪曲线绘制与标注 | medium | postgresql | end-user |
 | 7 | 产品设计工作台 | 旅程阶段定义与管理 | low | postgresql | end-user |
 | 8 | 产品设计工作台 | 人工编辑与迭代优化接口 | medium | fastapi-postgresql-redis | end-user |
@@ -4849,14 +4777,14 @@ prompt执行后的质量评分与指标记录
 | 10 | 产品设计工作台 | 需求输入与上下文聚合 | medium | fastapi-redis | end-user, system |
 | 11 | 产品设计工作台 | PRD 文档存储与版本控制 | medium | postgresql | end-user, system |
 | 12 | 产品设计工作台 | 可交互流程图渲染引擎 | medium | react | end-user |
-| 13 | 产品设计工作台 | 生成质量评估与反馈循环 | medium | fastapi-postgresql | end-user, admin |
+| 13 | 产品设计工作台 | 生成质量评估与反馈循环 | medium | fastapi-postgresql | admin, end-user |
 | 14 | 产品设计工作台 | 触点与动作记录 | low | postgresql | end-user |
 | 15 | 产品设计工作台 | 旅程图导出与分享 | medium | fastapi | end-user |
 | 16 | 产品设计工作台 | PRD 导出与分享 | medium | celery-redis-pandoc | end-user |
 | 17 | 产品设计工作台 | 多角色旅程对比视图 | medium | react | end-user |
 | 18 | 产品设计工作台 | PRD 文档结构化解析与校验 | high | python-nlp-libraries | system |
 | 19 | 产品设计工作台 | AI Prompt 构建与执行 | high | fastapi-anthropic-aliyun | system |
-| 20 | 产品设计工作台 | PRD 模板管理与配置 | low | fastapi-postgresql | end-user, admin |
+| 20 | 产品设计工作台 | PRD 模板管理与配置 | low | fastapi-postgresql | admin, end-user |
 | 21 | 产品设计工作台 | 旅程图结构化输出与持久化 | low | python-fastapi-postgresql | system |
 | 22 | 产品设计工作台 | 行业标准旅程模板库查询 | low | postgresql | system |
 | 23 | 产品设计工作台 | 触点预测与关联 | high | python-claude-api-postgresql | system |
@@ -4873,8 +4801,8 @@ prompt执行后的质量评分与指标记录
 | 34 | AI 模型集成层 | 模型路由与负载均衡 | medium | python-fastapi-redis | system |
 | 35 | AI 模型集成层 | 模型版本管理 | medium | python-fastapi-postgresql | admin, system |
 | 36 | AI 模型集成层 | Prompt 测试沙箱 | high | fastapi-redis | end-user |
-| 37 | AI 模型集成层 | Prompt 版本控制系统 | medium | postgresql | end-user, admin |
-| 38 | AI 模型集成层 | Prompt 模板库管理 | low | fastapi-postgresql | end-user, admin |
+| 37 | AI 模型集成层 | Prompt 版本控制系统 | medium | postgresql | admin, end-user |
+| 38 | AI 模型集成层 | Prompt 模板库管理 | low | fastapi-postgresql | admin, end-user |
 | 39 | AI 模型集成层 | 参数化模板渲染引擎 | medium | python-jinja2 | system-scheduler, end-user |
 | 40 | AI 模型集成层 | 上下文截断策略引擎 | medium | python | system |
 | 41 | AI 模型集成层 | 上下文序列化与注入器 | low | python | system |
@@ -4898,18 +4826,18 @@ prompt执行后的质量评分与指标记录
 | 59 | 商业模式画布 | 分析报告结构化输出与导出 | low | python-fastapi-jinja2-weasyprint | end-user |
 | 60 | 商业模式画布 | 定价模式识别与推荐 | medium | anthropic-claude, fastapi | entrepreneur, ai-model |
 | 61 | 商业模式画布 | 定价心理学分析模块 | low | anthropic-claude, milvus, fastapi | entrepreneur, ai-model |
-| 62 | 商业模式画布 | 融资文档模板管理 | low | postgresql, fastapi | end-user, admin |
+| 62 | 商业模式画布 | 融资文档模板管理 | low | postgresql, fastapi | admin, end-user |
 | 63 | 商业模式画布 | 文档分享与跟踪 | medium | fastapi, postgresql, redis | end-user, investor |
 | 64 | 商业模式画布 | 文档版本管理与协作 | medium | postgresql, redis, fastapi | end-user, collaborator |
 | 65 | 商业模式画布 | 投资人 FAQ 智能问答 | high | claude-api, milvus, fastapi | system-scheduler, end-user |
 | 66 | 商业模式画布 | 风险识别与等级分类 | high | python-fastapi-claude | llm-agent |
 | 67 | 商业模式画布 | 可视化数据接口 | low | python-fastapi-redis | end-user |
-| 68 | 商业模式画布 | 商业模式画布数据提取与结构化 | low | python-fastapi-claude-pydantic | end-user, llm-agent |
+| 68 | 商业模式画布 | 商业模式画布数据提取与结构化 | low | python-fastapi-claude-pydantic | llm-agent, end-user |
 | 69 | 商业模式画布 | 盈亏平衡分析 | low | python | system |
 | 70 | 商业模式画布 | 财务报表生成 | medium | python | end-user |
 | 71 | 商业模式画布 | 预测任务调度与缓存 | medium | redis-python | system |
 | 72 | 商业模式画布 | 价格区间计算引擎 | medium | python, fastapi, postgresql | entrepreneur |
-| 73 | 商业模式画布 | 交互式问答深挖接口 | medium | python-fastapi-claude-redis | end-user, llm-agent |
+| 73 | 商业模式画布 | 交互式问答深挖接口 | medium | python-fastapi-claude-redis | llm-agent, end-user |
 | 74 | 商业模式画布 | 敏感度分析模块 | medium | python-redis | system |
 | 75 | 商业模式画布 | 定价方案版本管理与历史追踪 | low | postgresql, fastapi | entrepreneur |
 | 76 | 商业模式画布 | 多档位定价方案生成器 | medium | anthropic-claude, fastapi, postgresql | entrepreneur, ai-model |
@@ -4950,78 +4878,78 @@ prompt执行后的质量评分与指标记录
 | 111 | 商业模式画布 | 模型参数自动校准引擎 | high | python-scikit-learn-statsmodels-prophet | system-scheduler |
 | 112 | 部署运维中心 | 自动扩缩容 | high | kubernetes | system-scheduler |
 | 113 | 部署运维中心 | 故障自愈机制 | very-high | kubernetes, redis | system-scheduler |
-| 114 | 部署运维中心 | 告警聚合与降噪 | medium | python-redis | system-scheduler, admin |
+| 114 | 部署运维中心 | 告警聚合与降噪 | medium | python-redis | admin, system-scheduler |
 | 115 | 部署运维中心 | 多渠道告警通知 | medium | python-fastapi-redis | system-scheduler, end-user |
 | 116 | 部署运维中心 | 日志可视化与仪表盘 | medium | react, echarts/recharts, grafana | admin, devops |
 | 117 | 部署运维中心 | 全文检索与条件过滤 | low | fastapi, elasticsearch-dsl | admin, devops |
 | 118 | 部署运维中心 | 环境配置差异对比 | medium | python | devops-engineer |
 | 119 | 部署运维中心 | 版本管理与回滚 | low | postgresql, kubernetes | developer, sre |
 | 120 | 部署运维中心 | 配置导入导出 | medium | python-pyyaml | devops-engineer |
-| 121 | 部署运维中心 | 环境配置模板管理 | medium | postgresql | devops-engineer, admin |
+| 121 | 部署运维中心 | 环境配置模板管理 | medium | postgresql | admin, devops-engineer |
 | 122 | 部署运维中心 | 日志告警规则引擎 | medium | python, celery, dingtalk-api | admin, devops |
 | 123 | 部署运维中心 | 代码质量与安全检查集成 | medium | docker-container | system-scheduler |
 | 124 | 部署运维中心 | 结构化日志解析与规范化 | medium | python, grok/regex | system-scheduler |
-| 125 | 部署运维中心 | 配置变更审批流 | high | postgresql-redis | approver, devops-engineer, admin |
-| 126 | 部署运维中心 | 监控可视化仪表盘 | medium | react-typescript-tailwind | end-user, admin |
+| 125 | 部署运维中心 | 配置变更审批流 | high | postgresql-redis | admin, approver, devops-engineer |
+| 126 | 部署运维中心 | 监控可视化仪表盘 | medium | react-typescript-tailwind | admin, end-user |
 | 127 | 部署运维中心 | 敏感信息自动脱敏 | medium | python, regex, optional-llm | system-scheduler |
 | 128 | 部署运维中心 | 流水线执行引擎 | high | kubernetes-job-redis-queue | system-scheduler |
-| 129 | 部署运维中心 | 集群连接与部署执行 | medium | kubernetes, kubectl, python-k8s-client | developer, platform-system |
-| 130 | 部署运维中心 | 日志保留与归档策略 | low | python, celery, s3/oss | system-scheduler, admin |
+| 129 | 部署运维中心 | 集群连接与部署执行 | medium | kubernetes, kubectl, python-k8s-client | platform-system, developer |
+| 130 | 部署运维中心 | 日志保留与归档策略 | low | python, celery, s3/oss | admin, system-scheduler |
 | 131 | 部署运维中心 | 日志存储与索引 | medium | elasticsearch, s3/oss | system-scheduler |
-| 132 | 部署运维中心 | Kubernetes 配置生成器 | medium | kubernetes, helm, jinja2 | developer, platform-engineer |
-| 133 | 部署运维中心 | 流水线定义与配置管理 | medium | postgresql-jsonb | developer, system-scheduler |
-| 134 | 部署运维中心 | 流水线执行历史与审计 | low | postgresql-timescaledb-oss | developer, admin |
+| 132 | 部署运维中心 | Kubernetes 配置生成器 | medium | kubernetes, helm, jinja2 | platform-engineer, developer |
+| 133 | 部署运维中心 | 流水线定义与配置管理 | medium | postgresql-jsonb | system-scheduler, developer |
+| 134 | 部署运维中心 | 流水线执行历史与审计 | low | postgresql-timescaledb-oss | admin, developer |
 | 135 | 部署运维中心 | 敏感配置加密存储 | medium | python-cryptography | security-admin, system |
 | 136 | 部署运维中心 | 可视化流水线编排工作台 | medium | react-typescript-websocket | developer |
 | 137 | 部署运维中心 | 制品构建与存储 | medium | docker-aliyun-acr | system-scheduler |
-| 138 | 部署运维中心 | 环境变量实例管理 | low | postgresql | developer, devops-engineer |
-| 139 | 部署运维中心 | 配置版本控制 | medium | postgresql | developer, devops-engineer |
+| 138 | 部署运维中心 | 环境变量实例管理 | low | postgresql | devops-engineer, developer |
+| 139 | 部署运维中心 | 配置版本控制 | medium | postgresql | devops-engineer, developer |
 | 140 | 部署运维中心 | 镜像仓库集成 | medium | aliyun-acr, harbor, docker-registry-api | security-scanner, platform-system |
-| 141 | 部署运维中心 | 值班排班与告警路由 | medium | python-fastapi-postgresql | end-user, admin |
-| 142 | 部署运维中心 | Docker 镜像构建管道 | medium | docker, buildkit, harbor/aliyun-acr | developer, ci-system |
-| 143 | 部署运维中心 | 告警规则引擎 | medium | python-fastapi-postgresql | system-scheduler, admin |
-| 144 | 部署运维中心 | 指标采集与存储 | medium | python-fastapi-prometheus | application-component, system-scheduler |
+| 141 | 部署运维中心 | 值班排班与告警路由 | medium | python-fastapi-postgresql | admin, end-user |
+| 142 | 部署运维中心 | Docker 镜像构建管道 | medium | docker, buildkit, harbor/aliyun-acr | ci-system, developer |
+| 143 | 部署运维中心 | 告警规则引擎 | medium | python-fastapi-postgresql | admin, system-scheduler |
+| 144 | 部署运维中心 | 指标采集与存储 | medium | python-fastapi-prometheus | system-scheduler, application-component |
 | 145 | 部署运维中心 | 日志采集 Agent 部署与配置 | medium | kubernetes, filebeat/fluentd | system-scheduler, devops |
 | 146 | 部署运维中心 | K8s RollingUpdate 策略配置 | low | kubernetes, python | automation-pipeline, system-operator |
-| 147 | 部署运维中心 | 人工反馈闭环 | medium | python-fastapi-postgresql | sre, admin |
+| 147 | 部署运维中心 | 人工反馈闭环 | medium | python-fastapi-postgresql | admin, sre |
 | 148 | 部署运维中心 | 故障上下文数据采集 | high | python-fastapi-postgresql-redis | system-monitor |
-| 149 | 部署运维中心 | 历史故障模式知识库 | medium | postgresql-milvus | sre, admin |
+| 149 | 部署运维中心 | 历史故障模式知识库 | medium | postgresql-milvus | admin, sre |
 | 150 | 部署运维中心 | 发布异常检测与自动暂停 | medium | python, redis, kubernetes | system |
 | 151 | 部署运维中心 | 发布策略编排引擎 | high | python, postgresql, redis | system-operator |
 | 152 | 部署运维中心 | 金丝雀发布流量控制 | medium | kubernetes, istio | system-operator |
 | 153 | 部署运维中心 | 蓝绿部署环境管理 | medium | kubernetes, python | system-operator |
 | 154 | 部署运维中心 | 发布过程指标监控 | medium | prometheus, python | system |
-| 155 | 部署运维中心 | 根因分析报告生成 | low | python-fastapi | sre, admin |
+| 155 | 部署运维中心 | 根因分析报告生成 | low | python-fastapi | admin, sre |
 | 156 | 部署运维中心 | AI根因推理引擎 | very-high | python-anthropic-milvus | system-ai |
-| 157 | 数据分析平台 | 报表导出与调度系统 | medium | python-fastapi-postgresql-redis-celery | system-scheduler, end-user, admin |
-| 158 | 数据分析平台 | 数据权限与隔离系统 | medium | python-fastapi-postgresql | end-user, admin, system-auditor |
-| 159 | 数据分析平台 | 指标定义与元数据管理 | medium | fastapi-postgresql-redis | developer, admin, analyst |
-| 160 | 数据分析平台 | 看板配置与模板管理 | medium | fastapi-postgresql | end-user, admin |
+| 157 | 数据分析平台 | 报表导出与调度系统 | medium | python-fastapi-postgresql-redis-celery | admin, end-user, system-scheduler |
+| 158 | 数据分析平台 | 数据权限与隔离系统 | medium | python-fastapi-postgresql | admin, end-user, system-auditor |
+| 159 | 数据分析平台 | 指标定义与元数据管理 | medium | fastapi-postgresql-redis | admin, developer, analyst |
+| 160 | 数据分析平台 | 看板配置与模板管理 | medium | fastapi-postgresql | admin, end-user |
 | 161 | 数据分析平台 | MRR/ARR 计算引擎 | medium | python-postgresql | system-scheduler |
 | 162 | 数据分析平台 | 收入预测模型 | high | python-postgresql | system-scheduler, data-scientist |
 | 163 | 数据分析平台 | 用户会话与设备识别 | medium | postgresql, redis | end-user |
-| 164 | 数据分析平台 | 用户留存分析引擎 | medium | postgresql, redis | end-user, admin |
-| 165 | 数据分析平台 | 用户路径与行为序列分析 | high | postgresql, python | end-user, admin |
+| 164 | 数据分析平台 | 用户留存分析引擎 | medium | postgresql, redis | admin, end-user |
+| 165 | 数据分析平台 | 用户路径与行为序列分析 | high | postgresql, python | admin, end-user |
 | 166 | 数据分析平台 | 看板数据权限与隔离 | medium | fastapi-postgresql | system |
 | 167 | 数据分析平台 | 数据刷新调度与推送机制 | high | fastapi-redis-websocket | end-user, system |
-| 168 | 数据分析平台 | 行为漏斗分析引擎 | medium | postgresql, redis | end-user, admin |
+| 168 | 数据分析平台 | 行为漏斗分析引擎 | medium | postgresql, redis | admin, end-user |
 | 169 | 数据分析平台 | 用户价值指标计算 | low | python-postgresql | system-scheduler |
 | 170 | 数据分析平台 | 图表组件库与布局引擎 | high | react-typescript-tailwind | end-user |
 | 171 | 数据分析平台 | 事件埋点与采集SDK | medium | typescript, python, redis | end-user, system |
 | 172 | 数据分析平台 | 告警降噪与智能聚合 | medium | python-fastapi-redis | system-scheduler |
-| 173 | 数据分析平台 | 告警历史与事件管理 | low | python-fastapi-postgresql | end-user, admin |
-| 174 | 数据分析平台 | SQL/DSL 查询接口 | medium | fastapi-websocket | developer, end-user |
-| 175 | 数据分析平台 | 收入分析报表与可视化接口 | low | python-fastapi-postgresql | end-user, admin, analyst |
-| 176 | 数据分析平台 | 指标权限与审计 | medium | fastapi-postgresql | end-user, admin |
+| 173 | 数据分析平台 | 告警历史与事件管理 | low | python-fastapi-postgresql | admin, end-user |
+| 174 | 数据分析平台 | SQL/DSL 查询接口 | medium | fastapi-websocket | end-user, developer |
+| 175 | 数据分析平台 | 收入分析报表与可视化接口 | low | python-fastapi-postgresql | admin, end-user, analyst |
+| 176 | 数据分析平台 | 指标权限与审计 | medium | fastapi-postgresql | admin, end-user |
 | 177 | 数据分析平台 | 根因分析与智能建议 | very-high | python-fastapi-milvus-claude | system-scheduler, end-user |
-| 178 | 数据分析平台 | 点击热力图与页面交互分析 | medium | typescript, postgresql | end-user, admin |
+| 178 | 数据分析平台 | 点击热力图与页面交互分析 | medium | typescript, postgresql | admin, end-user |
 | 179 | 数据分析平台 | 收入数据采集与存储 | medium | python-fastapi-postgresql-redis | message-queue, system-scheduler |
 | 180 | 数据分析平台 | 查询结果缓存层 | low | redis-python | system |
 | 181 | 数据分析平台 | 退款与争议分析 | medium | python-postgresql-redis | ops-team, system-scheduler |
 | 182 | 数据分析平台 | 收入来源与渠道分析 | low | python-postgresql | system-scheduler, analyst |
 | 183 | 数据分析平台 | 可视化指标构建器 | medium | react-typescript-tailwind | end-user, analyst |
 | 184 | 数据分析平台 | 多渠道告警通知分发 | medium | python-fastapi-redis | system-scheduler, end-user |
-| 185 | 数据分析平台 | 告警规则配置与评估 | medium | python-fastapi-postgresql | end-user, admin |
+| 185 | 数据分析平台 | 告警规则配置与评估 | medium | python-fastapi-postgresql | admin, end-user |
 | 186 | 数据分析平台 | 异常检测模型引擎 | high | python-fastapi-postgresql-redis | data-analyst, system-scheduler |
 | 187 | 数据分析平台 | 看板导出与分享 | medium | fastapi-redis | end-user |
 | 188 | 数据分析平台 | 查询模式识别与分类 | medium | python, postgresql | system-scheduler |
@@ -5029,55 +4957,55 @@ prompt执行后的质量评分与指标记录
 | 190 | 数据分析平台 | SQL 动态生成引擎 | medium | python-postgresql | system-scheduler |
 | 191 | 数据分析平台 | 分群对比与交叉分析 | medium | postgresql, redis | data-analyst, product-manager |
 | 192 | 数据分析平台 | 元数据管理接口 | low | python-postgresql-redis | system |
-| 193 | 数据分析平台 | 分群规则引擎 | medium | postgresql, redis | product-manager, admin |
+| 193 | 数据分析平台 | 分群规则引擎 | medium | postgresql, redis | admin, product-manager |
 | 194 | 数据分析平台 | 查询执行器与资源控制 | low | python-postgresql | system |
 | 195 | 数据分析平台 | 事件接收与验证网关 | medium | fastapi-redis-kafka | sdk, end-user-device |
 | 196 | 数据分析平台 | 查询结果缓存管理 | low | redis | system-scheduler |
 | 197 | 数据分析平台 | 性能瓶颈诊断引擎 | medium | postgresql, python | system-scheduler |
-| 198 | 数据分析平台 | AI推荐分群引擎 | high | claude, milvus, postgresql | ai-system, product-manager |
+| 198 | 数据分析平台 | AI推荐分群引擎 | high | claude, milvus, postgresql | product-manager, ai-system |
 | 199 | 数据分析平台 | DSL 表达式解析器 | medium | python | system |
 | 200 | 数据分析平台 | SQL 查询生成器 | medium | python-postgresql | system |
 | 201 | 数据分析平台 | 索引建议生成器 | high | postgresql, python | admin |
 | 202 | 数据分析平台 | 事件去重与幂等保障 | medium | redis-kafka | system-worker |
 | 203 | 数据分析平台 | 时间维度计算转换器 | medium | python-postgresql | system |
 | 204 | 数据分析平台 | 数据库查询执行器 | low | python-postgresql | system-scheduler |
-| 205 | 数据分析平台 | 物化视图和预聚合管理 | high | postgresql, python, redis | system-scheduler, admin |
+| 205 | 数据分析平台 | 物化视图和预聚合管理 | high | postgresql, python, redis | admin, system-scheduler |
 | 206 | 数据分析平台 | 流式指标实时聚合计算器 | very-high | unknown-stream-engine | system-worker |
-| 207 | 数据分析平台 | 标签体系与管理 | medium | postgresql, redis | product-manager, system-scheduler, admin |
+| 207 | 数据分析平台 | 标签体系与管理 | medium | postgresql, redis | admin, system-scheduler, product-manager |
 | 208 | 数据分析平台 | 并发查询调度与限流 | medium | python-fastapi-redis | system-scheduler, end-user |
 | 209 | 数据分析平台 | 事件清洗与标准化处理器 | medium | python-kafka-redis | system-worker |
 | 210 | 数据分析平台 | 实时与历史数据融合 | high | python-postgresql-redis | system-scheduler |
-| 211 | 数据分析平台 | 分群查询接口与画像生成 | medium | fastapi, postgresql, redis | product-manager, admin, external-api |
+| 211 | 数据分析平台 | 分群查询接口与画像生成 | medium | fastapi, postgresql, redis | admin, external-api, product-manager |
 | 212 | 数据分析平台 | 查询并发控制与限流 | medium | python, redis, postgresql | system-scheduler, end-user |
 | 213 | 数据分析平台 | 查询结果格式化与响应 | low | python-fastapi | end-user |
-| 214 | 数据分析平台 | 查询计划可视化 | medium | react, typescript, python | end-user, admin |
+| 214 | 数据分析平台 | 查询计划可视化 | medium | react, typescript, python | admin, end-user |
 | 215 | 数据分析平台 | 查询请求解析与路由 | low | python-fastapi | system-scheduler, end-user |
 | 216 | 数据分析平台 | 会话拼接与设备关联引擎 | high | redis-postgresql-kafka | system-worker |
-| 217 | 数据分析平台 | 回溯补算与数据修复调度器 | high | postgresql-redis-celery | system-scheduler, admin |
+| 217 | 数据分析平台 | 回溯补算与数据修复调度器 | high | postgresql-redis-celery | admin, system-scheduler |
 | 218 | 数据分析平台 | 分群实时更新与计算 | high | redis, postgresql | system-scheduler, event-stream |
 | 219 | 数据分析平台 | SQL自定义查询构建器 | high | postgresql | data-analyst, power-user |
-| 220 | 数据分析平台 | 慢查询日志采集与解析 | medium | postgresql, python, redis | system-scheduler, admin |
+| 220 | 数据分析平台 | 慢查询日志采集与解析 | medium | postgresql, python, redis | admin, system-scheduler |
 | 221 | 计费与订阅管理 | 额度与配额控制 | medium | redis, postgresql, fastapi | system-scheduler, end-user |
 | 222 | 计费与订阅管理 | 订阅生命周期管理 | medium | postgresql, redis, fastapi | system-scheduler, end-user |
-| 223 | 计费与订阅管理 | 发票与税务管理 | medium | fastapi, postgresql | end-user, finance-admin, tax-platform |
-| 224 | 计费与订阅管理 | 支付集成 | medium | fastapi, redis | payment-gateway, end-user |
-| 225 | 计费与订阅管理 | 账单生成与结算 | medium | postgresql, fastapi | system-scheduler, end-user, finance-admin |
-| 226 | 计费与订阅管理 | 优惠券与促销活动 | medium | redis, postgresql, fastapi | end-user, marketing-admin |
-| 227 | 计费与订阅管理 | 定价方案配置 | medium | postgresql, fastapi | product-manager, admin |
-| 228 | 计费与订阅管理 | 用量数据采集管道 | medium | fastapi, redis-stream, postgresql | api-gateway, ai-service, system-module |
+| 223 | 计费与订阅管理 | 发票与税务管理 | medium | fastapi, postgresql | finance-admin, end-user, tax-platform |
+| 224 | 计费与订阅管理 | 支付集成 | medium | fastapi, redis | end-user, payment-gateway |
+| 225 | 计费与订阅管理 | 账单生成与结算 | medium | postgresql, fastapi | finance-admin, end-user, system-scheduler |
+| 226 | 计费与订阅管理 | 优惠券与促销活动 | medium | redis, postgresql, fastapi | marketing-admin, end-user |
+| 227 | 计费与订阅管理 | 定价方案配置 | medium | postgresql, fastapi | admin, product-manager |
+| 228 | 计费与订阅管理 | 用量数据采集管道 | medium | fastapi, redis-stream, postgresql | ai-service, api-gateway, system-module |
 | 229 | 计费与订阅管理 | 用量数据归档与冷存储 | medium | postgresql, aliyun-oss, parquet | system-scheduler |
 | 230 | 计费与订阅管理 | 用量异常检测与告警 | medium | redis-stream, webhook, postgresql | ops-team, system-admin |
 | 231 | 计费与订阅管理 | 多时间粒度实时聚合引擎 | high | redis-stream, postgresql-timescaledb | system-scheduler, billing-service |
-| 232 | 计费与订阅管理 | 用量查询接口层 | low | fastapi, postgresql, redis-cache | end-user, dashboard, billing-service |
-| 233 | 技术架构规划 | 成本估算与优化建议 | medium | python-fastapi-postgresql | finance, startup-founder |
-| 234 | 技术架构规划 | 性能与扩展性评估 | high | python-postgresql | tech-lead, devops |
+| 232 | 计费与订阅管理 | 用量查询接口层 | low | fastapi, postgresql, redis-cache | end-user, billing-service, dashboard |
+| 233 | 技术架构规划 | 成本估算与优化建议 | medium | python-fastapi-postgresql | startup-founder, finance |
+| 234 | 技术架构规划 | 性能与扩展性评估 | high | python-postgresql | devops, tech-lead |
 | 235 | 技术架构规划 | 架构版本管理与协作 | medium | react-typescript-postgresql-redis | tech-lead, team-member |
-| 236 | 技术架构规划 | Swagger UI 集成与可视化 | low | swagger-ui | developer, end-user |
+| 236 | 技术架构规划 | Swagger UI 集成与可视化 | low | swagger-ui | end-user, developer |
 | 237 | 技术架构规划 | 多维度评分引擎 | medium | python, redis | system-engine |
 | 238 | 技术架构规划 | 用户权重调整与重新推荐 | low | react, fastapi, redis | end-user |
-| 239 | 技术架构规划 | 需求解析与特征提取 | medium | claude-api, fastapi | ai-agent, end-user |
+| 239 | 技术架构规划 | 需求解析与特征提取 | medium | claude-api, fastapi | end-user, ai-agent |
 | 240 | 技术架构规划 | RESTful 路由设计规则引擎 | medium | python | system |
-| 241 | 技术架构规划 | 敏感数据处理审查 | medium | python | dpo, security-auditor |
+| 241 | 技术架构规划 | 敏感数据处理审查 | medium | python | security-auditor, dpo |
 | 242 | 技术架构规划 | API 安全防护审查 | medium | python | security-auditor, system |
 | 243 | 技术架构规划 | 认证鉴权方案配置 | medium | python | system |
 | 244 | 技术架构规划 | 技术栈对比分析 | medium | postgresql, redis, react, chart-library | end-user |
@@ -5092,18 +5020,18 @@ prompt执行后的质量评分与指标记录
 | 253 | 技术架构规划 | 密钥管理安全审查 | medium | python | security-auditor, devops |
 | 254 | 技术架构规划 | 认证鉴权机制安全审查 | medium | python | security-auditor, system |
 | 255 | 技术架构规划 | 决策规则引擎 | medium | python, postgresql | system-engine |
-| 256 | 技术架构规划 | 范式规范化与反范式化建议 | medium | python | architect, system |
+| 256 | 技术架构规划 | 范式规范化与反范式化建议 | medium | python | system, architect |
 | 257 | 技术架构规划 | API 版本管理策略配置 | low | python | system |
 | 258 | 技术架构规划 | 索引策略推荐 | medium | python-sqlalchemy | system, dba |
-| 259 | 技术架构规划 | 技术栈与需求信息提取 | medium | claude-api | ai-agent, end-user |
-| 260 | 技术架构规划 | 架构风格模板库与选择器 | low | postgresql | end-user, admin |
+| 259 | 技术架构规划 | 技术栈与需求信息提取 | medium | claude-api | end-user, ai-agent |
+| 260 | 技术架构规划 | 架构风格模板库与选择器 | low | postgresql | admin, end-user |
 | 261 | 技术架构规划 | 安全修复建议生成 | low | python | security-auditor, dev-team |
 | 262 | 技术架构规划 | 分区与分表策略设计 | high | postgresql-shardingsphere | system, dba |
 | 263 | 技术架构规划 | 安全标准合规性检查 | medium | python | security-auditor, compliance-officer |
-| 264 | 技术架构规划 | 数据库类型与引擎选择 | low | python-fastapi | architect, system |
+| 264 | 技术架构规划 | 数据库类型与引擎选择 | low | python-fastapi | system, architect |
 | 265 | 技术架构规划 | 数据迁移脚本生成 | high | python-alembic-sqlalchemy | system, dba |
-| 266 | 技术架构规划 | 推荐结果生成与解释 | medium | claude-api, fastapi, markdown | ai-agent, end-user |
-| 267 | 技术架构规划 | 技术栈知识库管理 | medium | postgresql, fastapi | system-crawler, admin |
+| 266 | 技术架构规划 | 推荐结果生成与解释 | medium | claude-api, fastapi, markdown | end-user, ai-agent |
+| 267 | 技术架构规划 | 技术栈知识库管理 | medium | postgresql, fastapi | admin, system-crawler |
 | 268 | 技术架构规划 | OpenAPI 文档组装器 | low | python | system |
 | 269 | 技术架构规划 | JSON Schema 转换器 | low | python | system |
 | 270 | 技术架构规划 | 错误处理与类型化异常 | low | typescript | system |
@@ -5117,7 +5045,7 @@ prompt执行后的质量评分与指标记录
 | 278 | 技术架构规划 | 请求参数模型定义 | medium | pydantic, json-schema | backend-developer, api-consumer |
 | 279 | 技术架构规划 | 请求响应模板生成器 | low | python | system |
 | 280 | 技术架构规划 | 请求重试机制 | low | typescript | system |
-| 281 | 技术架构规划 | 分页参数标准化 | low | pydantic | backend-developer, frontend-developer |
+| 281 | 技术架构规划 | 分页参数标准化 | low | pydantic | frontend-developer, backend-developer |
 | 282 | 技术架构规划 | 鉴权与安全方案注入器 | medium | python | system |
 | 283 | 技术架构规划 | 响应模型定义 | low | pydantic, fastapi | backend-developer, api-consumer |
 | 284 | 技术架构规划 | 请求取消与超时控制 | low | typescript | system |
@@ -5125,7 +5053,7 @@ prompt执行后的质量评分与指标记录
 | 286 | 技术架构规划 | 文档预览与导出服务 | low | react, fastapi | end-user |
 | 287 | 技术架构规划 | 编辑冲突检测与锁定 | low | redis, fastapi | end-user |
 | 288 | 技术架构规划 | 操作事件实时同步 | medium | fastapi-websocket, redis | end-user |
-| 289 | 技术架构规划 | 排序过滤参数标准化 | high | pydantic, sqlalchemy | backend-developer, frontend-developer |
+| 289 | 技术架构规划 | 排序过滤参数标准化 | high | pydantic, sqlalchemy | frontend-developer, backend-developer |
 | 290 | 技术架构规划 | 组件关系与连接推理 | medium | python | system |
 | 291 | 技术架构规划 | 架构图数据格式解析器 | medium | typescript | system |
 | 292 | 技术架构规划 | 架构图主题与样式配置 | low | react-typescript | end-user |
@@ -5143,7 +5071,7 @@ prompt执行后的质量评分与指标记录
 | 304 | 技术架构规划 | API 客户端类生成 | medium | typescript | system |
 | 305 | 技术架构规划 | 前端交互式渲染层 | high | react-typescript-tailwind | end-user |
 | 306 | 技术架构规划 | 架构图数据模型输出器 | low | python | system |
-| 307 | 技术架构规划 | 操作权限与审计日志 | low | postgresql, python-fastapi | end-user, admin |
+| 307 | 技术架构规划 | 操作权限与审计日志 | low | postgresql, python-fastapi | admin, end-user |
 | 308 | 技术架构规划 | 版本快照存储与查询 | low | postgresql, python-fastapi | system-scheduler, end-user |
 | 309 | 技术架构规划 | 组件节点自动生成器 | low | python | system |
 | 310 | 技术架构规划 | 请求序列化与反序列化 | medium | typescript | system |
@@ -5151,7 +5079,7 @@ prompt执行后的质量评分与指标记录
 | 312 | 用户增长系统 | 渠道成本与 ROI 计算服务 | medium | python-postgresql-redis | admin, system |
 | 313 | 用户增长系统 | 数据清洗与规范化 | medium | python, redis, postgresql | system |
 | 314 | 用户增长系统 | 漏斗可视化与交互式探索 | medium | react, typescript, websocket | data-analyst, product-manager |
-| 315 | 用户增长系统 | 渠道效果对比与可视化仪表盘 | medium | react-typescript-tailwind | end-user, admin |
+| 315 | 用户增长系统 | 渠道效果对比与可视化仪表盘 | medium | react-typescript-tailwind | admin, end-user |
 | 316 | 用户增长系统 | 数据存储层设计 | medium | postgresql | system |
 | 317 | 用户增长系统 | 多渠道流量追踪与会话管理 | medium | postgresql-redis | end-user, system |
 | 318 | 用户增长系统 | 流失原因分析与归因 | high | python, postgresql | data-analyst, system-scheduler |
@@ -5162,7 +5090,7 @@ prompt执行后的质量评分与指标记录
 | 323 | 用户增长系统 | 漏斗对比与细分分析 | medium | postgresql, fastapi | data-analyst, product-manager |
 | 324 | 用户增长系统 | 前端埋点SDK与事件采集 | medium | typescript | end-user |
 | 325 | 用户增长系统 | 用户事件流采集与预处理 | medium | redis, postgresql, fastapi | system-scheduler, end-user |
-| 326 | 用户增长系统 | 事件Schema定义与管理 | medium | postgresql | developer, admin |
+| 326 | 用户增长系统 | 事件Schema定义与管理 | medium | postgresql | admin, developer |
 | 327 | 用户增长系统 | 实验配置与管理 | medium | react-typescript-fastapi-postgresql | growth-team, product-manager |
 | 328 | 用户增长系统 | 指标定义与计算引擎 | high | fastapi-postgresql-redis | data-analyst, system-scheduler |
 | 329 | 用户增长系统 | 批量数据导入 | medium | fastapi, redis, postgresql | admin |
@@ -5170,22 +5098,22 @@ prompt执行后的质量评分与指标记录
 | 331 | 用户增长系统 | UTM 参数解析与规范化服务 | low | python-fastapi | end-user, system |
 | 332 | 用户增长系统 | 流量分桶与用户分组 | medium | python-redis | end-user, system |
 | 333 | 用户增长系统 | 后端业务事件采集 | low | fastapi, redis | system |
-| 334 | 用户增长系统 | 异常波动检测与告警 | medium | python, redis, fastapi | product-manager, system-scheduler |
-| 335 | 用户增长系统 | 漏斗模板定义与存储 | low | postgresql, fastapi | product-manager, admin |
+| 334 | 用户增长系统 | 异常波动检测与告警 | medium | python, redis, fastapi | system-scheduler, product-manager |
+| 335 | 用户增长系统 | 漏斗模板定义与存储 | low | postgresql, fastapi | admin, product-manager |
 | 336 | 用户增长系统 | 留存率计算引擎 | medium | postgresql-redis | system-scheduler, analyst |
-| 337 | 用户增长系统 | 优化建议生成 | medium | python, anthropic-api, milvus | ai-agent, product-manager |
+| 337 | 用户增长系统 | 优化建议生成 | medium | python, anthropic-api, milvus | product-manager, ai-agent |
 | 338 | 用户增长系统 | 实时事件写入服务 | medium | fastapi, redis, postgresql | system |
 | 339 | 用户增长系统 | 用户分群留存对比 | medium | postgresql-python | product-manager, analyst |
 | 340 | 用户增长系统 | 留存曲线可视化接口 | low | python-fastapi | product-manager, analyst |
-| 341 | 用户增长系统 | 实验权限与审批流程 | low | fastapi-postgresql | product-manager, admin |
+| 341 | 用户增长系统 | 实验权限与审批流程 | low | fastapi-postgresql | admin, product-manager |
 | 342 | 用户增长系统 | 埋点事件规范与Schema定义 | low | json-schema | data-analyst, frontend-developer |
 | 343 | 用户增长系统 | 触达执行器与第三方渠道集成 | high | fastapi-redis-postgresql | system-worker |
 | 344 | 用户增长系统 | 增量数据拉取与去重合并 | high | postgresql-upsert, redis-bloomfilter | system-scheduler |
 | 345 | 用户增长系统 | 原始数据格式转换与标准化 | medium | python-pydantic, jsonschema | system-scheduler |
 | 346 | 用户增长系统 | 用户行为特征工程 | medium | postgresql, python | system-scheduler |
-| 347 | 用户增长系统 | 广告平台连接配置管理 | low | react-fastapi-postgresql | end-user, admin |
+| 347 | 用户增长系统 | 广告平台连接配置管理 | low | react-fastapi-postgresql | admin, end-user |
 | 348 | 用户增长系统 | 模型推理服务 | medium | fastapi, redis, python | system-scheduler, internal |
-| 349 | 用户增长系统 | 召回效果指标聚合与报表生成 | medium | fastapi-postgresql | product-manager, admin |
+| 349 | 用户增长系统 | 召回效果指标聚合与报表生成 | medium | fastapi-postgresql | admin, product-manager |
 | 350 | 用户增长系统 | 异构数据标准化转换引擎 | medium | fastapi | system-scheduler |
 | 351 | 用户增长系统 | 漏斗状态计算引擎 | medium | python-redis | system |
 | 352 | 用户增长系统 | 第三方平台认证与凭证管理 | medium | postgresql-encrypted-field, redis-cache | system-scheduler, end-user |
@@ -5195,19 +5123,19 @@ prompt执行后的质量评分与指标记录
 | 356 | 用户增长系统 | 多渠道触达任务调度接口 | medium | fastapi-redis-postgresql | system-scheduler |
 | 357 | 用户增长系统 | 埋点数据入库与存储层 | medium | postgresql | system-scheduler |
 | 358 | 用户增长系统 | 多平台数据采集适配器 | high | fastapi | system-scheduler |
-| 359 | 用户增长系统 | 实时指标查询接口 | low | fastapi-redis-postgresql | product-manager, end-user |
-| 360 | 用户增长系统 | 召回策略配置管理接口 | medium | fastapi-postgresql | product-manager, admin |
+| 359 | 用户增长系统 | 实时指标查询接口 | low | fastapi-redis-postgresql | end-user, product-manager |
+| 360 | 用户增长系统 | 召回策略配置管理接口 | medium | fastapi-postgresql | admin, product-manager |
 | 361 | 用户增长系统 | 训练数据集构建与标注 | medium | python, postgresql | system-scheduler |
 | 362 | 用户增长系统 | 埋点数据质量监控与告警 | medium | fastapi | system-scheduler, data-engineer |
 | 363 | 用户增长系统 | 模型定期重训练调度 | medium | python, postgresql | system-scheduler |
 | 364 | 用户增长系统 | OAuth2统一授权流程 | medium | fastapi | end-user |
-| 365 | 用户增长系统 | 漏斗模板定义与存储 | low | fastapi-postgresql | product-manager, admin |
+| 365 | 用户增长系统 | 漏斗模板定义与存储 | low | fastapi-postgresql | admin, product-manager |
 | 366 | 用户增长系统 | 定时同步任务调度 | medium | fastapi-redis | system-scheduler |
 | 367 | 用户增长系统 | A/B 测试框架支持 | high | python, postgresql | internal |
 | 368 | 用户增长系统 | 增量计算调度器 | medium | python-redis | system-scheduler |
 | 369 | 用户增长系统 | 事件流接入与规范化 | medium | fastapi-redis-kafka | end-user, system |
 | 370 | 用户增长系统 | API限流与重试调度引擎 | medium | redis-counter, python-tenacity | system-scheduler |
-| 371 | 用户增长系统 | 同步状态与监控仪表盘 | medium | react-typescript | end-user, admin |
+| 371 | 用户增长系统 | 同步状态与监控仪表盘 | medium | react-typescript | admin, end-user |
 | 372 | 用户增长系统 | 后端埋点接收API与数据管道 | medium | fastapi | system-sdk |
 | 373 | 用户增长系统 | 缓存失效与重算策略 | medium | python-redis-celery | admin, system |
 | 374 | 用户增长系统 | Webhook接收与验证服务 | medium | fastapi, redis-set, rabbitmq | third-party-platform |

@@ -125,6 +125,8 @@ def _name_shared_component(shared_content: str, config: Config) -> str:
     try:
         name = call_llm(shared_content[:500], config, system_prompt=system, max_tokens=64, temperature=0.1)
         name = name.strip().strip('"').strip("'").strip()
+        # Strip to first line — LLM sometimes returns markdown
+        name = name.split("\n")[0].strip().strip("#").strip()
         if len(name) > 60:
             name = name[:60]
         if name:
