@@ -12,3 +12,9 @@ dist/
 build/
 .pytest_cache/
 .mypy_cache/
+
+# Local test artifacts (may contain API keys)
+decompose_run.py
+decompose_results.json
+demo_pipeline.py
+demo_v1_*/

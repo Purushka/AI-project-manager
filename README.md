@@ -47,7 +47,7 @@ Why no alignment during decomposition? It avoids O(N^2) cross-comparison costs a
 Once all leaf nodes are done, a bottom-up optimization pass runs that **actually rewrites node content** (not just creates edges):
 
 ```
-1. Hybrid clustering              → weighted Jaccard + adaptive DBSCAN
+1. Hybrid clustering              → weighted Jaccard + average-link agglomeration + semantic boost
 2. Detect overlap between nodes   → LLM identifies shared content (a+b vs b+c)
 3. Extract shared components      → create new shared node for common content
 4. Rewrite original nodes         → remove extracted content, add references
@@ -128,6 +128,31 @@ Every LLM call operates within a strict token budget:
 
 **Quality floor:** If Tier 1 can't fit, the system stops and reports rather than operating with insufficient context.
 
+## Demo: Full Pipeline Run
+
+The `demo/` directory contains the output from a complete pipeline run on an "AI Entrepreneurship Platform" project — from seed idea to 960 decomposed nodes with execution tickets.
+
+**Pipeline stats:**
+- Duration: ~29 minutes (8 parallel backward workers)
+- Total nodes: 960 (769 original + 191 shared components)
+- Depth distribution: L0:1 → L1:11 → L2:99 → L3:344 → L4:505
+- 657 leaf-level execution tickets (one person, one sprint each)
+- 382 nodes rewritten to reference shared components
+- 170 clusters processed, 300 LLM calls, 639 embedding calls
+
+**Files:**
+| File | Description |
+|------|-------------|
+| `final_report.md` | Full tree: all nodes, execution tickets, shared components |
+| `final_report.html` | Styled HTML version with TOC and print support |
+| `final_report.docx` | Word document version |
+| `full_snapshot.json` | Complete tree data (all 960 nodes) |
+| `00_pipeline_summary.json` | Run metadata and timings |
+| `01_forward_decomposition.json` | Forward pass output |
+| `02_clustering.json` | Cluster assignments (170 clusters) |
+| `03_backward_optimization.json` | Shared components and rewrite log |
+| `pipeline_*.log` | Full pipeline execution log |
+
 ## Quick Start
 
 ```bash
@@ -192,7 +217,7 @@ python cli.py edge gc <project>                 # Garbage collect weak/orphan/st
 ### Clustering & Search
 
 ```bash
-python cli.py cluster run <project> <depth>     # Hybrid clustering (weighted Jaccard + DBSCAN)
+python cli.py cluster run <project> <depth>     # Weighted Jaccard + average-link agglomeration
 python cli.py search similar <node_id> [--n 5]  # Tag-based similarity search
 ```
 
@@ -220,7 +245,7 @@ python cli.py reconcile <project>               # File system <-> DB consistency
 |-------|---------|
 | `ai-pm-core` | Main orchestrator, state machine, phase dispatch |
 | `ai-pm-decomposer` | Forward decomposition with prompt templates per level |
-| `ai-pm-hyperspace` | Hybrid clustering (weighted Jaccard + adaptive DBSCAN + semantic) |
+| `ai-pm-hyperspace` | Hybrid clustering (weighted Jaccard + average-link + semantic boost) |
 | `ai-pm-comparator` | Merge strategy analysis for clusters |
 | `ai-pm-challenger` | Adversarial validation of merge plans |
 | `ai-pm-backprop` | Content-rewriting backward optimization with write locks |

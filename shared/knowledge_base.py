@@ -90,12 +90,16 @@ class KnowledgeEntry:
         return {k: getattr(self, k) for k in self.__slots__}
 
 
+SEMANTIC_DEDUP_THRESHOLD = 0.85
+
+
 class KnowledgeBase:
     """Vector-backed knowledge store with ownership and sync."""
 
     def __init__(self, config: "Config"):
         self.config = config
         self.db_path = config.db_path
+        self._vector_store = None
         self._init_schema()
 
     def _init_schema(self) -> None:
@@ -126,9 +130,97 @@ class KnowledgeBase:
 
     @staticmethod
     def _derive_topic_key(title: str, category: str) -> str:
-        """Derive a topic key for mutex. Same topic = same key = exclusive write."""
+        """Derive a topic key for indexing. Used alongside semantic dedup."""
         normalized = title.strip().lower().replace(" ", "_")
         return f"{category}__{normalized[:60]}"
+
+    def _find_semantic_duplicate(
+        self, title: str, category: str, source_node_id: str, project: str,
+    ) -> dict[str, str] | None:
+        """Check if a semantically similar entry already exists from another node.
+
+        Uses the knowledge_base ChromaDB collection instead of string matching.
+        Returns conflict dict if near-duplicate found, None otherwise.
+        """
+        try:
+            from shared.vector_store import VectorStore
+            from shared.embeddings import get_embedding
+
+            if self._vector_store is None:
+                self._vector_store = VectorStore(self.config)
+
+            coll = self._vector_store.collections.get("knowledge_base")
+            if coll is None or coll.count() == 0:
+                return None
+
+            query_text = f"{category}: {title}"
+            embedding = get_embedding(query_text, self.config)
+            results = coll.query(
+                query_embeddings=[embedding],
+                n_results=1,
+                where={"category": category},
+            )
+
+            if not results["ids"] or not results["ids"][0]:
+                return None
+
+            top_id = results["ids"][0][0]
+            top_distance = results["distances"][0][0] if results.get("distances") else 1.0
+            similarity = 1.0 - top_distance
+
+            if similarity < SEMANTIC_DEDUP_THRESHOLD:
+                return None
+
+            # Check if it's from a different node
+            with self._connect() as conn:
+                row = conn.execute(
+                    "SELECT entry_id, source_node_id, title, topic_key FROM knowledge "
+                    "WHERE entry_id = ? AND status = 'active' AND source_node_id != ?",
+                    (top_id, source_node_id),
+                ).fetchone()
+
+            if not row:
+                return None
+
+            return {
+                "conflict": "semantic_duplicate",
+                "owner": row["source_node_id"],
+                "existing_entry_id": row["entry_id"],
+                "existing_title": row["title"],
+                "similarity": f"{similarity:.3f}",
+                "message": (
+                    f"Semantically similar entry '{row['title']}' (similarity={similarity:.3f}) "
+                    f"already exists from node '{row['source_node_id']}'. "
+                    f"Use propose_amendment() to suggest changes."
+                ),
+            }
+        except Exception as e:
+            logger.debug(f"Semantic dedup check failed (falling back to string): {e}")
+            return None
+
+    def _sync_to_vector(self, entry_id: str, title: str, content: str, category: str) -> None:
+        """Sync an entry to the knowledge_base ChromaDB collection."""
+        try:
+            from shared.vector_store import VectorStore
+            from shared.embeddings import get_embedding
+
+            if self._vector_store is None:
+                self._vector_store = VectorStore(self.config)
+
+            coll = self._vector_store.collections.get("knowledge_base")
+            if coll is None:
+                return
+
+            query_text = f"{category}: {title}"
+            embedding = get_embedding(query_text, self.config)
+            coll.upsert(
+                ids=[entry_id],
+                embeddings=[embedding],
+                metadatas=[{"category": category, "title": title}],
+                documents=[content[:1000]],
+            )
+        except Exception as e:
+            logger.debug(f"Vector sync failed (non-fatal): {e}")
 
     # ── Lock operations (topic-level mutex) ───────────────��───────────
 
@@ -199,10 +291,16 @@ class KnowledgeBase:
                      source_node_id, now, entry_id),
                 )
             else:
-                # Insert path: check topic mutex
+                # Insert path: semantic dedup first, then string-based fallback
+                semantic_conflict = self._find_semantic_duplicate(
+                    title, category, source_node_id, project,
+                )
+                if semantic_conflict:
+                    return semantic_conflict
+
+                # Fallback: string-based topic mutex
                 topic_owner = self._acquire_lock(conn, topic, source_node_id)
                 if topic_owner:
-                    # Same topic already owned by another node
                     conflicting = conn.execute(
                         "SELECT entry_id FROM knowledge "
                         "WHERE topic_key = ? AND status = 'active' AND source_node_id = ?",
@@ -228,6 +326,9 @@ class KnowledgeBase:
                     (entry_id, project, source_node_id, topic, category, title,
                      content, content_hash, source_node_id, now, now, now),
                 )
+
+        # Sync to vector store for future semantic dedup
+        self._sync_to_vector(entry_id, title, content, category)
 
         return self.get(entry_id)  # type: ignore
 

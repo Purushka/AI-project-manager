@@ -37,6 +37,7 @@ class EdgeStatus(str, Enum):
     VALIDATED = "validated"
     STALE = "stale"
     CONFLICT = "conflict"
+    RESOLVED = "resolved"
 
 
 class CompactionLevel(str, Enum):
@@ -100,6 +101,7 @@ class HyperspaceVector:
         "patterns": "pattern",
         "actors": "actor",
         "tech_traits": "tech_stack",
+        "priority": "timeline_priority",
         "rule_fingerprint": None,  # dropped — use biz_metrics or entity instead
         "api_shape": None,  # dropped — not representable as flat tags
     }

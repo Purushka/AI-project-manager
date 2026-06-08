@@ -12,14 +12,16 @@ The agent evaluates a 10-dimension completeness checklist (weighted 1-3) against
 ### Phase 1: Forward Decomposition
 **Independent parallel decomposition with NO cross-node alignment.** No fixed layers or layer semantics. Nodes decompose by detail granularity: depth-0 is coarsest, depth-N is executable (one person, one sprint). Breadth-first with depth-first sprints. Each node gets weighted multi-axis hyperspace tags. Only parent edges created. Completed subtrees compacted early to free context budget.
 
-### Phase 2: Backward Optimization (Cluster-First)
+### Phase 2: Backward Optimization (Content-Rewriting)
 Once forward pass completes, a single bottom-up optimization runs:
-1. Cluster leaf nodes via tag Jaccard + DBSCAN → O(N)
-2. Compare cluster representatives → O(K²) instead of O(N²)
-3. Detailed intra/cross-cluster LLM alignment → only matched clusters
-4. Create 6 typed edges (calls, produces_consumes, shares, presents, constrains, measures) with lifecycle tracking
-5. Bottom-up parent re-derivation with constraint propagation
-6. Root consistency check (strategic alignment)
+1. Cluster leaf nodes via weighted Jaccard + semantic boost + average-link agglomeration
+2. For each cluster, detect pairwise overlap between members via LLM
+3. Extract shared components into new nodes where overlap found
+4. Rewrite original nodes to reference shared components (removes duplication)
+5. Create typed edges (calls, produces_consumes, shares, presents, constrains, measures)
+6. Resolve stale conflicts (alignment_count > 4) — LLM generates resolution, auto-applied with `auto_resolved: true` marker in edge contract for human review
+7. Re-derive parent summaries bottom-up (only for parents whose children were modified)
+8. Sync all changes to knowledge base
 
 ### Compaction & Context Control
 3-level compaction (full ~500t → compacted ~150t → interface ~80t). Constraints survive all compression levels. Always compress from original, never iteratively. Quality floor: minimum 850t context or stop.
@@ -131,7 +133,7 @@ Tests cover: prompt template loading/rendering, JSON response parsing, vector ex
 
 1. **Adaptive depth, not fixed layers**: Decomposition depth is driven by content complexity. Some branches finish at depth-2, others go to depth-12. Layers are granularity levels, not semantic categories.
 2. **Forward pass: zero cross-node alignment**: Branches decompose independently. No alignment during Phase 1. This makes forward pass embarrassingly parallel but relies on Phase 2 clustering to catch divergence.
-3. **Backward pass: cluster-first content rewriting**: After all leaves complete, one backward optimization rewrites content (not just creates edges). Detects overlap → extracts shared components → rewrites originals.
-4. **Edge lifecycle (backward/maintenance only)**: Edges and alignment are created exclusively in Phase 2 and during post-delivery maintenance. They are NOT triggered during forward decomposition. alignment_count > 4 → force resolution.
+3. **Backward pass: content-rewriting optimization**: After all leaves complete, one backward pass: cluster → detect overlap → extract shared components → rewrite originals → resolve stale conflicts → re-derive parents → sync KB. This rewrites deliverable content, not just edges.
+4. **Edge lifecycle (backward/maintenance only)**: Edges and alignment are created exclusively in Phase 2 and during post-delivery maintenance. They are NOT triggered during forward decomposition. alignment_count > 4 → LLM auto-resolution with `auto_resolved: true` marker in edge contract; export highlights these for human review. Trade-off: eliminates dead loops but removes human gate on hardest convergence failures.
 5. **Constraints survive all compaction**: Negative requirements preserved at every compression level.
 6. **File-based state sharing**: SQLite + filesystem for persistence. CLI returns JSON for agent consumption. Checkpoints enable rollback. Snapshots enable session resumption.

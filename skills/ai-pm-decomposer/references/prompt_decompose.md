@@ -48,15 +48,19 @@
         "concerns": ""
       },
       "vector": {
-        "domain": "业务领域",
-        "tech_stack": "技术栈",
+        "domain": "业务领域 (kebab-case, e.g. user-auth, payment, content-mgmt)",
+        "entity": ["核心数据实体 (e.g. user, order, subscription)"],
+        "pattern": ["架构模式 (e.g. crud, event-driven, batch-pipeline)"],
+        "actor": ["参与角色 (e.g. end-user, admin, system-scheduler)"],
+        "nfr": ["非功能需求 (e.g. low-latency, high-availability, audit-trail)"],
+        "tech_stack": "技术栈 (e.g. react, postgresql, redis)",
         "user_facing": "user-facing / internal / hybrid",
         "complexity": "low / medium / high / very-high",
         "dependency": "independent / light / heavy",
         "data_sensitivity": "public / internal / sensitive / critical",
         "revenue_impact": "direct / indirect / supporting / none",
-        "priority": "mvp / phase-1 / phase-2 / phase-3",
-        "biz_metrics": "核心业务指标"
+        "timeline_priority": "mvp / phase-1 / phase-2 / phase-3",
+        "biz_metrics": "核心业务指标 (e.g. conversion-rate, dau, arpu)"
       }
     }
   ]

@@ -234,46 +234,26 @@ def cmd_cluster_run(args: argparse.Namespace) -> None:
         _json_out({"message": "Need at least 2 nodes to cluster", "node_count": len(nodes)})
         return
 
-    # Structural clustering via Jaccard on tags
-    node_tags: dict[str, set[str]] = {}
+    sys.path.insert(0, str(Path(__file__).parent / "skills" / "ai-pm-hyperspace" / "scripts"))
+    from cluster import tag_cluster
+
+    node_tags: dict[str, list[tuple[str, str]]] = {}
+    node_titles: dict[str, str] = {}
     for n in nodes:
-        tags = db.get_tags(n.id)
-        node_tags[n.id] = {f"{k}:{v}" for k, v in tags}
+        node_tags[n.id] = db.get_tags(n.id)
+        node_titles[n.id] = n.title
 
-    clusters: list[dict] = []
-    visited: set[str] = set()
-    node_ids = list(node_tags.keys())
+    results = tag_cluster(node_tags, node_titles=node_titles, config=config)
 
-    for i, nid_a in enumerate(node_ids):
-        if nid_a in visited:
-            continue
-        cluster_members = [nid_a]
-        visited.add(nid_a)
-        tags_a = node_tags[nid_a]
-        if not tags_a:
-            continue
-        for nid_b in node_ids[i + 1:]:
-            if nid_b in visited:
-                continue
-            tags_b = node_tags[nid_b]
-            if not tags_b:
-                continue
-            intersection = tags_a & tags_b
-            union = tags_a | tags_b
-            jaccard = len(intersection) / len(union) if union else 0
-            if jaccard >= 0.3:
-                cluster_members.append(nid_b)
-                visited.add(nid_b)
-        if len(cluster_members) >= 2:
-            shared = list(node_tags[cluster_members[0]])
-            for m in cluster_members[1:]:
-                shared = [t for t in shared if t in node_tags[m]]
-            clusters.append({
-                "id": f"cluster_{uuid.uuid4().hex[:6]}",
-                "members": cluster_members,
-                "shared_tags": shared,
-                "size": len(cluster_members),
-            })
+    clusters = []
+    for c in results:
+        clusters.append({
+            "id": c.id,
+            "members": c.members,
+            "shared_tags": c.shared_features,
+            "size": len(c.members),
+            "suggested_action": c.suggested_action.value,
+        })
 
     _json_out({
         "project": args.project, "depth_filter": args.depth,

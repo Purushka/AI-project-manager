@@ -17,6 +17,7 @@ import json
 import logging
 import sys
 import uuid
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
@@ -33,6 +34,7 @@ from shared.models import (
 logger = logging.getLogger(__name__)
 
 CALLER_ID = "backprop"  # Module identity for lock acquisition
+BACKPROP_LOCK_TTL = 600  # 10 minutes — backprop operations include LLM calls
 
 
 def _read_node_content(node: Node, config: Config) -> str:
@@ -135,7 +137,7 @@ def extract_shared_component(
     comp_title = f"Shared: {shared_content[:50]}"
 
     # Acquire lock on the new node (create operation)
-    db.acquire_lock(comp_id, CALLER_ID)
+    db.acquire_lock(comp_id, CALLER_ID, ttl=BACKPROP_LOCK_TTL)
 
     try:
         detail_path = _write_node_content(comp_id, f"# {comp_title}\n\n{shared_content}", project, config)
@@ -186,7 +188,7 @@ def rewrite_node_content(
     if not node:
         return
 
-    if not db.acquire_lock(node_id, CALLER_ID):
+    if not db.acquire_lock(node_id, CALLER_ID, ttl=BACKPROP_LOCK_TTL):
         holder = db.is_locked(node_id)
         logger.warning(f"Cannot rewrite {node_id}: locked by {holder}")
         return
@@ -276,7 +278,7 @@ def apply_resolution(
     new_a = resolution.get("new_content_a", "")
     new_b = resolution.get("new_content_b", "")
 
-    if new_a and db.acquire_lock(node_a.id, CALLER_ID):
+    if new_a and db.acquire_lock(node_a.id, CALLER_ID, ttl=BACKPROP_LOCK_TTL):
         try:
             path = _write_node_content(node_a.id, new_a, node_a.project, config)
             db.update_node_content(node_a.id, CALLER_ID, detail_path=path)
@@ -285,7 +287,7 @@ def apply_resolution(
         finally:
             db.release_lock(node_a.id, CALLER_ID)
 
-    if new_b and db.acquire_lock(node_b.id, CALLER_ID):
+    if new_b and db.acquire_lock(node_b.id, CALLER_ID, ttl=BACKPROP_LOCK_TTL):
         try:
             path = _write_node_content(node_b.id, new_b, node_b.project, config)
             db.update_node_content(node_b.id, CALLER_ID, detail_path=path)
@@ -342,7 +344,7 @@ def rederive_parent(
     if not child_summaries:
         return
 
-    if not db.acquire_lock(parent_id, CALLER_ID):
+    if not db.acquire_lock(parent_id, CALLER_ID, ttl=BACKPROP_LOCK_TTL):
         logger.warning(f"Cannot rederive parent {parent_id}: locked")
         return
 
@@ -401,50 +403,69 @@ def run_backward_optimization(
         "errors": [],
     }
 
-    # Step 1-3: Process each cluster
-    for cluster in clusters:
-        if len(cluster.members) < 2:
-            continue
+    BACKPROP_WORKERS = 8
 
-        members = [db.get_node(m) for m in cluster.members]
+    def _process_cluster(cluster: Cluster) -> dict[str, Any]:
+        """Process one cluster: detect overlap, extract shared, rewrite. Thread-safe."""
+        local_db = Database(config)
+        local_kb = KnowledgeBase(config)
+        result = {"shared": [], "rewritten": [], "errors": []}
+
+        if len(cluster.members) < 2:
+            return result
+
+        members = [local_db.get_node(m) for m in cluster.members]
         members = [m for m in members if m and m.status != NodeStatus.INVALIDATED]
 
         if len(members) < 2:
-            continue
+            return result
 
-        # Compare first pair (representative pair)
-        # For larger clusters, compare all adjacent pairs
         for i in range(len(members) - 1):
-            overlap = detect_overlap(members[i], members[i + 1], config)
+            try:
+                overlap = detect_overlap(members[i], members[i + 1], config)
 
-            if not overlap.get("has_overlap"):
-                continue
+                if not overlap.get("has_overlap"):
+                    continue
 
-            # Extract shared component
-            comp_id = extract_shared_component(overlap, cluster, project, db, config, kb)
-            if comp_id:
-                results["shared_components"].append(comp_id)
+                comp_id = extract_shared_component(overlap, cluster, project, local_db, config, local_kb)
+                if comp_id:
+                    result["shared"].append(comp_id)
+                    a_unique = overlap.get("a_unique", "")
+                    b_unique = overlap.get("b_unique", "")
+                    if a_unique:
+                        rewrite_node_content(members[i].id, a_unique, comp_id, local_db, config, local_kb)
+                        result["rewritten"].append(members[i].id)
+                    if b_unique:
+                        rewrite_node_content(members[i + 1].id, b_unique, comp_id, local_db, config, local_kb)
+                        result["rewritten"].append(members[i + 1].id)
 
-                # Rewrite affected nodes
-                a_unique = overlap.get("a_unique", "")
-                b_unique = overlap.get("b_unique", "")
+                rel = overlap.get("relationship", "")
+                if rel and rel != "none":
+                    try:
+                        etype = EdgeType(rel)
+                        local_db.add_edge(members[i].id, members[i + 1].id, etype)
+                    except ValueError:
+                        local_db.add_edge(members[i].id, members[i + 1].id, EdgeType.SHARES)
+            except Exception as e:
+                result["errors"].append(f"{cluster.id}: {e}")
+                logger.warning(f"Cluster {cluster.id} pair {i} error: {e}")
 
-                if a_unique:
-                    rewrite_node_content(members[i].id, a_unique, comp_id, db, config, kb)
-                    results["rewritten_nodes"].append(members[i].id)
+        return result
 
-                if b_unique:
-                    rewrite_node_content(members[i + 1].id, b_unique, comp_id, db, config, kb)
-                    results["rewritten_nodes"].append(members[i + 1].id)
-
-            # Create typed edge
-            rel = overlap.get("relationship", "")
-            if rel and rel != "none":
-                try:
-                    etype = EdgeType(rel)
-                    db.add_edge(members[i].id, members[i + 1].id, etype)
-                except ValueError:
-                    db.add_edge(members[i].id, members[i + 1].id, EdgeType.SHARES)
+    # Step 1-3: Process clusters in parallel
+    logger.info(f"  Processing {len(clusters)} clusters with {BACKPROP_WORKERS} workers...")
+    done_count = 0
+    with ThreadPoolExecutor(max_workers=BACKPROP_WORKERS) as pool:
+        futures = {pool.submit(_process_cluster, c): c for c in clusters}
+        for future in as_completed(futures):
+            done_count += 1
+            r = future.result()
+            results["shared_components"].extend(r["shared"])
+            results["rewritten_nodes"].extend(r["rewritten"])
+            results["errors"].extend(r["errors"])
+            if done_count % 20 == 0 or done_count == len(clusters):
+                logger.info(f"  Clusters: {done_count}/{len(clusters)} done, "
+                            f"{len(results['shared_components'])} shared components")
 
     # Step 4: Resolve stale conflicts
     stale_edges = db.get_edges_by_status(project, EdgeStatus.CONFLICT)
@@ -458,9 +479,27 @@ def run_backward_optimization(
 
         resolution = resolve_conflict(node_a, node_b, edge, config)
         apply_result = apply_resolution(resolution, node_a, node_b, db, config, kb)
+
+        # Mark auto-resolved edges so export can flag them for human review
+        action = resolution.get("resolution", "escalate")
+        if action != "escalate":
+            contract_info = json.dumps({
+                "auto_resolved": True,
+                "resolution": action,
+                "rationale": resolution.get("root_cause", ""),
+                "oscillation_point": resolution.get("oscillation_point", ""),
+                "alignment_count_at_resolution": edge.alignment_count,
+            }, ensure_ascii=False)
+            db.update_edge(
+                edge.from_id, edge.to_id, edge.edge_type.value,
+                status=EdgeStatus.RESOLVED.value,
+                contract=contract_info,
+            )
+
         results["conflicts_resolved"].append({
-            "edge": f"{edge.from_id} → {edge.to_id}",
+            "edge": f"{edge.from_id} -> {edge.to_id}",
             "result": apply_result,
+            "auto_resolved": action != "escalate",
         })
 
     # Step 5: Re-derive parents bottom-up

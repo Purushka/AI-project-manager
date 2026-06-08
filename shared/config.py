@@ -39,6 +39,7 @@ class Config:
     llm_provider: str = "openai"
     openai_base_url: str = "http://localhost:8080/v1"
     openai_api_key: str = "sk-placeholder"
+    openai_custom_headers: dict[str, str] = field(default_factory=dict)
     embedding_provider: str = "ollama"
     default_model: str = "gpt-5.5"
     model_overrides: dict[str, str] = field(default_factory=dict)
@@ -53,6 +54,10 @@ class Config:
     ollama_base_url: str = "http://localhost:11434"
     ollama_model: str = "nomic-embed-text"
     openai_embedding_model: str = "text-embedding-3-small"
+    dashscope_base_url: str = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
+    dashscope_api_key: str = ""
+    dashscope_workspace: str = ""
+    dashscope_embedding_model: str = "text-embedding-v3"
 
     @property
     def data_dir(self) -> Path:
@@ -90,7 +95,8 @@ def load_config(config_path: Path | None = None) -> Config:
         llm_provider=merged.get("llm_provider", "openai"),
         openai_base_url=merged.get("openai_base_url", DEFAULT_CONFIG["openai_base_url"]),
         openai_api_key=merged.get("openai_api_key", DEFAULT_CONFIG["openai_api_key"]),
-        embedding_provider=merged["embedding_provider"],
+        openai_custom_headers=merged.get("openai_custom_headers", {}),
+        embedding_provider=merged.get("embedding_provider", "ollama"),
         default_model=merged["default_model"],
         model_overrides=merged.get("model_overrides", {}),
         workspace_path=merged["workspace_path"],
@@ -99,6 +105,10 @@ def load_config(config_path: Path | None = None) -> Config:
         ollama_base_url=merged.get("ollama_base_url", DEFAULT_CONFIG["ollama_base_url"]),
         ollama_model=merged.get("ollama_model", DEFAULT_CONFIG["ollama_model"]),
         openai_embedding_model=merged.get("openai_embedding_model", DEFAULT_CONFIG["openai_embedding_model"]),
+        dashscope_base_url=merged.get("dashscope_base_url", "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"),
+        dashscope_api_key=merged.get("dashscope_api_key", ""),
+        dashscope_workspace=merged.get("dashscope_workspace", ""),
+        dashscope_embedding_model=merged.get("dashscope_embedding_model", "text-embedding-v3"),
     )
 
 

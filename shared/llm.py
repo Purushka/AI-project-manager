@@ -32,9 +32,49 @@ def call_llm(
 ) -> str:
     model = config.get_model_for_depth(depth)
 
+    if config.llm_provider == "codex":
+        return _call_codex(prompt, system_prompt)
     if config.llm_provider == "anthropic":
         return _call_anthropic(prompt, model, system_prompt, max_tokens, temperature)
     return _call_openai(prompt, model, system_prompt, max_tokens, temperature, config)
+
+
+def _call_codex(
+    prompt: str,
+    system_prompt: str,
+) -> str:
+    import subprocess
+
+    full_prompt = ""
+    if system_prompt:
+        full_prompt += f"[System]\n{system_prompt}\n\n"
+    full_prompt += f"[User]\n{prompt}"
+
+    last_error: Exception | None = None
+    for attempt in range(MAX_RETRIES):
+        try:
+            result = subprocess.run(
+                ["codex", "exec", "-"],
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                timeout=180,
+                shell=True,
+                input=full_prompt,
+            )
+            if result.returncode != 0:
+                raise RuntimeError(f"codex exit {result.returncode}: {result.stderr[:300]}")
+            output = result.stdout.strip()
+            if len(output) > 5:
+                return output
+            raise RuntimeError("codex returned empty response")
+        except (subprocess.TimeoutExpired, RuntimeError) as e:
+            last_error = e
+            delay = RETRY_DELAYS[min(attempt, len(RETRY_DELAYS) - 1)]
+            logger.warning(f"Codex failed (attempt {attempt + 1}): {e}, retrying in {delay}s")
+            time.sleep(delay)
+
+    raise RuntimeError(f"Codex call failed after {MAX_RETRIES} retries: {last_error}")
 
 
 def _call_openai(
@@ -47,10 +87,15 @@ def _call_openai(
 ) -> str:
     import openai
 
-    client = openai.OpenAI(
-        base_url=config.openai_base_url,
-        api_key=config.openai_api_key,
-    )
+    kwargs: dict = {
+        "base_url": config.openai_base_url,
+        "api_key": config.openai_api_key,
+        "timeout": 120.0,
+        "max_retries": 5,
+    }
+    if config.openai_custom_headers:
+        kwargs["default_headers"] = config.openai_custom_headers
+    client = openai.OpenAI(**kwargs)
 
     messages: list[dict] = []
     if system_prompt:
