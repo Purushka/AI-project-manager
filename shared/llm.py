@@ -18,8 +18,10 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-MAX_RETRIES = 3
-RETRY_DELAYS = [2, 5, 15]
+import random
+
+MAX_RETRIES = 5
+RETRY_DELAYS = [3, 8, 20, 45, 90]
 
 
 def call_llm(
@@ -114,14 +116,18 @@ def _call_openai(
             return response.choices[0].message.content or ""
         except openai.RateLimitError as e:
             last_error = e
-            delay = RETRY_DELAYS[min(attempt, len(RETRY_DELAYS) - 1)]
-            logger.warning(f"Rate limited (attempt {attempt + 1}), retrying in {delay}s")
+            base_delay = RETRY_DELAYS[min(attempt, len(RETRY_DELAYS) - 1)]
+            jitter = random.uniform(0, base_delay * 0.3)
+            delay = base_delay + jitter
+            logger.warning(f"Rate limited (attempt {attempt + 1}/{MAX_RETRIES}), retrying in {delay:.1f}s")
             time.sleep(delay)
         except openai.APIStatusError as e:
             if e.status_code >= 500:
                 last_error = e
-                delay = RETRY_DELAYS[min(attempt, len(RETRY_DELAYS) - 1)]
-                logger.warning(f"API error {e.status_code} (attempt {attempt + 1}), retrying in {delay}s")
+                base_delay = RETRY_DELAYS[min(attempt, len(RETRY_DELAYS) - 1)]
+                jitter = random.uniform(0, base_delay * 0.3)
+                delay = base_delay + jitter
+                logger.warning(f"API error {e.status_code} (attempt {attempt + 1}/{MAX_RETRIES}), retrying in {delay:.1f}s")
                 time.sleep(delay)
             else:
                 raise

@@ -87,14 +87,16 @@ def detect_overlap(
     system = (
         "你是架构分析助手。分析两个模块的描述，判断它们是否有内容重叠。\n"
         "重叠 = 两者描述了同一个功能/数据/接口/约束。\n"
+        "在输出中直接使用模块的实际名称，不要用'模块A/模块B'之类的占位词。\n"
+        "shared_content 应概括重叠部分的具体功能名称，不要用完整散文。\n"
         "输出 JSON，格式如下（不要代码块之外的文字）：\n"
         "```json\n"
-        '{"has_overlap": true/false, "shared_content": "重叠部分的描述", '
-        '"a_unique": "A独有的部分", "b_unique": "B独有的部分", '
+        '{"has_overlap": true/false, "shared_content": "重叠功能的简短描述(≤80字)", '
+        '"a_unique": "第一个模块独有的部分", "b_unique": "第二个模块独有的部分", '
         '"relationship": "calls/shares/produces_consumes/constrains/none"}\n'
         "```"
     )
-    prompt = f"## 模块 A: {node_a.title}\n{content_a}\n\n## 模块 B: {node_b.title}\n{content_b}"
+    prompt = f"## {node_a.title}\n{content_a}\n\n## {node_b.title}\n{content_b}"
 
     try:
         raw = call_llm_with_json(prompt, config, depth=node_a.level, system_prompt=system, max_tokens=2048)
@@ -110,6 +112,40 @@ def detect_overlap(
 
 
 # ── Shared component extraction ───────────────────────────────────
+
+def _name_shared_component(shared_content: str, config: Config) -> str:
+    """Generate a concise, descriptive name for a shared component via LLM."""
+    from shared.llm import call_llm
+
+    system = (
+        "给共享组件起一个简洁的技术名称（不超过30字）。"
+        "要求：名词短语，说明这个组件是什么（如'用户留存数据计算服务'），"
+        "不要用'模块A/B'之类的占位词，不要用完整句子。只输出名称，不要其他内容。"
+    )
+    try:
+        name = call_llm(shared_content[:500], config, system_prompt=system, max_tokens=64, temperature=0.1)
+        name = name.strip().strip('"').strip("'").strip()
+        if len(name) > 60:
+            name = name[:60]
+        if name:
+            return name
+    except Exception as e:
+        logger.warning(f"Shared component naming failed: {e}")
+    # Fallback: first meaningful sentence fragment
+    for line in shared_content.split("\n"):
+        line = line.strip().strip("#").strip()
+        if len(line) > 5:
+            return line[:50]
+    return shared_content[:50]
+
+
+def _clean_ab_references(content: str) -> str:
+    """Remove 模块A/模块B placeholder references from rewritten content."""
+    import re
+    content = re.sub(r"模块\s*[AB]\s*", "", content)
+    content = re.sub(r"Module\s*[AB]\s*", "", content, flags=re.IGNORECASE)
+    return content
+
 
 def extract_shared_component(
     overlap: dict[str, Any],
@@ -134,7 +170,7 @@ def extract_shared_component(
 
     # Create shared component node
     comp_id = f"{project}_shared_{uuid.uuid4().hex[:8]}"
-    comp_title = f"Shared: {shared_content[:50]}"
+    comp_title = _name_shared_component(shared_content, config)
 
     # Acquire lock on the new node (create operation)
     db.acquire_lock(comp_id, CALLER_ID, ttl=BACKPROP_LOCK_TTL)
@@ -194,10 +230,11 @@ def rewrite_node_content(
         return
 
     try:
-        # Add reference to shared component in the content
+        # Clean 模块A/B placeholder references and add shared component reference
+        new_content = _clean_ab_references(new_content)
         content_with_ref = (
             f"{new_content}\n\n"
-            f"> 共享组件: 参见 [{shared_ref_id}] 获取公共部分定义"
+            f"> 共享组件: 参见 [{shared_ref_id}]"
         )
         detail_path = _write_node_content(node_id, content_with_ref, node.project, config)
         db.update_node_content(node_id, CALLER_ID, detail_path=detail_path)
@@ -395,15 +432,24 @@ def run_backward_optimization(
     db = Database(config)
     kb = KnowledgeBase(config)
 
+    # Filter out KEEP_SEPARATE clusters (no high-signal shared axes)
+    from shared.models import MergeStrategy
+    actionable = [c for c in clusters if c.suggested_action != MergeStrategy.KEEP_SEPARATE]
+    skipped = len(clusters) - len(actionable)
+    if skipped:
+        logger.info(f"  Filtered {skipped} KEEP_SEPARATE clusters, {len(actionable)} actionable")
+    clusters = actionable
+
     results = {
         "shared_components": [],
         "rewritten_nodes": [],
         "conflicts_resolved": [],
         "parents_rederived": [],
         "errors": [],
+        "clusters_skipped": skipped,
     }
 
-    BACKPROP_WORKERS = 8
+    BACKPROP_WORKERS = 3
 
     def _process_cluster(cluster: Cluster) -> dict[str, Any]:
         """Process one cluster: detect overlap, extract shared, rewrite. Thread-safe."""

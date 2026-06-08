@@ -1,15 +1,15 @@
 {
-  "total_nodes": 960,
+  "total_nodes": 533,
   "max_depth": 4,
-  "leaf_count": 848,
-  "shared_count": 191,
-  "ticket_count": 657,
+  "leaf_count": 469,
+  "shared_count": 82,
+  "ticket_count": 383,
   "depth_distribution": {
     "0": 1,
-    "1": 11,
-    "2": 99,
-    "3": 344,
-    "4": 505
+    "1": 12,
+    "2": 62,
+    "3": 235,
+    "4": 223
   },
   "report_path": "demo\\final_report.md"
 }

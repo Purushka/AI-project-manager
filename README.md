@@ -130,26 +130,26 @@ Every LLM call operates within a strict token budget:
 
 ## Demo: Full Pipeline Run
 
-The `demo/` directory contains the output from a complete pipeline run on an "AI Entrepreneurship Platform" project — from seed idea to 960 decomposed nodes with execution tickets.
+The `demo/` directory contains the output from a complete pipeline run on an "AI Entrepreneurship Platform" project — from seed idea to 533 decomposed nodes with execution tickets.
 
 **Pipeline stats:**
-- Duration: ~29 minutes (8 parallel backward workers)
-- Total nodes: 960 (769 original + 191 shared components)
-- Depth distribution: L0:1 → L1:11 → L2:99 → L3:344 → L4:505
-- 657 leaf-level execution tickets (one person, one sprint each)
-- 382 nodes rewritten to reference shared components
-- 170 clusters processed, 300 LLM calls, 639 embedding calls
+- Duration: ~52 minutes (3 parallel backward workers)
+- Total nodes: 533 (451 original + 82 shared components)
+- Depth distribution: L0:1 → L1:12 → L2:62 → L3:235 → L4:223
+- 383 leaf-level execution tickets (one person, one sprint each)
+- 164 nodes rewritten to reference shared components
+- 50 parent summaries re-derived bottom-up
+- 96 clusters found, 36 rejected by merge guard, 60 processed
+- 355 LLM calls, 900 embedding calls
 
 **Files:**
 | File | Description |
 |------|-------------|
 | `final_report.md` | Full tree: all nodes, execution tickets, shared components |
-| `final_report.html` | Styled HTML version with TOC and print support |
-| `final_report.docx` | Word document version |
-| `full_snapshot.json` | Complete tree data (all 960 nodes) |
+| `full_snapshot.json` | Complete tree data (all 533 nodes) |
 | `00_pipeline_summary.json` | Run metadata and timings |
 | `01_forward_decomposition.json` | Forward pass output |
-| `02_clustering.json` | Cluster assignments (170 clusters) |
+| `02_clustering.json` | Cluster assignments (96 clusters) |
 | `03_backward_optimization.json` | Shared components and rewrite log |
 | `pipeline_*.log` | Full pipeline execution log |
 
@@ -157,7 +157,7 @@ The `demo/` directory contains the output from a complete pipeline run on an "AI
 
 ```bash
 # 1. Clone and setup
-git clone https://github.com/anthropics/ai-pm-skills.git
+git clone https://github.com/Purushka/AI-project-manager.git
 cd ai-pm-skills
 bash setup.sh
 

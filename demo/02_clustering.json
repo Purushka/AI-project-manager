@@ -1,2064 +1,1214 @@
 {
-  "leaf_count": 657,
-  "cluster_count": 170,
+  "leaf_count": 387,
+  "cluster_count": 96,
   "clusters": [
     {
-      "id": "cluster_33141d2f",
-      "size": 8,
-      "member_titles": [
-        "任务模板库管理",
-        "任务依赖关系图构建",
-        "任务基础 CRUD 接口",
-        "任务分配与重新分配操作",
-        "任务元数据管理",
-        "任务层级关系管理",
-        "任务负责人与协作管理",
-        "任务依赖关系管理"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "entity:task"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, entity:task)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_c188c7ef",
-      "size": 4,
-      "member_titles": [
-        "算法模型管理器",
-        "统计模型检测器",
-        "机器学习检测器",
-        "时间序列分解检测器"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "domain:anomaly-detection",
-        "user_facing:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, domain:anomaly-detection, user_facing:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_2c01da09",
-      "size": 9,
-      "member_titles": [
-        "模板元数据与版本管理",
-        "Prompt 版本控制",
-        "评估器参数与Prompt优化",
-        "召回策略模板管理",
-        "Prompt 模板管理",
-        "变量注入与预览",
-        "评估Prompt模板管理",
-        "BP 章节 Prompt 模板管理",
-        "报告模板配置与版本管理"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_f07f1f77",
+      "id": "cluster_75836c56",
       "size": 2,
       "member_titles": [
-        "审计日志系统",
-        "数据源访问日志与审计"
+        "漏斗模板定义与存储",
+        "漏斗模板定义与存储"
       ],
       "shared_features": [
         "actor:admin",
-        "actor:system",
+        "actor:product-manager",
         "complexity:low",
-        "data_sensitivity:sensitive",
+        "data_sensitivity:internal",
         "dependency:independent"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:admin, actor:system, complexity:low, data_sensitivity:sensitive, dependency:independent)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_7762322c",
-      "size": 2,
-      "member_titles": [
-        "投资机构数据库构建与维护",
-        "投资机构数据库管理"
-      ],
-      "shared_features": [
-        "actor:admin",
-        "biz_metrics:data-coverage-rate",
-        "data_sensitivity:internal",
-        "dependency:independent",
-        "entity:investment-case"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:admin, biz_metrics:data-coverage-rate, data_sensitivity:internal, dependency:independent, entity:investment-case)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:admin, actor:product-manager, complexity:low, data_sensitivity:internal, dependency:independent)",
       "action": "merge_duplicates"
     },
     {
-      "id": "cluster_aa7fdb37",
-      "size": 3,
+      "id": "cluster_548cb310",
+      "size": 2,
       "member_titles": [
-        "RBAC权限模型与访问控制",
-        "配置访问权限控制",
-        "权限与访问控制"
+        "PDF 文档渲染引擎",
+        "PPTX 文档渲染引擎"
       ],
       "shared_features": [
-        "actor:admin",
-        "nfr:audit-trail",
-        "nfr:security",
+        "actor:system",
+        "complexity:high",
+        "data_sensitivity:sensitive",
+        "dependency:light",
+        "domain:document-rendering"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, complexity:high, data_sensitivity:sensitive, dependency:light, domain:document-rendering)",
+      "action": "merge_duplicates"
+    },
+    {
+      "id": "cluster_5b8523dc",
+      "size": 11,
+      "member_titles": [
+        "告警聚合与降噪",
+        "多渠道告警通知",
+        "日志告警规则引擎",
+        "用量异常检测与告警",
+        "告警降噪与智能聚合",
+        "告警历史与事件管理",
+        "值班排班与告警路由",
+        "异常波动检测与告警",
+        "多渠道告警通知分发",
+        "告警规则配置与评估"
+      ],
+      "shared_features": [
+        "revenue_impact:supporting"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: revenue_impact:supporting)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_21a678d3",
+      "size": 4,
+      "member_titles": [
+        "看板数据权限与隔离",
+        "数据权限与隔离系统",
+        "指标权限与审计",
+        "操作权限与审计日志"
+      ],
+      "shared_features": [
+        "entity:permission",
         "pattern:rbac",
         "revenue_impact:supporting"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:admin, nfr:audit-trail, nfr:security, pattern:rbac, revenue_impact:supporting)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: entity:permission, pattern:rbac, revenue_impact:supporting)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_e27934a9",
+      "id": "cluster_ea45da6f",
+      "size": 4,
+      "member_titles": [
+        "事件埋点与采集SDK",
+        "前端埋点SDK与事件采集",
+        "后端业务事件采集",
+        "实时事件写入服务"
+      ],
+      "shared_features": [
+        "entity:event",
+        "timeline_priority:mvp"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: entity:event, timeline_priority:mvp)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_f693b971",
       "size": 7,
       "member_titles": [
-        "架构版本管理与变更追踪",
-        "文档版本管理与协作",
-        "版本控制与历史对比",
-        "历史版本对比与变更追踪",
-        "文档生成历史与版本管理",
-        "版本管理与历史追溯",
-        "BP 版本管理与历史追溯"
+        "敏感数据处理审查",
+        "API 安全防护审查",
+        "数据加密实现审查",
+        "密钥管理安全审查",
+        "认证鉴权机制安全审查",
+        "安全修复建议生成",
+        "安全标准合规性检查"
       ],
       "shared_features": [
-        "user_facing:user-facing"
+        "actor:security-auditor",
+        "domain:security-audit",
+        "revenue_impact:supporting",
+        "tech_stack:python",
+        "timeline_priority:mvp"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: user_facing:user-facing)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:security-auditor, domain:security-audit, revenue_impact:supporting, tech_stack:python, timeline_priority:mvp)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_37338838",
-      "size": 4,
+      "id": "cluster_5916fa1c",
+      "size": 2,
       "member_titles": [
-        "Deployment 资源管理",
-        "Job 与 CronJob 资源管理",
-        "DaemonSet 资源管理",
-        "StatefulSet 资源管理"
+        "查询结果缓存管理",
+        "查询结果缓存层"
       ],
       "shared_features": [
-        "actor:platform-admin",
+        "biz_metrics:cache-hit-rate",
+        "complexity:low",
         "data_sensitivity:internal",
-        "dependency:heavy",
-        "domain:k8s-workload",
-        "entity:pod"
+        "dependency:light",
+        "entity:query-result"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:platform-admin, data_sensitivity:internal, dependency:heavy, domain:k8s-workload, entity:pod)",
-      "action": "merge_duplicates"
-    },
-    {
-      "id": "cluster_8529f798",
-      "size": 4,
-      "member_titles": [
-        "负载热力图（识别过载/空闲成员）",
-        "多成员对比视图",
-        "实时负载计算引擎",
-        "容量图（可用时间 vs 已分配时间）"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "domain:resource-management",
-        "entity:member",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, domain:resource-management, entity:member, revenue_impact:supporting)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: biz_metrics:cache-hit-rate, complexity:low, data_sensitivity:internal, dependency:light, entity:query-result)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_f3ddf9c0",
+      "id": "cluster_452abb30",
       "size": 5,
       "member_titles": [
-        "模型监控与漂移检测",
-        "模型性能监控与漂移检测",
-        "检测性能监控",
-        "评估器效果监控看板",
-        "事件接收监控与告警"
+        "需求解析与特征提取",
+        "实体关系提取与建模",
+        "技术栈与需求解析器",
+        "技术栈与需求信息提取",
+        "需求文档解析与特征提取"
       ],
       "shared_features": [
+        "complexity:medium",
+        "nfr:accuracy",
+        "timeline_priority:mvp"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, nfr:accuracy, timeline_priority:mvp)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_b14bc02e",
+      "size": 5,
+      "member_titles": [
+        "用户行为特征工程",
+        "模型推理服务",
+        "模型训练与超参数调优",
+        "训练数据集构建与标注",
+        "模型定期重训练调度"
+      ],
+      "shared_features": [
+        "actor:system-scheduler",
+        "complexity:medium",
         "data_sensitivity:internal",
+        "dependency:light",
+        "user_facing:internal"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, complexity:medium, data_sensitivity:internal, dependency:light, user_facing:internal)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_5cb16606",
+      "size": 6,
+      "member_titles": [
+        "环境配置差异对比",
+        "配置导入导出",
+        "环境配置模板管理",
+        "配置变更审批流",
+        "环境变量实例管理",
+        "配置版本控制"
+      ],
+      "shared_features": [
+        "actor:devops-engineer",
+        "data_sensitivity:internal",
+        "domain:config-management",
         "revenue_impact:supporting",
         "user_facing:internal"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, revenue_impact:supporting, user_facing:internal)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:devops-engineer, data_sensitivity:internal, domain:config-management, revenue_impact:supporting, user_facing:internal)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_2d789213",
-      "size": 3,
+      "id": "cluster_f48abf50",
+      "size": 6,
       "member_titles": [
-        "多格式导出引擎",
-        "PDF 生成与排版引擎",
-        "Word 文档生成引擎"
+        "情绪曲线绘制与标注",
+        "旅程阶段定义与管理",
+        "痛点与机会点识别",
+        "可交互流程图渲染引擎",
+        "触点与动作记录",
+        "多角色旅程对比视图"
       ],
       "shared_features": [
-        "actor:system",
-        "biz_metrics:export-success-rate",
-        "domain:document-export",
-        "revenue_impact:direct",
-        "timeline_priority:mvp"
+        "actor:end-user",
+        "data_sensitivity:internal",
+        "domain:journey-mapping",
+        "user_facing:user-facing"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, biz_metrics:export-success-rate, domain:document-export, revenue_impact:direct, timeline_priority:mvp)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, data_sensitivity:internal, domain:journey-mapping, user_facing:user-facing)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_cd7c5375",
-      "size": 7,
+      "id": "cluster_cbb56804",
+      "size": 4,
       "member_titles": [
-        "排期数据持久化与版本控制",
-        "版本列表查询与过滤",
-        "根因分析结果存储与版本管理",
-        "生成结果管理",
-        "生成结果存储与版本管理",
-        "模拟结果持久化与版本管理",
-        "Schema 版本持久化存储"
+        "数据清洗与规范化",
+        "事件去重与幂等保障",
+        "数据清洗与标准化",
+        "事件清洗与标准化处理器"
       ],
       "shared_features": [
-        "pattern:crud",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: pattern:crud, revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_f37b8517",
-      "size": 5,
-      "member_titles": [
-        "AI 模型关系抽取",
-        "AI 模型调用与并行生成调度",
-        "AI 模型实体识别",
-        "AI 模型调用与 Prompt 工程",
-        "AI 模型调用与 Prompt 工程"
-      ],
-      "shared_features": [
-        "actor:system",
-        "dependency:heavy",
-        "nfr:cost-optimization",
+        "complexity:medium",
+        "dependency:light",
+        "revenue_impact:supporting",
         "timeline_priority:mvp",
         "user_facing:internal"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, dependency:heavy, nfr:cost-optimization, timeline_priority:mvp, user_facing:internal)",
-      "action": "extract_shared"
+      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, dependency:light, revenue_impact:supporting, timeline_priority:mvp, user_facing:internal)",
+      "action": "keep_separate"
     },
     {
-      "id": "cluster_fb4dbf68",
-      "size": 7,
-      "member_titles": [
-        "财务报表与可视化生成器",
-        "敏感性分析工具",
-        "实验报告生成与可视化",
-        "财务报表生成器",
-        "结果可视化与报告生成",
-        "可视化图表生成器",
-        "成本报告生成与导出"
-      ],
-      "shared_features": [
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_b83a8248",
-      "size": 2,
-      "member_titles": [
-        "协作与评审流程",
-        "协作评审与评论系统"
-      ],
-      "shared_features": [
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "domain:collaboration",
-        "entity:comment"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:internal, dependency:light, domain:collaboration, entity:comment)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_f9b744b5",
+      "id": "cluster_9a523beb",
       "size": 5,
       "member_titles": [
-        "抓取任务调度与执行",
-        "数据抓取任务调度与执行",
-        "检测任务调度器",
-        "数据预聚合调度器",
-        "计算任务调度与执行监控"
+        "触点预测与关联",
+        "旅程阶段识别与排序",
+        "痛点假设生成",
+        "竞品旅程数据检索与对比",
+        "情绪曲线推断"
+      ],
+      "shared_features": [
+        "actor:system",
+        "data_sensitivity:internal",
+        "dependency:heavy",
+        "entity:journey-stage",
+        "user_facing:internal"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, data_sensitivity:internal, dependency:heavy, entity:journey-stage, user_facing:internal)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_fd3a4399",
+      "size": 4,
+      "member_titles": [
+        "额度与配额控制",
+        "并发查询调度与限流",
+        "API限流与重试调度引擎",
+        "查询并发控制与限流"
+      ],
+      "shared_features": [
+        "actor:system-scheduler",
+        "complexity:medium",
+        "data_sensitivity:internal"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, complexity:medium, data_sensitivity:internal)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_129c04e8",
+      "size": 4,
+      "member_titles": [
+        "架构图导出与分享",
+        "旅程图导出与分享",
+        "PRD 导出与分享",
+        "看板导出与分享"
+      ],
+      "shared_features": [
+        "actor:end-user",
+        "dependency:light",
+        "timeline_priority:phase-1",
+        "user_facing:user-facing"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, dependency:light, timeline_priority:phase-1, user_facing:user-facing)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_3dfc379f",
+      "size": 6,
+      "member_titles": [
+        "定价模式识别与推荐",
+        "定价心理学分析模块",
+        "价格区间计算引擎",
+        "定价方案版本管理与历史追踪",
+        "多档位定价方案生成器",
+        "竞品定价数据采集与分析"
+      ],
+      "shared_features": [
+        "domain:pricing-strategy"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: domain:pricing-strategy)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_ded77448",
+      "size": 6,
+      "member_titles": [
+        "看板配置与模板管理",
+        "财务模型参数管理",
+        "融资文档模板管理",
+        "Prompt 版本控制系统",
+        "Prompt 模板库管理",
+        "PRD 模板管理与配置"
+      ],
+      "shared_features": [
+        "actor:end-user",
+        "data_sensitivity:internal",
+        "pattern:crud",
+        "revenue_impact:supporting"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, data_sensitivity:internal, pattern:crud, revenue_impact:supporting)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_16a9040d",
+      "size": 6,
+      "member_titles": [
+        "通用错误码体系",
+        "请求参数模型定义",
+        "分页参数标准化",
+        "响应模型定义",
+        "排序过滤参数标准化",
+        "模型代码生成器"
+      ],
+      "shared_features": [
+        "actor:backend-developer",
+        "data_sensitivity:internal",
+        "domain:api-design",
+        "revenue_impact:supporting",
+        "timeline_priority:mvp"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:backend-developer, data_sensitivity:internal, domain:api-design, revenue_impact:supporting, timeline_priority:mvp)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_fb463f63",
+      "size": 5,
+      "member_titles": [
+        "查询模式识别与分类",
+        "性能瓶颈诊断引擎",
+        "索引建议生成器",
+        "物化视图和预聚合管理",
+        "慢查询日志采集与解析"
+      ],
+      "shared_features": [
+        "biz_metrics:query-latency",
+        "data_sensitivity:internal",
+        "domain:query-performance"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: biz_metrics:query-latency, data_sensitivity:internal, domain:query-performance)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_798f6d11",
+      "size": 2,
+      "member_titles": [
+        "鉴权与安全方案注入器",
+        "认证鉴权方案配置"
+      ],
+      "shared_features": [
+        "actor:system",
+        "biz_metrics:security-coverage",
+        "complexity:medium",
+        "nfr:security",
+        "revenue_impact:supporting"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, biz_metrics:security-coverage, complexity:medium, nfr:security, revenue_impact:supporting)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_463ac04c",
+      "size": 3,
+      "member_titles": [
+        "用户留存分析引擎",
+        "留存率计算引擎",
+        "用户分群留存对比"
       ],
       "shared_features": [
         "complexity:medium",
         "data_sensitivity:internal",
-        "dependency:light",
-        "revenue_impact:supporting"
+        "entity:cohort",
+        "entity:user"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:internal, dependency:light, revenue_impact:supporting)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:internal, entity:cohort, entity:user)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_091fec79",
+      "id": "cluster_9efcc222",
+      "size": 8,
+      "member_titles": [
+        "漏斗可视化与交互式探索",
+        "行为漏斗分析引擎",
+        "流失原因分析与归因",
+        "漏斗对比与细分分析",
+        "漏斗状态计算引擎",
+        "实时指标查询接口",
+        "增量计算调度器",
+        "聚合指标计算与汇总"
+      ],
+      "shared_features": [],
+      "reason": "Embedding+Jaccard hybrid (shared tags: )",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_09bda2c9",
+      "size": 2,
+      "member_titles": [
+        "数据存储层设计",
+        "埋点数据入库与存储层"
+      ],
+      "shared_features": [
+        "complexity:medium",
+        "domain:data-storage",
+        "entity:event",
+        "nfr:query-performance",
+        "pattern:time-series"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, domain:data-storage, entity:event, nfr:query-performance, pattern:time-series)",
+      "action": "merge_duplicates"
+    },
+    {
+      "id": "cluster_f6792ec5",
+      "size": 2,
+      "member_titles": [
+        "标准组件库与模板管理",
+        "架构风格模板库与选择器"
+      ],
+      "shared_features": [
+        "actor:admin",
+        "complexity:low",
+        "dependency:independent",
+        "domain:architecture-design",
+        "entity:template"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:admin, complexity:low, dependency:independent, domain:architecture-design, entity:template)",
+      "action": "merge_duplicates"
+    },
+    {
+      "id": "cluster_51d3337c",
       "size": 6,
       "member_titles": [
-        "结果存储与查询接口",
-        "漏斗路径匹配算法",
-        "增量计算与缓存管理",
-        "事件流数据查询与预处理",
-        "转化指标聚合计算",
-        "消息队列消费与预处理"
+        "竞争壁垒强度评分子引擎",
+        "市场扩展性评分子引擎",
+        "收入成本平衡评分子引擎",
+        "市场时机评分子引擎",
+        "价值主张匹配度评分子引擎",
+        "客户细分合理性评分子引擎"
+      ],
+      "shared_features": [
+        "actor:system",
+        "domain:business-model-scoring",
+        "nfr:accuracy",
+        "pattern:scoring-engine",
+        "revenue_impact:indirect"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, domain:business-model-scoring, nfr:accuracy, pattern:scoring-engine, revenue_impact:indirect)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_38e8cf49",
+      "size": 5,
+      "member_titles": [
+        "收入预测模型",
+        "多场景预测引擎",
+        "盈亏平衡分析",
+        "敏感度分析计算器",
+        "敏感度分析模块"
       ],
       "shared_features": [
         "data_sensitivity:internal",
         "user_facing:internal"
       ],
       "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, user_facing:internal)",
-      "action": "extract_shared"
+      "action": "keep_separate"
     },
     {
-      "id": "cluster_3c961b22",
-      "size": 4,
-      "member_titles": [
-        "查询性能优化引擎",
-        "查询模式分析与索引推荐",
-        "索引成本与收益评估",
-        "分区表索引策略生成"
-      ],
-      "shared_features": [
-        "complexity:high",
-        "data_sensitivity:internal",
-        "entity:index"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:high, data_sensitivity:internal, entity:index)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_ccceadfb",
+      "id": "cluster_e8686413",
       "size": 2,
       "member_titles": [
-        "数据质量监控与异常告警",
-        "数据质量监控"
+        "定价方案输入管理",
+        "定价方案配置"
       ],
       "shared_features": [
-        "actor:system-scheduler",
-        "complexity:medium",
         "data_sensitivity:internal",
-        "dependency:light",
-        "domain:data-quality"
+        "domain:pricing-config",
+        "entity:pricing-plan",
+        "pattern:crud",
+        "timeline_priority:mvp"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, complexity:medium, data_sensitivity:internal, dependency:light, domain:data-quality)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, domain:pricing-config, entity:pricing-plan, pattern:crud, timeline_priority:mvp)",
       "action": "merge_duplicates"
     },
     {
-      "id": "cluster_17783149",
-      "size": 6,
+      "id": "cluster_5d6469fc",
+      "size": 10,
       "member_titles": [
-        "强标识符采集与规范化",
-        "概率性匹配引擎",
-        "身份图谱存储与查询",
-        "身份合并API与冲突解决",
-        "匿名到已知用户身份转换",
-        "确定性匹配引擎"
-      ],
-      "shared_features": [
-        "actor:system-processor",
-        "domain:user-identity",
-        "user_facing:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-processor, domain:user-identity, user_facing:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_2e2d64d0",
-      "size": 2,
-      "member_titles": [
-        "用户分群与标签体系",
-        "用户分群与标签管理"
-      ],
-      "shared_features": [
-        "complexity:medium",
-        "dependency:light",
-        "domain:user-segmentation",
-        "pattern:rule-engine"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, dependency:light, domain:user-segmentation, pattern:rule-engine)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_a766c0a2",
-      "size": 6,
-      "member_titles": [
-        "降级策略与失败处理",
-        "多模型投票协调器",
-        "评估结果解析与归一化",
-        "自我一致性检查执行器",
-        "单模型评估执行器",
-        "评估策略配置与路由"
+        "错误处理与类型化异常",
+        "模块打包与输出配置",
+        "TypeScript 类型定义生成",
+        "HTTP 请求执行层",
+        "请求重试机制",
+        "请求取消与超时控制",
+        "请求拦截器与响应拦截器",
+        "OpenAPI 规范解析与验证",
+        "API 客户端类生成",
+        "请求序列化与反序列化"
       ],
       "shared_features": [
         "actor:system",
         "data_sensitivity:internal",
-        "domain:ai-evaluation",
-        "user_facing:internal"
+        "domain:api-codegen",
+        "revenue_impact:supporting",
+        "tech_stack:typescript"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, data_sensitivity:internal, domain:ai-evaluation, user_facing:internal)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, data_sensitivity:internal, domain:api-codegen, revenue_impact:supporting, tech_stack:typescript)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_2035c051",
+      "id": "cluster_56cd8b8f",
+      "size": 7,
+      "member_titles": [
+        "查询性能日志记录",
+        "SQL 动态生成引擎",
+        "查询执行器与资源控制",
+        "数据库查询执行器",
+        "实时与历史数据融合",
+        "查询结果格式化与响应",
+        "查询请求解析与路由"
+      ],
+      "shared_features": [
+        "data_sensitivity:internal",
+        "revenue_impact:supporting"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, revenue_impact:supporting)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_5af74821",
+      "size": 3,
+      "member_titles": [
+        "版本管理与回滚",
+        "版本回滚与差异对比",
+        "版本快照存储与查询"
+      ],
+      "shared_features": [
+        "data_sensitivity:sensitive",
+        "domain:version-control",
+        "revenue_impact:supporting",
+        "user_facing:user-facing"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:sensitive, domain:version-control, revenue_impact:supporting, user_facing:user-facing)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_28b2e5ea",
       "size": 5,
       "member_titles": [
-        "多渠道消息推送调度器",
-        "多渠道通知分发",
-        "告警分发与通知",
-        "多渠道通知分发系统",
-        "部署状态变更通知机制"
+        "人工评分系统",
+        "优化建议生成器",
+        "效果趋势分析",
+        "自动评分引擎",
+        "效果指标采集接口"
+      ],
+      "shared_features": [
+        "data_sensitivity:internal",
+        "domain:ai-prompt-mgmt"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, domain:ai-prompt-mgmt)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_f666693d",
+      "size": 2,
+      "member_titles": [
+        "文档版本管理与协作",
+        "架构版本管理与协作"
+      ],
+      "shared_features": [
+        "complexity:medium",
+        "domain:collaboration",
+        "entity:comment",
+        "entity:permission",
+        "timeline_priority:phase-1"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, domain:collaboration, entity:comment, entity:permission, timeline_priority:phase-1)",
+      "action": "merge_duplicates"
+    },
+    {
+      "id": "cluster_8ac95681",
+      "size": 5,
+      "member_titles": [
+        "OpenAPI 文档组装器",
+        "JSON Schema 转换器",
+        "架构图数据格式解析器",
+        "需求与数据模型解析器",
+        "结构化内容转换层"
+      ],
+      "shared_features": [
+        "actor:system",
+        "timeline_priority:mvp",
+        "user_facing:internal"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, timeline_priority:mvp, user_facing:internal)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_95ab706e",
+      "size": 2,
+      "member_titles": [
+        "RESTful 路由设计规则引擎",
+        "RESTful 路径与操作推断引擎"
+      ],
+      "shared_features": [
+        "actor:system",
+        "complexity:medium",
+        "data_sensitivity:internal",
+        "revenue_impact:supporting",
+        "tech_stack:python"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, complexity:medium, data_sensitivity:internal, revenue_impact:supporting, tech_stack:python)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_179de688",
+      "size": 3,
+      "member_titles": [
+        "可视化数据接口",
+        "收入分析报表与可视化接口",
+        "留存曲线可视化接口"
+      ],
+      "shared_features": [
+        "complexity:low",
+        "nfr:low-latency",
+        "timeline_priority:mvp"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:low, nfr:low-latency, timeline_priority:mvp)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_a6b1ea9c",
+      "size": 2,
+      "member_titles": [
+        "商业模式画布模板库",
+        "商业模式画布数据提取与结构化"
       ],
       "shared_features": [
         "actor:end-user",
-        "complexity:medium",
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, complexity:medium, user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_4ed439fa",
-      "size": 2,
-      "member_titles": [
-        "HTTP API网关与鉴权",
-        "API 网关与路由"
-      ],
-      "shared_features": [
-        "actor:system",
-        "biz_metrics:api-latency",
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "domain:api-gateway"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, biz_metrics:api-latency, complexity:medium, data_sensitivity:internal, domain:api-gateway)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_79670995",
-      "size": 4,
-      "member_titles": [
-        "会话标注与协作",
-        "任务指派与跟踪",
-        "评论与批注系统",
-        "评论与批注系统"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "dependency:light",
-        "pattern:crud"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, dependency:light, pattern:crud)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_9ffd6082",
-      "size": 6,
-      "member_titles": [
-        "看板权限与协作",
-        "模型版本管理与协作",
-        "权限控制与角色管理",
-        "资产权限与协作管理",
-        "多用户协作编辑与权限控制",
-        "权限与角色管理"
-      ],
-      "shared_features": [],
-      "reason": "Embedding+Jaccard hybrid (shared tags: )",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_e800e71c",
-      "size": 2,
-      "member_titles": [
-        "实体类型定义与管理",
-        "关系类型定义与管理"
-      ],
-      "shared_features": [
-        "actor:admin",
-        "actor:system",
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "entity:type_version"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:admin, actor:system, complexity:medium, data_sensitivity:internal, entity:type_version)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_5f62bc0b",
-      "size": 3,
-      "member_titles": [
-        "渠道效果数据聚合管道",
-        "渠道效果报表查询接口",
-        "渠道归因规则引擎"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "dependency:light",
-        "domain:marketing-analytics",
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, dependency:light, domain:marketing-analytics, timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_5a7df65d",
-      "size": 4,
-      "member_titles": [
-        "需求特征提取与结构化",
-        "需求特征提取与向量化",
-        "需求文档解析器",
-        "需求解析与标准化"
-      ],
-      "shared_features": [
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_0d332210",
-      "size": 5,
-      "member_titles": [
-        "演讲稿脚本生成",
-        "用户故事生成器",
-        "原型设计建议生成",
-        "用户旅程图生成",
-        "AI 旅程图内容生成引擎"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "dependency:light"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, dependency:light)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_20a89173",
-      "size": 2,
-      "member_titles": [
-        "查询结果缓存管理",
-        "用户分配结果缓存层"
-      ],
-      "shared_features": [
-        "biz_metrics:cache-hit-rate",
         "complexity:low",
         "data_sensitivity:internal",
-        "domain:caching",
-        "nfr:high-availability"
+        "domain:business-model-canvas",
+        "revenue_impact:supporting"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: biz_metrics:cache-hit-rate, complexity:low, data_sensitivity:internal, domain:caching, nfr:high-availability)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, complexity:low, data_sensitivity:internal, domain:business-model-canvas, revenue_impact:supporting)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_effa9da5",
-      "size": 3,
-      "member_titles": [
-        "模型调用限流与配额",
-        "配额与限流管理",
-        "用量计量与配额控制"
-      ],
-      "shared_features": [
-        "actor:system",
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, complexity:medium, data_sensitivity:internal, timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_f62efb35",
-      "size": 6,
-      "member_titles": [
-        "多云成本对比分析",
-        "成本优化建议生成",
-        "流量与使用量预测",
-        "资源配置参数解析",
-        "成本计算引擎",
-        "开发工时估算"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "domain:cost-estimation",
-        "tech_stack:python"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, domain:cost-estimation, tech_stack:python)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_6743fc57",
-      "size": 7,
-      "member_titles": [
-        "废弃API与依赖检测",
-        "监控与可观测性缺失分析",
-        "过时技术栈版本扫描",
-        "紧耦合设计模式识别",
-        "测试覆盖盲区检测",
-        "文档缺失与过期检测",
-        "技术债务综合评分与优先级排序"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "domain:tech-debt-analysis"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, domain:tech-debt-analysis)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_ffa1f312",
-      "size": 5,
-      "member_titles": [
-        "法律文档模板库",
-        "法律法规知识库",
-        "法规知识库构建与维护",
-        "法规条款智能匹配引擎",
-        "法律文档模板库管理"
-      ],
-      "shared_features": [
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_c74879ad",
+      "id": "cluster_c3c1cf7d",
       "size": 4,
       "member_titles": [
-        "评估维度定义与配置管理",
-        "综合评分计算与聚合",
-        "评估结果存储与查询",
-        "BP 评估维度定义与权重配置"
+        "实验结果可视化与报告",
+        "实验配置与管理",
+        "统计分析与显著性检验",
+        "实验权限与审批流程"
       ],
       "shared_features": [
-        "data_sensitivity:internal",
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_abb62cfc",
-      "size": 3,
-      "member_titles": [
-        "项目画像特征提取与向量化",
-        "用户项目画像生成",
-        "任务特征提取与向量化"
-      ],
-      "shared_features": [
-        "complexity:medium",
-        "dependency:light",
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, dependency:light, timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_e98e56ba",
-      "size": 2,
-      "member_titles": [
-        "变体与流量分配配置",
-        "用户分配决策核心"
-      ],
-      "shared_features": [
-        "complexity:medium",
+        "actor:product-manager",
         "data_sensitivity:internal",
         "dependency:light",
         "domain:ab-testing",
-        "entity:variant"
+        "entity:experiment"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:internal, dependency:light, domain:ab-testing, entity:variant)",
-      "action": "merge_duplicates"
-    },
-    {
-      "id": "cluster_70b4317f",
-      "size": 2,
-      "member_titles": [
-        "漏斗模型定义与配置服务",
-        "漏斗定义配置与存储"
-      ],
-      "shared_features": [
-        "complexity:low",
-        "data_sensitivity:internal",
-        "pattern:crud",
-        "revenue_impact:supporting",
-        "tech_stack:fastapi-postgresql"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:low, data_sensitivity:internal, pattern:crud, revenue_impact:supporting, tech_stack:fastapi-postgresql)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:product-manager, data_sensitivity:internal, dependency:light, domain:ab-testing, entity:experiment)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_36624524",
-      "size": 3,
-      "member_titles": [
-        "生成内容质量评估",
-        "生成质量评估与反馈",
-        "内容重新生成与迭代优化"
-      ],
-      "shared_features": [
-        "actor:end-user",
-        "data_sensitivity:internal",
-        "revenue_impact:indirect"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, data_sensitivity:internal, revenue_impact:indirect)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_523b90ec",
-      "size": 2,
-      "member_titles": [
-        "A/B 测试实验管理",
-        "A/B 测试实验管理"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "pattern:ab-testing",
-        "pattern:traffic-routing",
-        "revenue_impact:indirect"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, pattern:ab-testing, pattern:traffic-routing, revenue_impact:indirect)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_e7e1a4ce",
-      "size": 2,
-      "member_titles": [
-        "未来收入预测生成",
-        "预测结果持久化与查询"
-      ],
-      "shared_features": [
-        "actor:end-user",
-        "complexity:low",
-        "data_sensitivity:sensitive",
-        "dependency:light",
-        "domain:revenue-analytics"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, complexity:low, data_sensitivity:sensitive, dependency:light, domain:revenue-analytics)",
-      "action": "merge_duplicates"
-    },
-    {
-      "id": "cluster_accc91bc",
-      "size": 3,
-      "member_titles": [
-        "实时事件采集与存储",
-        "定时采集调度引擎",
-        "会话数据接收与存储"
-      ],
-      "shared_features": [
-        "complexity:medium",
-        "domain:data-ingestion",
-        "nfr:idempotency",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, domain:data-ingestion, nfr:idempotency, revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_1a3f37ed",
-      "size": 5,
-      "member_titles": [
-        "变量定义与类型系统",
-        "模板预览与测试工具",
-        "模板渲染引擎",
-        "模板内容编辑器",
-        "多语言模板支持"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "domain:prompt-management",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, domain:prompt-management, revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_aba07679",
-      "size": 3,
-      "member_titles": [
-        "架构模板库",
-        "Pitch Deck 模板管理与选择",
-        "模板切换与样式更新"
-      ],
-      "shared_features": [
-        "actor:end-user",
-        "complexity:low",
-        "dependency:independent",
-        "revenue_impact:indirect",
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, complexity:low, dependency:independent, revenue_impact:indirect, user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_e55f1170",
-      "size": 7,
-      "member_titles": [
-        "流水线生命周期控制",
-        "DAG 解析与任务依赖分析",
-        "并发执行与资源隔离",
-        "异步任务队列与状态追踪",
-        "任务调度与分发",
-        "任务执行状态同步",
-        "流水线触发与实例创建"
-      ],
-      "shared_features": [
-        "actor:system-scheduler",
-        "data_sensitivity:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, data_sensitivity:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_fb82fb7f",
+      "id": "cluster_b1740242",
       "size": 4,
       "member_titles": [
-        "文档内容解析与结构化",
-        "PRD 文档后处理与格式化",
-        "多格式文档解析与文本提取",
-        "BP 内容解析与结构化提取"
+        "编辑冲突检测与锁定",
+        "操作事件实时同步",
+        "协作者光标与选区展示",
+        "实时协作会话管理"
       ],
       "shared_features": [
-        "data_sensitivity:sensitive",
-        "domain:document-processing",
-        "timeline_priority:mvp"
+        "actor:end-user",
+        "data_sensitivity:internal",
+        "dependency:light",
+        "domain:realtime-collab",
+        "nfr:low-latency"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:sensitive, domain:document-processing, timeline_priority:mvp)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, data_sensitivity:internal, dependency:light, domain:realtime-collab, nfr:low-latency)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_60d4b0b7",
+      "id": "cluster_db01f0da",
       "size": 5,
       "member_titles": [
-        "自动化推进状态机",
-        "渐进式推进阶段配置",
-        "流量分配策略引擎",
-        "异常自动暂停与回滚",
-        "发布历史与审计日志"
+        "高风险用户识别与打标",
+        "召回效果指标聚合与报表生成",
+        "召回策略配置管理接口",
+        "召回效果追踪数据采集接口",
+        "高风险用户匹配与策略选择引擎"
       ],
       "shared_features": [
+        "domain:user-retention",
+        "user_facing:internal"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: domain:user-retention, user_facing:internal)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_e5e0766c",
+      "size": 2,
+      "member_titles": [
+        "组件职责与元数据管理",
+        "架构图数据模型与存储"
+      ],
+      "shared_features": [
+        "actor:end-user",
+        "dependency:independent",
+        "domain:architecture-design",
+        "entity:component",
+        "nfr:data-integrity"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, dependency:independent, domain:architecture-design, entity:component, nfr:data-integrity)",
+      "action": "merge_duplicates"
+    },
+    {
+      "id": "cluster_bce36a7e",
+      "size": 6,
+      "member_titles": [
+        "请求响应模板生成器",
+        "架构模式推理引擎",
+        "组件关系与连接推理",
+        "AI辅助架构优化建议",
+        "架构图数据模型输出器",
+        "组件节点自动生成器"
+      ],
+      "shared_features": [
+        "actor:system",
+        "data_sensitivity:internal"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, data_sensitivity:internal)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_27a6d687",
+      "size": 4,
+      "member_titles": [
+        "元数据管理接口",
+        "DSL 表达式解析器",
+        "SQL 查询生成器",
+        "时间维度计算转换器"
+      ],
+      "shared_features": [
+        "actor:system",
+        "biz_metrics:metric-query-success-rate",
+        "data_sensitivity:internal",
+        "domain:data-analytics",
+        "revenue_impact:supporting"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, biz_metrics:metric-query-success-rate, data_sensitivity:internal, domain:data-analytics, revenue_impact:supporting)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_def5a48d",
+      "size": 5,
+      "member_titles": [
+        "日志可视化与仪表盘",
+        "渠道效果对比与可视化仪表盘",
+        "监控可视化仪表盘",
+        "同步状态与监控仪表盘",
+        "查询计划可视化"
+      ],
+      "shared_features": [
+        "actor:admin",
+        "complexity:medium",
+        "data_sensitivity:internal",
+        "dependency:light"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:admin, complexity:medium, data_sensitivity:internal, dependency:light)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_63780b73",
+      "size": 3,
+      "member_titles": [
+        "需求输入与上下文聚合",
+        "用户事件流采集与预处理",
+        "事件流接入与规范化"
+      ],
+      "shared_features": [
+        "actor:end-user",
+        "complexity:medium",
+        "data_sensitivity:sensitive",
+        "nfr:low-latency",
+        "timeline_priority:mvp"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, complexity:medium, data_sensitivity:sensitive, nfr:low-latency, timeline_priority:mvp)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_fffbf064",
+      "size": 2,
+      "member_titles": [
+        "数据源接入与文件解析",
+        "数据源集成与预处理"
+      ],
+      "shared_features": [
+        "actor:end-user",
         "actor:system-scheduler",
+        "complexity:medium",
+        "data_sensitivity:sensitive",
+        "domain:data-integration"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, actor:system-scheduler, complexity:medium, data_sensitivity:sensitive, domain:data-integration)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_505d242d",
+      "size": 6,
+      "member_titles": [
+        "分群对比与交叉分析",
+        "分群规则引擎",
+        "AI推荐分群引擎",
+        "标签体系与管理",
+        "分群查询接口与画像生成",
+        "分群实时更新与计算"
+      ],
+      "shared_features": [
+        "data_sensitivity:internal",
+        "domain:user-segmentation",
+        "entity:user"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, domain:user-segmentation, entity:user)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_d24effbd",
+      "size": 2,
+      "member_titles": [
+        "触达执行器与第三方渠道集成",
+        "多渠道触达任务调度接口"
+      ],
+      "shared_features": [
+        "domain:user-retention",
+        "entity:task",
+        "nfr:fault-tolerance",
+        "tech_stack:fastapi-redis-postgresql",
+        "timeline_priority:mvp"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: domain:user-retention, entity:task, nfr:fault-tolerance, tech_stack:fastapi-redis-postgresql, timeline_priority:mvp)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_255178fe",
+      "size": 4,
+      "member_titles": [
+        "发布异常检测与自动暂停",
+        "发布策略编排引擎",
+        "金丝雀发布流量控制",
+        "发布过程指标监控"
+      ],
+      "shared_features": [
         "biz_metrics:deployment-success-rate",
         "data_sensitivity:internal",
-        "domain:deployment-orchestration",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, biz_metrics:deployment-success-rate, data_sensitivity:internal, domain:deployment-orchestration, revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_1ae5f2c2",
-      "size": 2,
-      "member_titles": [
-        "数据源连接器注册与配置管理",
-        "数据源接入与配置管理"
-      ],
-      "shared_features": [
-        "actor:admin",
-        "data_sensitivity:sensitive",
-        "dependency:independent",
-        "entity:credential",
-        "pattern:crud"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:admin, data_sensitivity:sensitive, dependency:independent, entity:credential, pattern:crud)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_b937ba15",
-      "size": 3,
-      "member_titles": [
-        "多视图任务协作界面",
-        "甘特图可视化组件",
-        "时间线视图（甘特图）组件"
-      ],
-      "shared_features": [
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "entity:task",
-        "nfr:responsive-ui"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:internal, dependency:light, entity:task, nfr:responsive-ui)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_064c276d",
-      "size": 5,
-      "member_titles": [
-        "响应缓存与去重",
-        "数据缓存与增量更新",
-        "漏斗分析结果缓存与增量更新机制",
-        "匹配结果缓存与增量更新",
-        "架构数据缓存与版本管理"
-      ],
-      "shared_features": [
-        "biz_metrics:cache-hit-rate",
-        "data_sensitivity:internal",
-        "user_facing:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: biz_metrics:cache-hit-rate, data_sensitivity:internal, user_facing:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_88516261",
-      "size": 5,
-      "member_titles": [
-        "NetworkPolicy 网络策略配置",
-        "Ingress 路由规则配置",
-        "Service 资源配置",
-        "服务发现与负载均衡验证",
-        "灰度流量权重配置与调度"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "domain:k8s-orchestration",
-        "tech_stack:kubernetes-python-client",
-        "user_facing:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, domain:k8s-orchestration, tech_stack:kubernetes-python-client, user_facing:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_0b2bc34c",
-      "size": 2,
-      "member_titles": [
-        "AI内容生成与辅助",
-        "结构化 PRD 内容生成"
-      ],
-      "shared_features": [
-        "actor:end-user",
-        "data_sensitivity:sensitive",
-        "dependency:heavy",
-        "domain:ai-content-generation",
-        "revenue_impact:direct"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, data_sensitivity:sensitive, dependency:heavy, domain:ai-content-generation, revenue_impact:direct)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_c8210685",
-      "size": 6,
-      "member_titles": [
-        "任务分解请求接收与上下文聚合",
-        "分解历史记录与用户反馈收集",
-        "迭代分解支持",
-        "用户交互界面与编辑能力",
-        "任务分解建议结构化与验证",
-        "任务确认与批量创建"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "dependency:light",
-        "domain:task-management"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, dependency:light, domain:task-management)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_1919260a",
-      "size": 7,
-      "member_titles": [
-        "SDK集成与接入管理",
-        "服务端埋点集成接口",
-        "服务端事件上报 SDK",
-        "HTTP/WebSocket 事件接收接口",
-        "前端事件采集 SDK",
-        "会话事件采集 SDK",
-        "后端埋点 API 网关"
-      ],
-      "shared_features": [],
-      "reason": "Embedding+Jaccard hybrid (shared tags: )",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_6d370642",
-      "size": 6,
-      "member_titles": [
-        "画布前端交互组件",
-        "AI画布生成接口",
-        "AI建议与优化引擎",
-        "画布导出与分享",
-        "画布模块手动编辑接口",
-        "商业模式画布数据模型与存储"
-      ],
-      "shared_features": [
-        "actor:end-user",
-        "domain:business-model-canvas"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, domain:business-model-canvas)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_666dd954",
-      "size": 2,
-      "member_titles": [
-        "文档模板与结构管理",
-        "PRD 模板库管理"
-      ],
-      "shared_features": [
-        "biz_metrics:template-usage-rate",
-        "complexity:low",
-        "data_sensitivity:internal",
-        "dependency:independent",
-        "entity:template-version"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: biz_metrics:template-usage-rate, complexity:low, data_sensitivity:internal, dependency:independent, entity:template-version)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_138aae61",
-      "size": 5,
-      "member_titles": [
-        "部署状态实时推送服务",
-        "滚动更新进度计算与展示",
-        "部署失败原因智能分析",
-        "部署事件日志采集与存储",
-        "Pod 启动进度与副本状态查询"
-      ],
-      "shared_features": [
-        "actor:k8s-api",
-        "data_sensitivity:internal",
-        "dependency:heavy",
-        "domain:deployment-monitoring"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:k8s-api, data_sensitivity:internal, dependency:heavy, domain:deployment-monitoring)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_ae5c3185",
-      "size": 6,
-      "member_titles": [
-        "技术栈候选集生成与排序",
-        "方案排序与筛选",
-        "评分明细生成与解释",
-        "技术栈组合生成器",
-        "技术栈评分引擎",
-        "技术栈适配与推荐"
-      ],
-      "shared_features": [
-        "actor:system",
-        "tech_stack:python",
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, tech_stack:python, timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_4ea78381",
-      "size": 2,
-      "member_titles": [
-        "日志聚合与查询",
-        "执行日志聚合与查询"
-      ],
-      "shared_features": [
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "nfr:low-latency",
-        "pattern:stream-processing",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:internal, nfr:low-latency, pattern:stream-processing, revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_cd2fbf88",
-      "size": 10,
-      "member_titles": [
-        "版本回溯与恢复",
-        "版本历史管理与对比回退",
-        "版本控制与变更历史",
-        "修改历史与版本回溯",
-        "协作历史与版本回溯",
-        "评估历史与迭代追踪",
-        "编辑历史与版本控制",
-        "分支管理",
-        "版本对比与差异可视化",
-        "架构图版本快照存储"
-      ],
-      "shared_features": [
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_b64ba4d3",
-      "size": 5,
-      "member_titles": [
-        "预警去重与智能聚合",
-        "风险仪表盘与趋势分析",
-        "风险指标采集与计算引擎",
-        "异常检测与预警",
-        "风险规则引擎与阈值配置"
-      ],
-      "shared_features": [
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "nfr:low-latency"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:internal, nfr:low-latency)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_344dcfcb",
-      "size": 3,
-      "member_titles": [
-        "效果评估指标看板",
-        "模型输出原始数据查看",
-        "Prompt 调试沙盒"
-      ],
-      "shared_features": [
-        "actor:end-user",
-        "data_sensitivity:internal",
-        "domain:prompt-engineering",
-        "nfr:low-latency",
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, data_sensitivity:internal, domain:prompt-engineering, nfr:low-latency, user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_0f1d6975",
-      "size": 3,
-      "member_titles": [
-        "构建产物管理",
-        "构建缓存管理",
-        "构建缓存管理与挂载"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_f8d727e6",
-      "size": 7,
-      "member_titles": [
-        "模型训练与评估服务",
-        "实时风险推理服务",
-        "风险预测结果反馈闭环",
-        "模型在线更新与 A/B 测试框架",
-        "工时预测模型训练与管理",
-        "实时工时预测服务",
-        "风险预测模型训练与版本管理"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_8a3aff29",
-      "size": 2,
-      "member_titles": [
-        "多场景旅程图对比引擎",
-        "旅程图数据模型与存储"
-      ],
-      "shared_features": [
-        "actor:end-user",
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "domain:journey-mapping",
-        "entity:journey-map"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, complexity:medium, data_sensitivity:internal, domain:journey-mapping, entity:journey-map)",
-      "action": "merge_duplicates"
-    },
-    {
-      "id": "cluster_d4dc575b",
-      "size": 3,
-      "member_titles": [
-        "技术方案文档自动生成",
-        "架构说明文档生成",
-        "数据字典自动生成"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "nfr:readability",
-        "pattern:template-rendering",
+        "entity:deployment",
         "revenue_impact:supporting",
-        "timeline_priority:mvp"
+        "user_facing:internal"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, nfr:readability, pattern:template-rendering, revenue_impact:supporting, timeline_priority:mvp)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: biz_metrics:deployment-success-rate, data_sensitivity:internal, entity:deployment, revenue_impact:supporting, user_facing:internal)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_29ee83e8",
-      "size": 5,
-      "member_titles": [
-        "手动编辑与协作接口",
-        "在线状态与光标追踪",
-        "实时协作状态同步",
-        "实时协作引擎",
-        "协作活动日志与通知"
-      ],
-      "shared_features": [
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_a93b34d0",
+      "id": "cluster_9d7befdb",
       "size": 2,
       "member_titles": [
-        "架构图数据存储与索引",
-        "知识图谱存储与索引"
-      ],
-      "shared_features": [
-        "actor:system",
-        "dependency:independent",
-        "nfr:data-integrity",
-        "nfr:query-performance",
-        "pattern:indexing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, dependency:independent, nfr:data-integrity, nfr:query-performance, pattern:indexing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_88ee1635",
-      "size": 4,
-      "member_titles": [
-        "章节级与段落级编辑模式切换",
-        "在线编辑交互层",
-        "富文本编辑器集成与基础编辑能力",
-        "人工补充与编辑接口"
+        "商业模式知识库与案例推荐",
+        "类似案例库匹配与参考"
       ],
       "shared_features": [
         "actor:end-user",
-        "domain:content-editing",
-        "timeline_priority:mvp",
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, domain:content-editing, timeline_priority:mvp, user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_6770b41f",
-      "size": 4,
-      "member_titles": [
-        "冲突解决策略执行",
-        "协同编辑冲突检测与解决",
-        "冲突检测与标注",
-        "冲突检测与解决"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "entity:conflict"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, entity:conflict)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_4c30bc93",
-      "size": 2,
-      "member_titles": [
-        "AI 根因推理引擎",
-        "AI根因假设生成器"
-      ],
-      "shared_features": [
-        "complexity:high",
-        "data_sensitivity:internal",
-        "dependency:heavy",
-        "entity:hypothesis",
-        "nfr:explainability"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:high, data_sensitivity:internal, dependency:heavy, entity:hypothesis, nfr:explainability)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_a3edaa35",
-      "size": 3,
-      "member_titles": [
-        "ConfigMap 资源 CRUD 接口",
-        "配置变更触发工作负载滚动更新",
-        "配置挂载到工作负载"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "dependency:light",
-        "domain:k8s-config-mgmt",
-        "entity:configmap",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, dependency:light, domain:k8s-config-mgmt, entity:configmap, revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_d67dffea",
-      "size": 3,
-      "member_titles": [
-        "BP 可视化增强",
-        "ER 图可视化生成",
-        "可视化图表自动生成"
-      ],
-      "shared_features": [
-        "revenue_impact:indirect"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: revenue_impact:indirect)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_943eecc1",
-      "size": 5,
-      "member_titles": [
-        "人工校正反馈接口",
-        "策略效果追踪与反馈闭环",
-        "人工修正与反馈闭环",
-        "人工审核与策略调优工作台",
-        "规则调整与效果监控"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "dependency:light"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, dependency:light)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_3cd99855",
-      "size": 2,
-      "member_titles": [
-        "流水线定义与存储",
-        "流水线可视化编辑器"
-      ],
-      "shared_features": [
-        "actor:developer",
         "complexity:medium",
-        "data_sensitivity:internal",
-        "domain:cicd-pipeline",
-        "entity:job"
+        "data_sensitivity:public",
+        "nfr:low-latency",
+        "pattern:recommendation"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:developer, complexity:medium, data_sensitivity:internal, domain:cicd-pipeline, entity:job)",
-      "action": "merge_duplicates"
-    },
-    {
-      "id": "cluster_edde9b1f",
-      "size": 2,
-      "member_titles": [
-        "需求优先级评分引擎",
-        "冲突需求检测与解决建议"
-      ],
-      "shared_features": [
-        "actor:ai-agent",
-        "actor:product-manager",
-        "data_sensitivity:internal",
-        "domain:requirement-management",
-        "entity:requirement"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:ai-agent, actor:product-manager, data_sensitivity:internal, domain:requirement-management, entity:requirement)",
-      "action": "merge_duplicates"
-    },
-    {
-      "id": "cluster_21d88735",
-      "size": 4,
-      "member_titles": [
-        "导出与集成",
-        "导出与集成",
-        "文档导出与格式化服务",
-        "多格式导出服务"
-      ],
-      "shared_features": [],
-      "reason": "Embedding+Jaccard hybrid (shared tags: )",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, complexity:medium, data_sensitivity:public, nfr:low-latency, pattern:recommendation)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_eb29814b",
-      "size": 2,
+      "id": "cluster_ac58e930",
+      "size": 6,
       "member_titles": [
-        "敏感信息加密存储服务",
-        "数据加密与安全"
+        "上下文截断策略引擎",
+        "上下文序列化与注入器",
+        "角色标记规范化器",
+        "上下文摘要压缩器",
+        "上下文构建编排器",
+        "Token 计数与限制控制器"
       ],
       "shared_features": [
         "actor:system",
-        "data_sensitivity:critical",
-        "dependency:light",
-        "entity:encryption-key",
-        "revenue_impact:supporting"
+        "user_facing:internal"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, data_sensitivity:critical, dependency:light, entity:encryption-key, revenue_impact:supporting)",
-      "action": "extract_shared"
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, user_facing:internal)",
+      "action": "keep_separate"
     },
     {
-      "id": "cluster_36f43775",
+      "id": "cluster_7b09c69d",
       "size": 5,
       "member_titles": [
-        "时间序列收入计算器",
-        "成本与现金流模拟器",
-        "风险指标计算引擎",
-        "概率分布统计分析器",
-        "蒙特卡洛随机抽样执行器"
+        "异构数据标准化转换引擎",
+        "统一数据模型持久化",
+        "平台API调用抽象层",
+        "多平台数据采集适配器",
+        "定时同步任务调度"
       ],
       "shared_features": [
         "actor:system-scheduler",
-        "domain:financial-modeling",
+        "domain:ad-platform-integration",
         "timeline_priority:mvp",
         "user_facing:internal"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, domain:financial-modeling, timeline_priority:mvp, user_facing:internal)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, domain:ad-platform-integration, timeline_priority:mvp, user_facing:internal)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_3f8ace5b",
-      "size": 4,
-      "member_titles": [
-        "统计分析与显著性检验",
-        "实验提前终止规则与自动决策",
-        "目标指标与样本量计算",
-        "实验配置管理"
-      ],
-      "shared_features": [
-        "actor:product-manager",
-        "data_sensitivity:internal",
-        "domain:ab-testing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:product-manager, data_sensitivity:internal, domain:ab-testing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_05312112",
+      "id": "cluster_9a5a5aa4",
       "size": 2,
       "member_titles": [
-        "多维度收入构成分析引擎",
-        "客单价与付费转化分析"
+        "旅程图结构化输出与持久化",
+        "模拟结果持久化与版本管理"
       ],
       "shared_features": [
-        "actor:admin",
-        "actor:end-user",
-        "complexity:medium",
-        "data_sensitivity:sensitive",
-        "dependency:light"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:admin, actor:end-user, complexity:medium, data_sensitivity:sensitive, dependency:light)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_231b451b",
-      "size": 8,
-      "member_titles": [
-        "DDL 语句生成与验证",
-        "约束条件生成",
-        "批量 DDL 生成协调器",
-        "命名规范校验与修正",
-        "外键约束策略生成",
-        "实体到表映射规则引擎",
-        "DDL 模板渲染引擎",
-        "数据库方言适配层"
-      ],
-      "shared_features": [
-        "actor:system",
-        "data_sensitivity:internal",
-        "revenue_impact:supporting",
-        "user_facing:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, data_sensitivity:internal, revenue_impact:supporting, user_facing:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_96ef6a5f",
-      "size": 2,
-      "member_titles": [
-        "配置版本管理与回滚",
-        "回滚操作"
-      ],
-      "shared_features": [
-        "actor:admin",
-        "actor:developer",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "nfr:audit-trail"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:admin, actor:developer, data_sensitivity:internal, dependency:light, nfr:audit-trail)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_df050f4d",
-      "size": 3,
-      "member_titles": [
-        "历史数据提取与预处理",
-        "历史项目数据采集与特征工程",
-        "特征工程管道"
-      ],
-      "shared_features": [
-        "actor:system-scheduler",
-        "complexity:medium",
-        "nfr:audit-trail",
-        "timeline_priority:mvp",
-        "user_facing:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, complexity:medium, nfr:audit-trail, timeline_priority:mvp, user_facing:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_68530dd4",
-      "size": 4,
-      "member_titles": [
-        "留存分析模块",
-        "留存干预时机智能推荐",
-        "留存实验设计与效果评估平台",
-        "留存指标计算与分层模块"
-      ],
-      "shared_features": [
-        "actor:product-manager",
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "revenue_impact:indirect"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:product-manager, complexity:medium, data_sensitivity:internal, dependency:light, revenue_impact:indirect)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_4769f092",
-      "size": 4,
-      "member_titles": [
-        "架构拓扑解析与负载输入模块",
-        "性能瓶颈识别引擎",
-        "瓶颈点识别与分析",
-        "性能基准数据库与组件特征库"
-      ],
-      "shared_features": [
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_87584be6",
-      "size": 2,
-      "member_titles": [
-        "AI 语义理解与关键信息识别",
-        "AI 语义风险识别"
-      ],
-      "shared_features": [
-        "actor:system",
-        "data_sensitivity:sensitive",
-        "pattern:prompt-engineering",
-        "revenue_impact:direct",
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, data_sensitivity:sensitive, pattern:prompt-engineering, revenue_impact:direct, timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_212a1614",
-      "size": 2,
-      "member_titles": [
-        "环境配置元数据定义与存储",
-        "技术组件元数据存储与管理"
-      ],
-      "shared_features": [
-        "actor:admin",
         "actor:system",
         "complexity:low",
-        "data_sensitivity:internal",
-        "dependency:independent"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:admin, actor:system, complexity:low, data_sensitivity:internal, dependency:independent)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_d4026032",
-      "size": 3,
-      "member_titles": [
-        "融资进度仪表盘",
-        "投资人详情页展示",
-        "融资沟通进展跟踪"
-      ],
-      "shared_features": [
-        "actor:end-user",
-        "dependency:light",
-        "revenue_impact:indirect",
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, dependency:light, revenue_impact:indirect, user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_cfe258f5",
-      "size": 3,
-      "member_titles": [
-        "部署历史记录管理",
-        "部署历史与回滚",
-        "历史任务数据存储与查询"
-      ],
-      "shared_features": [
-        "actor:admin",
-        "data_sensitivity:internal",
-        "nfr:audit-trail",
-        "pattern:crud",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:admin, data_sensitivity:internal, nfr:audit-trail, pattern:crud, revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_7e4f9d99",
-      "size": 2,
-      "member_titles": [
-        "内容差异计算与应用引擎",
-        "版本间差异计算引擎"
-      ],
-      "shared_features": [
-        "actor:system",
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, complexity:medium, data_sensitivity:internal, dependency:light, revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_a21b1408",
-      "size": 6,
-      "member_titles": [
-        "自定义报表与数据导出",
-        "风险聚合与报告生成",
-        "调研报告生成与导出",
-        "评估报告生成与导出",
-        "评估报告可视化与导出",
-        "扫描结果报告生成与导出"
-      ],
-      "shared_features": [
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_b2bb5d7e",
-      "size": 3,
-      "member_titles": [
-        "专项法规检查配置",
-        "合规性规则检查引擎",
-        "风险规则引擎"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_ea99a961",
-      "size": 3,
-      "member_titles": [
-        "NoSQL Schema 设计生成",
-        "Schema 验证与最佳实践检查",
-        "数据库类型选型推荐"
-      ],
-      "shared_features": [
-        "actor:system",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "domain:schema-design",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, data_sensitivity:internal, dependency:light, domain:schema-design, revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_5440b36d",
-      "size": 4,
-      "member_titles": [
-        "改进建议生成与优先级排序",
-        "综合排序与推荐列表生成",
-        "多维度匹配规则引擎",
-        "AI 驱动的多维度质量评分引擎"
-      ],
-      "shared_features": [
-        "actor:system",
-        "revenue_impact:direct",
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, revenue_impact:direct, timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_15cedcc0",
-      "size": 3,
-      "member_titles": [
-        "订阅套餐配置管理",
-        "用户订阅生命周期管理",
-        "欠费处理与服务降级"
-      ],
-      "shared_features": [
-        "complexity:medium",
-        "domain:subscription-management"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, domain:subscription-management)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_69246e65",
-      "size": 5,
-      "member_titles": [
-        "建议交互与应用接口",
-        "AI调整建议生成器",
-        "冲突通知与预警机制",
-        "冲突检测规则引擎",
-        "调整历史记录与审计"
-      ],
-      "shared_features": [
-        "actor:project-manager",
-        "data_sensitivity:internal",
-        "domain:project-scheduling"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:project-manager, data_sensitivity:internal, domain:project-scheduling)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_88c57788",
-      "size": 4,
-      "member_titles": [
-        "安全审计与异常监控",
-        "用户注册与账号管理",
-        "密码管理与安全策略",
-        "登录认证与会话管理"
-      ],
-      "shared_features": [
-        "domain:user-auth"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: domain:user-auth)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_63906a24",
-      "size": 3,
-      "member_titles": [
-        "配置热更新推送服务",
-        "实时数据推送",
-        "实验配置热加载服务"
-      ],
-      "shared_features": [
-        "actor:system",
-        "data_sensitivity:internal",
-        "nfr:low-latency",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, data_sensitivity:internal, nfr:low-latency, revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_428ede65",
-      "size": 6,
-      "member_titles": [
-        "手动工时填报接口",
-        "工时数据标准化与存储",
-        "工时数据权限与隐私控制",
-        "工时审批流程引擎",
-        "自动工时捕获集成层",
-        "工时冲突检测与修正"
-      ],
-      "shared_features": [
-        "domain:time-tracking"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: domain:time-tracking)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_07ec752e",
-      "size": 2,
-      "member_titles": [
-        "账单生成与管理",
-        "财务对账与报表"
-      ],
-      "shared_features": [
         "data_sensitivity:sensitive",
-        "domain:billing",
-        "entity:invoice",
-        "nfr:audit-trail"
+        "dependency:independent",
+        "domain:data-persistence"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:sensitive, domain:billing, entity:invoice, nfr:audit-trail)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, complexity:low, data_sensitivity:sensitive, dependency:independent, domain:data-persistence)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_02fdb02e",
-      "size": 2,
+      "id": "cluster_9e0396e2",
+      "size": 3,
       "member_titles": [
-        "设备指纹与会话管理",
-        "设备指纹生成与存储"
+        "上下文与会话管理",
+        "生成内容持久化与缓存管理",
+        "对话历史存储服务"
       ],
       "shared_features": [
-        "actor:end-user",
-        "complexity:medium",
-        "pattern:crud",
+        "actor:system",
+        "data_sensitivity:sensitive",
+        "dependency:light",
         "revenue_impact:supporting",
         "timeline_priority:mvp"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, complexity:medium, pattern:crud, revenue_impact:supporting, timeline_priority:mvp)",
-      "action": "extract_shared"
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, data_sensitivity:sensitive, dependency:light, revenue_impact:supporting, timeline_priority:mvp)",
+      "action": "keep_separate"
     },
     {
-      "id": "cluster_1be737d2",
-      "size": 7,
-      "member_titles": [
-        "告警规则管理",
-        "收入异常检测与告警",
-        "异常事件管理与协作",
-        "告警规则引擎",
-        "竞品动态监控告警",
-        "告警历史与分析",
-        "告警聚合与降噪"
-      ],
-      "shared_features": [],
-      "reason": "Embedding+Jaccard hybrid (shared tags: )",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_e7a1a38e",
-      "size": 4,
-      "member_titles": [
-        "修复建议生成与知识库检索",
-        "依赖库 CVE 漏洞检测",
-        "架构方案安全风险自动扫描引擎",
-        "安全风险优先级排序与聚合"
-      ],
-      "shared_features": [
-        "actor:system-analyzer",
-        "domain:security-analysis",
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-analyzer, domain:security-analysis, timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_89402c56",
-      "size": 4,
-      "member_titles": [
-        "结构化数据模型构建与验证",
-        "架构数据结构化与验证",
-        "生成结果质量评估",
-        "生成内容结构化解析与校验"
-      ],
-      "shared_features": [
-        "actor:system",
-        "data_sensitivity:internal",
-        "user_facing:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, data_sensitivity:internal, user_facing:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_fa2e551c",
+      "id": "cluster_bd55a3b4",
       "size": 3,
       "member_titles": [
-        "灰度发布监控与回滚",
-        "指标健康度评估",
-        "性能监控与降级策略"
+        "用户会话与设备识别",
+        "多渠道流量追踪与会话管理",
+        "会话拼接与设备关联引擎"
       ],
       "shared_features": [
-        "data_sensitivity:internal",
-        "domain:observability",
-        "entity:metric",
+        "dependency:light",
+        "revenue_impact:supporting",
+        "timeline_priority:mvp",
         "user_facing:internal"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, domain:observability, entity:metric, user_facing:internal)",
-      "action": "extract_shared"
+      "reason": "Embedding+Jaccard hybrid (shared tags: dependency:light, revenue_impact:supporting, timeline_priority:mvp, user_facing:internal)",
+      "action": "keep_separate"
     },
     {
-      "id": "cluster_9a39aa59",
-      "size": 2,
+      "id": "cluster_08f70c27",
+      "size": 4,
       "member_titles": [
-        "工作负载配置模板库",
-        "项目模板与最佳实践库"
-      ],
-      "shared_features": [
-        "complexity:medium",
-        "dependency:light",
-        "domain:template-management",
-        "nfr:versioning",
-        "pattern:crud"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, dependency:light, domain:template-management, nfr:versioning, pattern:crud)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_9535e1f8",
-      "size": 2,
-      "member_titles": [
-        "实体关系模型解析",
-        "需求文档解析与实体识别"
-      ],
-      "shared_features": [
-        "actor:system",
-        "complexity:medium",
-        "entity:entity",
-        "entity:relationship",
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, complexity:medium, entity:entity, entity:relationship, timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_e84bbc22",
-      "size": 2,
-      "member_titles": [
+        "模型评估与监控",
         "模型路由与负载均衡",
-        "模型适配器统一接口"
+        "模型版本管理与监控",
+        "模型版本管理"
+      ],
+      "shared_features": [
+        "complexity:medium",
+        "data_sensitivity:internal",
+        "dependency:light",
+        "user_facing:internal"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:internal, dependency:light, user_facing:internal)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_ca8ce018",
+      "size": 2,
+      "member_titles": [
+        "生成内容结构化解析与验证",
+        "PRD 文档结构化解析与校验"
       ],
       "shared_features": [
         "actor:system",
-        "complexity:medium",
         "data_sensitivity:internal",
-        "domain:ai-model-integration",
+        "dependency:light",
+        "entity:validation-rule",
         "timeline_priority:mvp"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, complexity:medium, data_sensitivity:internal, domain:ai-model-integration, timeline_priority:mvp)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, data_sensitivity:internal, dependency:light, entity:validation-rule, timeline_priority:mvp)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_f3b12fea",
-      "size": 4,
+      "id": "cluster_f39ac001",
+      "size": 3,
       "member_titles": [
-        "架构图导出与分享",
-        "C4 层级切换与导航",
-        "节点与关系编辑操作",
-        "架构图数据模型与标准化接口"
+        "MRR/ARR 计算引擎",
+        "用户价值指标计算",
+        "收入来源与渠道分析"
       ],
       "shared_features": [
-        "actor:system-architect",
-        "data_sensitivity:internal",
+        "actor:system-scheduler",
         "dependency:light",
-        "domain:architecture-visualization"
+        "domain:revenue-analytics",
+        "tech_stack:python-postgresql",
+        "timeline_priority:mvp"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-architect, data_sensitivity:internal, dependency:light, domain:architecture-visualization)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, dependency:light, domain:revenue-analytics, tech_stack:python-postgresql, timeline_priority:mvp)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_8f20e5d4",
+      "id": "cluster_930807fe",
       "size": 2,
       "member_titles": [
-        "反爬策略执行层",
-        "HTTP请求执行引擎"
+        "人工编辑与迭代优化接口",
+        "章节内容编辑与再生成接口"
       ],
       "shared_features": [
-        "actor:system-crawler",
-        "domain:data-crawling",
+        "actor:end-user",
+        "biz_metrics:edit-frequency",
+        "data_sensitivity:sensitive",
+        "dependency:light",
+        "pattern:crud"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, biz_metrics:edit-frequency, data_sensitivity:sensitive, dependency:light, pattern:crud)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_1f9bf9b7",
+      "size": 4,
+      "member_titles": [
+        "人工反馈闭环",
+        "故障上下文数据采集",
+        "历史故障模式知识库",
+        "根因分析报告生成"
+      ],
+      "shared_features": [
+        "data_sensitivity:internal",
+        "domain:monitoring-alerting",
         "revenue_impact:supporting",
-        "timeline_priority:mvp",
         "user_facing:internal"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-crawler, domain:data-crawling, revenue_impact:supporting, timeline_priority:mvp, user_facing:internal)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, domain:monitoring-alerting, revenue_impact:supporting, user_facing:internal)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_60f48e1c",
-      "size": 4,
-      "member_titles": [
-        "竞品数据管理界面",
-        "竞品对比分析报告",
-        "对比矩阵生成与可视化",
-        "方案对比视图"
-      ],
-      "shared_features": [
-        "actor:end-user",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, data_sensitivity:internal, dependency:light, user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_beb3853f",
-      "size": 2,
-      "member_titles": [
-        "基于规则的评估引擎",
-        "流量路由决策引擎"
-      ],
-      "shared_features": [
-        "actor:system-scheduler",
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "nfr:low-latency"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, complexity:medium, data_sensitivity:internal, dependency:light, nfr:low-latency)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_0cabb747",
+      "id": "cluster_b15f7e7d",
       "size": 3,
       "member_titles": [
-        "模型置信度评估",
-        "模型自动重训练调度",
-        "时间序列预测模型训练"
-      ],
-      "shared_features": [
-        "actor:system-scheduler",
-        "data_sensitivity:internal",
-        "domain:revenue-analytics",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, data_sensitivity:internal, domain:revenue-analytics, revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_d50f7e03",
-      "size": 3,
-      "member_titles": [
-        "PDF 报告生成服务",
-        "图表导出为图片服务",
-        "Markdown 报告生成与预览"
-      ],
-      "shared_features": [
-        "actor:end-user",
-        "data_sensitivity:internal",
-        "domain:content-mgmt",
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, data_sensitivity:internal, domain:content-mgmt, user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_dba063f7",
-      "size": 2,
-      "member_titles": [
-        "文档内容结构化与元数据管理",
-        "BP 内容结构定义与模板管理"
+        "模型适配器抽象层",
+        "成本优化引擎",
+        "AI 模型调用适配层"
       ],
       "shared_features": [
         "actor:system",
-        "dependency:independent",
-        "entity:section",
-        "pattern:crud",
-        "revenue_impact:supporting"
+        "user_facing:internal"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, dependency:independent, entity:section, pattern:crud, revenue_impact:supporting)",
-      "action": "extract_shared"
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, user_facing:internal)",
+      "action": "keep_separate"
     },
     {
-      "id": "cluster_5b3d8b7c",
-      "size": 3,
+      "id": "cluster_89e17848",
+      "size": 2,
       "member_titles": [
-        "容器环境管理与生命周期控制",
-        "容器镜像管理",
-        "任务步骤编排与执行引擎"
+        "多场景模拟引擎",
+        "模型参数自动校准引擎"
       ],
       "shared_features": [
         "actor:system-scheduler",
-        "complexity:medium",
-        "revenue_impact:supporting",
-        "timeline_priority:mvp",
-        "user_facing:internal"
+        "biz_metrics:prediction-accuracy",
+        "data_sensitivity:internal",
+        "nfr:accuracy",
+        "pattern:batch-pipeline"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, complexity:medium, revenue_impact:supporting, timeline_priority:mvp, user_facing:internal)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, biz_metrics:prediction-accuracy, data_sensitivity:internal, nfr:accuracy, pattern:batch-pipeline)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_7d1b9104",
+      "id": "cluster_4434b451",
+      "size": 2,
+      "member_titles": [
+        "渠道成本与 ROI 计算服务",
+        "转化事件归因计算引擎"
+      ],
+      "shared_features": [
+        "actor:system",
+        "complexity:medium",
+        "dependency:light",
+        "domain:user-acquisition",
+        "nfr:audit-trail"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, complexity:medium, dependency:light, domain:user-acquisition, nfr:audit-trail)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_a04ba822",
       "size": 4,
       "member_titles": [
-        "系统变更日志关联服务",
-        "指标变化趋势分析器",
-        "异常事件关联查询服务",
-        "指标数据接入层"
+        "流水线执行引擎",
+        "流水线定义与配置管理",
+        "流水线执行历史与审计",
+        "可视化流水线编排工作台"
+      ],
+      "shared_features": [
+        "domain:ci-cd-orchestration"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: domain:ci-cd-orchestration)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_fde4b307",
+      "size": 3,
+      "member_titles": [
+        "导入任务队列与进度跟踪",
+        "预测任务调度与缓存",
+        "数据拉取任务调度器"
+      ],
+      "shared_features": [
+        "complexity:medium",
+        "data_sensitivity:internal",
+        "dependency:light",
+        "timeline_priority:mvp"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:internal, dependency:light, timeline_priority:mvp)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_67e9a353",
+      "size": 2,
+      "member_titles": [
+        "埋点事件规范与Schema定义",
+        "事件Schema定义与管理"
+      ],
+      "shared_features": [
+        "data_sensitivity:internal",
+        "dependency:independent",
+        "entity:event-schema",
+        "nfr:backward-compatibility",
+        "revenue_impact:supporting"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, dependency:independent, entity:event-schema, nfr:backward-compatibility, revenue_impact:supporting)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_0621f236",
+      "size": 2,
+      "member_titles": [
+        "A/B 测试框架",
+        "A/B 测试框架支持"
+      ],
+      "shared_features": [
+        "data_sensitivity:internal",
+        "dependency:heavy"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, dependency:heavy)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_219746b9",
+      "size": 3,
+      "member_titles": [
+        "用量数据采集管道",
+        "多时间粒度实时聚合引擎",
+        "用量查询接口层"
+      ],
+      "shared_features": [
+        "data_sensitivity:internal",
+        "domain:usage-metering",
+        "entity:user",
+        "timeline_priority:mvp"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, domain:usage-metering, entity:user, timeline_priority:mvp)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_e9166982",
+      "size": 3,
+      "member_titles": [
+        "用量数据归档与冷存储",
+        "日志保留与归档策略",
+        "日志存储与索引"
       ],
       "shared_features": [
         "actor:system-scheduler",
@@ -2067,862 +1217,481 @@
         "user_facing:internal"
       ],
       "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, data_sensitivity:internal, revenue_impact:supporting, user_facing:internal)",
-      "action": "extract_shared"
+      "action": "keep_separate"
     },
     {
-      "id": "cluster_f086319a",
+      "id": "cluster_2fd693da",
       "size": 2,
       "member_titles": [
-        "数据清洗与标准化",
-        "事件清洗与验证服务"
+        "广告平台连接配置管理",
+        "第三方平台认证与凭证管理"
       ],
       "shared_features": [
-        "actor:system-scheduler",
-        "complexity:medium",
-        "dependency:light",
-        "nfr:data-quality",
-        "nfr:idempotency"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, complexity:medium, dependency:light, nfr:data-quality, nfr:idempotency)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_3a46a5c0",
-      "size": 2,
-      "member_titles": [
-        "资源负载分析与瓶颈预警",
-        "资源日历与可用性管理"
-      ],
-      "shared_features": [
-        "biz_metrics:resource-utilization-rate",
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "domain:resource-management",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: biz_metrics:resource-utilization-rate, complexity:medium, data_sensitivity:internal, domain:resource-management, revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_53f34f05",
-      "size": 3,
-      "member_titles": [
-        "事件 Schema 注册与校验中心",
-        "事件回溯与补采接口",
-        "事件定义与元数据管理"
-      ],
-      "shared_features": [
-        "entity:event",
-        "nfr:audit-trail",
-        "revenue_impact:supporting",
-        "user_facing:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: entity:event, nfr:audit-trail, revenue_impact:supporting, user_facing:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_e119b94e",
-      "size": 3,
-      "member_titles": [
-        "环境配置差异对比引擎",
-        "配置模板继承机制",
-        "配置值多版本存储引擎"
-      ],
-      "shared_features": [
-        "actor:admin",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "domain:config-management",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:admin, data_sensitivity:internal, dependency:light, domain:config-management, revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_04bce27c",
-      "size": 4,
-      "member_titles": [
-        "可视化看板",
-        "看板视图与状态管理",
-        "看板布局引擎",
-        "看板配置管理"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "dependency:light",
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, dependency:light, timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_ed0db9a9",
-      "size": 2,
-      "member_titles": [
-        "用户流失风险预测模型",
-        "流失用户特征提取服务"
-      ],
-      "shared_features": [
-        "actor:system-scheduler",
-        "data_sensitivity:internal",
-        "entity:user",
-        "pattern:batch-pipeline",
-        "revenue_impact:indirect"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, data_sensitivity:internal, entity:user, pattern:batch-pipeline, revenue_impact:indirect)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_61d53537",
-      "size": 4,
-      "member_titles": [
-        "人工标注样本管理",
-        "评估结果与标注对比分析",
-        "差异案例挖掘与标记",
-        "人工标注数据管理"
-      ],
-      "shared_features": [
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "revenue_impact:supporting",
-        "user_facing:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:internal, revenue_impact:supporting, user_facing:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_656e7910",
-      "size": 2,
-      "member_titles": [
-        "灰度规则配置管理",
-        "灰度发布审计日志"
-      ],
-      "shared_features": [
-        "actor:admin",
-        "actor:devops",
-        "data_sensitivity:internal",
+        "actor:end-user",
+        "biz_metrics:platform-connection-rate",
+        "data_sensitivity:critical",
         "dependency:independent",
-        "nfr:audit-trail"
+        "entity:credential"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:admin, actor:devops, data_sensitivity:internal, dependency:independent, nfr:audit-trail)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, biz_metrics:platform-connection-rate, data_sensitivity:critical, dependency:independent, entity:credential)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_740eb5fb",
+      "id": "cluster_e6f8b57c",
       "size": 2,
       "member_titles": [
-        "历史案例知识库",
-        "数据字典与文档中心"
+        "根因分析与智能建议",
+        "AI根因推理引擎"
       ],
       "shared_features": [
-        "actor:data-analyst",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "domain:knowledge-management",
-        "pattern:crud"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:data-analyst, data_sensitivity:internal, dependency:light, domain:knowledge-management, pattern:crud)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_8a4945c4",
-      "size": 4,
-      "member_titles": [
-        "组件拖拽与定位系统",
-        "快捷键与工具栏命令系统",
-        "图层管理与选区操作",
-        "组件属性编辑器"
-      ],
-      "shared_features": [
-        "actor:end-user",
-        "dependency:light",
-        "revenue_impact:direct",
-        "timeline_priority:mvp",
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, dependency:light, revenue_impact:direct, timeline_priority:mvp, user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_795e393e",
-      "size": 2,
-      "member_titles": [
-        "容错机制完整性检查",
-        "降级方案完整性检查"
-      ],
-      "shared_features": [
-        "actor:system-architect",
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "pattern:checklist"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-architect, complexity:medium, data_sensitivity:internal, dependency:light, pattern:checklist)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_2f0d031a",
-      "size": 2,
-      "member_titles": [
-        "资产预览与交互演示",
-        "多端预览与响应式模拟"
-      ],
-      "shared_features": [
-        "actor:designer",
-        "complexity:medium",
-        "dependency:light",
-        "revenue_impact:indirect",
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:designer, complexity:medium, dependency:light, revenue_impact:indirect, timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_25201912",
-      "size": 2,
-      "member_titles": [
-        "用户反馈收集与模型优化",
-        "用户反馈回路"
-      ],
-      "shared_features": [
-        "actor:end-user",
-        "entity:user-feedback",
-        "revenue_impact:indirect",
-        "timeline_priority:phase-1",
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, entity:user-feedback, revenue_impact:indirect, timeline_priority:phase-1, user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_8cf40ff5",
-      "size": 3,
-      "member_titles": [
-        "图表组件引擎",
-        "Pitch Deck 页面渲染引擎",
-        "图形渲染引擎集成"
-      ],
-      "shared_features": [
-        "actor:end-user",
-        "timeline_priority:mvp",
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, timeline_priority:mvp, user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_326090a0",
-      "size": 3,
-      "member_titles": [
-        "多情景模型配置引擎",
-        "参数概率分布定义与管理",
-        "财务模型参数输入与校验"
-      ],
-      "shared_features": [
-        "actor:end-user",
-        "domain:financial-modeling",
-        "timeline_priority:mvp",
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, domain:financial-modeling, timeline_priority:mvp, user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_da1874c2",
-      "size": 2,
-      "member_titles": [
-        "行业最佳实践参考库",
-        "模板库与知识库"
-      ],
-      "shared_features": [
-        "data_sensitivity:public",
-        "dependency:light",
-        "pattern:crud",
-        "pattern:search",
-        "revenue_impact:indirect"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:public, dependency:light, pattern:crud, pattern:search, revenue_impact:indirect)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_e9419b51",
-      "size": 2,
-      "member_titles": [
-        "评估模型热切换与版本管理",
-        "模型版本管理与发布"
-      ],
-      "shared_features": [
-        "actor:system-admin",
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "entity:model-version"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-admin, complexity:medium, data_sensitivity:internal, dependency:light, entity:model-version)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_c15fb994",
-      "size": 4,
-      "member_titles": [
-        "用户分群与触发条件匹配服务",
-        "AI召回策略生成核心",
-        "召回渠道适配与优先级决策",
-        "批量召回策略生成与调度"
-      ],
-      "shared_features": [
-        "actor:recall-engine",
-        "data_sensitivity:internal",
-        "user_facing:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:recall-engine, data_sensitivity:internal, user_facing:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_c23e5e29",
-      "size": 3,
-      "member_titles": [
-        "置信度评估与质量监控",
-        "埋点数据验证与健康度监控",
-        "数据血缘追踪与质量监控"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "pattern:alerting",
-        "revenue_impact:supporting",
-        "timeline_priority:phase-1",
-        "user_facing:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, pattern:alerting, revenue_impact:supporting, timeline_priority:phase-1, user_facing:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_8f045bf5",
-      "size": 2,
-      "member_titles": [
-        "转化率异常检测引擎",
-        "用户行为漏斗分析"
-      ],
-      "shared_features": [
-        "actor:data-analyst",
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "revenue_impact:indirect"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:data-analyst, complexity:medium, data_sensitivity:internal, dependency:light, revenue_impact:indirect)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_582bb4fe",
-      "size": 3,
-      "member_titles": [
-        "会话回放播放器",
-        "对话上下文管理器",
-        "会话检索与筛选引擎"
-      ],
-      "shared_features": [
-        "data_sensitivity:sensitive",
-        "revenue_impact:supporting",
-        "user_facing:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:sensitive, revenue_impact:supporting, user_facing:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_cc1345d8",
-      "size": 3,
-      "member_titles": [
-        "模型调用成本追踪",
-        "资产引用追踪与使用统计",
-        "使用日志与效果追踪"
-      ],
-      "shared_features": [
-        "actor:system",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "nfr:audit-trail",
-        "revenue_impact:indirect"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, data_sensitivity:internal, dependency:light, nfr:audit-trail, revenue_impact:indirect)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_1a274aee",
-      "size": 2,
-      "member_titles": [
-        "关键路径算法与排期引擎",
-        "甘特图排期与时间线规划"
-      ],
-      "shared_features": [
-        "complexity:high",
+        "biz_metrics:mttr",
+        "complexity:very-high",
         "data_sensitivity:internal",
         "dependency:heavy",
-        "domain:project-scheduling"
+        "nfr:low-latency"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:high, data_sensitivity:internal, dependency:heavy, domain:project-scheduling)",
-      "action": "extract_shared"
+      "reason": "Embedding+Jaccard hybrid (shared tags: biz_metrics:mttr, complexity:very-high, data_sensitivity:internal, dependency:heavy, nfr:low-latency)",
+      "action": "keep_separate"
     },
     {
-      "id": "cluster_cece2895",
-      "size": 2,
+      "id": "cluster_14d3f70a",
+      "size": 3,
       "member_titles": [
-        "变更报告生成器",
-        "迁移脚本生成器"
+        "制品构建与存储",
+        "镜像仓库集成",
+        "Docker 镜像构建管道"
+      ],
+      "shared_features": [
+        "complexity:medium",
+        "revenue_impact:supporting",
+        "timeline_priority:mvp",
+        "user_facing:internal"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, revenue_impact:supporting, timeline_priority:mvp, user_facing:internal)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_49f8bdde",
+      "size": 3,
+      "member_titles": [
+        "版本管理与回滚",
+        "集群连接与部署执行",
+        "Kubernetes 配置生成器"
       ],
       "shared_features": [
         "actor:developer",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "domain:schema-version-mgmt",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:developer, data_sensitivity:internal, dependency:light, domain:schema-version-mgmt, revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_aa8add3b",
-      "size": 2,
-      "member_titles": [
-        "时序数据库写入适配器",
-        "消息队列缓冲层"
-      ],
-      "shared_features": [
-        "actor:system-scheduler",
-        "data_sensitivity:sensitive",
-        "domain:event-tracking",
-        "entity:event",
-        "nfr:high-throughput"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, data_sensitivity:sensitive, domain:event-tracking, entity:event, nfr:high-throughput)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_9913e61e",
-      "size": 2,
-      "member_titles": [
-        "故障域隔离建议生成",
-        "单点故障风险检测"
-      ],
-      "shared_features": [
-        "actor:sre",
-        "actor:system-architect",
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "dependency:light"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:sre, actor:system-architect, complexity:medium, data_sensitivity:internal, dependency:light)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_56822dfa",
-      "size": 2,
-      "member_titles": [
-        "竞品自动发现引擎",
-        "竞品数据采集器"
-      ],
-      "shared_features": [
-        "actor:system-scheduler",
-        "data_sensitivity:internal",
-        "dependency:heavy",
-        "entity:competitor",
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, data_sensitivity:internal, dependency:heavy, entity:competitor, timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_6ca9a8e0",
-      "size": 2,
-      "member_titles": [
-        "文档创建与编辑服务",
-        "文档搜索与过滤"
-      ],
-      "shared_features": [
-        "actor:end-user",
-        "dependency:independent",
-        "entity:document",
-        "nfr:low-latency",
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, dependency:independent, entity:document, nfr:low-latency, user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_111be988",
-      "size": 2,
-      "member_titles": [
-        "外部密钥管理系统集成（阿里云 KMS）",
-        "Secret 资源加密存储与访问控制"
-      ],
-      "shared_features": [
-        "complexity:medium",
-        "data_sensitivity:critical",
-        "domain:k8s-secret-mgmt",
-        "entity:secret",
-        "revenue_impact:supporting"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:critical, domain:k8s-secret-mgmt, entity:secret, revenue_impact:supporting)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_cb7156ef",
-      "size": 2,
-      "member_titles": [
-        "布局推荐引擎",
-        "交互逻辑生成器"
-      ],
-      "shared_features": [
-        "actor:system-ai",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "pattern:rule-based",
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-ai, data_sensitivity:internal, dependency:light, pattern:rule-based, timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_91dae370",
-      "size": 2,
-      "member_titles": [
-        "资产文件存储与版本控制",
-        "文件存储与 CDN 加速"
-      ],
-      "shared_features": [
-        "actor:system",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "nfr:high-availability",
-        "pattern:object-storage"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, data_sensitivity:internal, dependency:light, nfr:high-availability, pattern:object-storage)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_2f9a3697",
-      "size": 2,
-      "member_titles": [
-        "关系推断与依赖图构建",
-        "依赖关系图谱管理"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "entity:dependency",
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, entity:dependency, timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_d3a1ad06",
-      "size": 2,
-      "member_titles": [
-        "根因分析报告生成与推送",
-        "根因提示前端展示组件"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "dependency:light",
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, dependency:light, user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_17f10481",
-      "size": 2,
-      "member_titles": [
-        "数据源健康监控与降级策略",
-        "异常处理与降级策略"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "dependency:light",
-        "entity:alert",
-        "nfr:observability",
-        "pattern:circuit-breaker"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, dependency:light, entity:alert, nfr:observability, pattern:circuit-breaker)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_da93c8ff",
-      "size": 2,
-      "member_titles": [
-        "收入数据采集与聚合层",
-        "数据源聚合与预处理"
-      ],
-      "shared_features": [
-        "complexity:medium",
-        "dependency:heavy",
+        "domain:deployment-automation",
+        "revenue_impact:supporting",
         "timeline_priority:mvp",
         "user_facing:internal"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, dependency:heavy, timeline_priority:mvp, user_facing:internal)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:developer, domain:deployment-automation, revenue_impact:supporting, timeline_priority:mvp, user_facing:internal)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_3bc87042",
+      "id": "cluster_68dd5f3d",
       "size": 2,
       "member_titles": [
-        "多轮对话信息收集模块",
-        "LLM 文档生成编排器"
+        "分析报告结构化输出与导出",
+        "推荐结果生成与解释"
       ],
       "shared_features": [
-        "complexity:medium",
-        "data_sensitivity:sensitive",
-        "domain:legal-doc-gen",
-        "revenue_impact:direct",
-        "timeline_priority:mvp"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:sensitive, domain:legal-doc-gen, revenue_impact:direct, timeline_priority:mvp)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_22e183d8",
-      "size": 2,
-      "member_titles": [
-        "LLM 调用管理与成本优化",
-        "对话性能与成本优化"
-      ],
-      "shared_features": [
-        "complexity:medium",
+        "actor:end-user",
         "data_sensitivity:internal",
-        "pattern:circuit-breaker",
+        "dependency:light",
+        "domain:report-generation",
+        "pattern:template-rendering"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, data_sensitivity:internal, dependency:light, domain:report-generation, pattern:template-rendering)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_c2559f69",
+      "size": 2,
+      "member_titles": [
+        "章节级并发生成调度器",
+        "章节类型到 Prompt 模板映射引擎"
+      ],
+      "shared_features": [
+        "data_sensitivity:internal",
+        "domain:doc-generation",
         "revenue_impact:supporting",
+        "timeline_priority:mvp",
         "user_facing:internal"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:internal, pattern:circuit-breaker, revenue_impact:supporting, user_facing:internal)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, domain:doc-generation, revenue_impact:supporting, timeline_priority:mvp, user_facing:internal)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_60d84b36",
-      "size": 2,
+      "id": "cluster_695ed26b",
+      "size": 4,
       "member_titles": [
-        "标准查询响应格式化器",
-        "统一查询 API 编排层"
-      ],
-      "shared_features": [
-        "actor:end-user",
-        "data_sensitivity:sensitive",
-        "entity:response",
-        "nfr:security",
-        "tech_stack:python-fastapi"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, data_sensitivity:sensitive, entity:response, nfr:security, tech_stack:python-fastapi)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_28817a14",
-      "size": 2,
-      "member_titles": [
-        "约束条件调整与重新推荐",
-        "推荐结果持久化与历史记录"
+        "架构图导出服务",
+        "架构图主题与样式配置",
+        "架构图版本与协作管理",
+        "前端交互式渲染层"
       ],
       "shared_features": [
         "actor:end-user",
         "data_sensitivity:internal",
-        "domain:tech-stack-recommendation",
-        "timeline_priority:phase-1"
+        "domain:architecture-visualization",
+        "revenue_impact:indirect",
+        "user_facing:user-facing"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, data_sensitivity:internal, domain:tech-stack-recommendation, timeline_priority:phase-1)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, data_sensitivity:internal, domain:architecture-visualization, revenue_impact:indirect, user_facing:user-facing)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_74e4fe34",
+      "id": "cluster_8ab7dd73",
       "size": 2,
       "member_titles": [
-        "组件智能识别与分类",
-        "Pitch Deck 页面组装与排版"
+        "K8s RollingUpdate 策略配置",
+        "蓝绿部署环境管理"
+      ],
+      "shared_features": [
+        "actor:system-operator",
+        "biz_metrics:deployment-success-rate",
+        "data_sensitivity:internal",
+        "domain:deployment-orchestration",
+        "revenue_impact:supporting"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-operator, biz_metrics:deployment-success-rate, data_sensitivity:internal, domain:deployment-orchestration, revenue_impact:supporting)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_b67327c0",
+      "size": 2,
+      "member_titles": [
+        "评分维度配置管理",
+        "加权总分计算与评分卡生成"
       ],
       "shared_features": [
         "actor:system",
-        "complexity:medium",
-        "data_sensitivity:internal",
-        "revenue_impact:direct",
-        "tech_stack:python"
+        "complexity:low",
+        "domain:business-model-scoring",
+        "tech_stack:fastapi-postgresql",
+        "timeline_priority:mvp"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, complexity:medium, data_sensitivity:internal, revenue_impact:direct, tech_stack:python)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, complexity:low, domain:business-model-scoring, tech_stack:fastapi-postgresql, timeline_priority:mvp)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_fbc2ac76",
+      "id": "cluster_18cd4481",
       "size": 2,
       "member_titles": [
-        "负载阈值预警规则配置",
-        "配置灰度发布控制器"
+        "Swagger UI 集成与可视化",
+        "文档预览与导出服务"
+      ],
+      "shared_features": [
+        "actor:end-user",
+        "complexity:low",
+        "data_sensitivity:internal",
+        "nfr:usability",
+        "timeline_priority:mvp"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, complexity:low, data_sensitivity:internal, nfr:usability, timeline_priority:mvp)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_8de1f6f9",
+      "size": 2,
+      "member_titles": [
+        "事件接收与验证网关",
+        "后端埋点接收API与数据管道"
+      ],
+      "shared_features": [
+        "complexity:medium",
+        "data_sensitivity:internal",
+        "nfr:high-throughput",
+        "nfr:low-latency",
+        "pattern:api-gateway"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:internal, nfr:high-throughput, nfr:low-latency, pattern:api-gateway)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_7657a7eb",
+      "size": 2,
+      "member_titles": [
+        "优化建议生成与排序",
+        "优化建议生成"
+      ],
+      "shared_features": [
+        "complexity:medium",
+        "data_sensitivity:internal",
+        "user_facing:user-facing"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:internal, user_facing:user-facing)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_4d356d20",
+      "size": 2,
+      "member_titles": [
+        "埋点数据质量监控与告警",
+        "数据接入监控与告警"
+      ],
+      "shared_features": [
+        "complexity:medium",
+        "data_sensitivity:internal",
+        "nfr:real-time",
+        "pattern:monitoring",
+        "revenue_impact:supporting"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:internal, nfr:real-time, pattern:monitoring, revenue_impact:supporting)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_0661f42b",
+      "size": 2,
+      "member_titles": [
+        "报表导出与调度系统",
+        "导出与集成"
+      ],
+      "shared_features": [
+        "complexity:medium",
+        "dependency:light",
+        "entity:export-task",
+        "timeline_priority:phase-1"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, dependency:light, entity:export-task, timeline_priority:phase-1)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_3291ac4a",
+      "size": 4,
+      "member_titles": [
+        "指标定义与元数据管理",
+        "指标定义与计算引擎",
+        "可视化指标构建器",
+        "指标采集与存储"
+      ],
+      "shared_features": [
+        "data_sensitivity:internal",
+        "entity:metric",
+        "timeline_priority:mvp"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, entity:metric, timeline_priority:mvp)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_0d153a8f",
+      "size": 2,
+      "member_titles": [
+        "图表组件库与布局引擎",
+        "图表生成与嵌入"
+      ],
+      "shared_features": [
+        "domain:data-visualization",
+        "entity:chart",
+        "timeline_priority:mvp",
+        "user_facing:user-facing"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: domain:data-visualization, entity:chart, timeline_priority:mvp, user_facing:user-facing)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_a365000d",
+      "size": 2,
+      "member_titles": [
+        "缓存失效与重算策略",
+        "回溯补算与数据修复调度器"
       ],
       "shared_features": [
         "actor:admin",
         "data_sensitivity:internal",
-        "domain:config-management",
-        "revenue_impact:supporting"
+        "dependency:heavy",
+        "nfr:fault-tolerance",
+        "pattern:async-task"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:admin, data_sensitivity:internal, domain:config-management, revenue_impact:supporting)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:admin, data_sensitivity:internal, dependency:heavy, nfr:fault-tolerance, pattern:async-task)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_226c153e",
+      "id": "cluster_13e13ec9",
       "size": 2,
       "member_titles": [
-        "原型渲染适配器",
-        "数据包到 Prompt 变量映射"
+        "命名规范化与一致性检查",
+        "范式规范化与反范式化建议"
       ],
       "shared_features": [
         "actor:system",
-        "domain:data-transformation",
+        "data_sensitivity:internal",
+        "dependency:independent",
+        "revenue_impact:supporting",
+        "tech_stack:python"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, data_sensitivity:internal, dependency:independent, revenue_impact:supporting, tech_stack:python)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_fff600de",
+      "size": 2,
+      "member_titles": [
+        "决策规则引擎",
+        "数据库类型与引擎选择"
+      ],
+      "shared_features": [
+        "data_sensitivity:internal",
         "revenue_impact:supporting",
         "timeline_priority:mvp",
         "user_facing:internal"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, domain:data-transformation, revenue_impact:supporting, timeline_priority:mvp, user_facing:internal)",
-      "action": "extract_shared"
+      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, revenue_impact:supporting, timeline_priority:mvp, user_facing:internal)",
+      "action": "keep_separate"
     },
     {
-      "id": "cluster_45769a77",
+      "id": "cluster_1e7330b9",
       "size": 2,
       "member_titles": [
-        "用户标签实时查询服务",
-        "在线推理服务"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "dependency:heavy",
-        "entity:user",
-        "nfr:high-availability",
-        "nfr:low-latency"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, dependency:heavy, entity:user, nfr:high-availability, nfr:low-latency)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_d1093a2b",
-      "size": 2,
-      "member_titles": [
-        "增长模型推荐系统",
-        "增长数据看板"
-      ],
-      "shared_features": [
-        "actor:founder",
-        "actor:growth-team",
-        "data_sensitivity:internal",
-        "dependency:light",
-        "user_facing:internal"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:founder, actor:growth-team, data_sensitivity:internal, dependency:light, user_facing:internal)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_87b4325d",
-      "size": 2,
-      "member_titles": [
-        "假设验证实验框架",
-        "A/B测试框架"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "timeline_priority:phase-2"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, timeline_priority:phase-2)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_779a1b24",
-      "size": 2,
-      "member_titles": [
-        "用户画像生成",
-        "用户画像汇总服务"
-      ],
-      "shared_features": [
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_c2e19b14",
-      "size": 2,
-      "member_titles": [
-        "市场规模估算",
-        "趋势预测与机会识别"
+        "校准结果审核与人工调整界面",
+        "用户权重调整与重新推荐"
       ],
       "shared_features": [
         "actor:end-user",
         "data_sensitivity:internal",
         "dependency:light",
-        "nfr:explainability",
-        "user_facing:user-facing"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, data_sensitivity:internal, dependency:light, nfr:explainability, user_facing:user-facing)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_e883bc37",
-      "size": 2,
-      "member_titles": [
-        "画布状态管理与历史记录",
-        "执行结果回写与状态同步"
-      ],
-      "shared_features": [
-        "data_sensitivity:internal",
-        "dependency:light",
-        "domain:state-management",
+        "revenue_impact:indirect",
         "timeline_priority:mvp"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, dependency:light, domain:state-management, timeline_priority:mvp)",
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, data_sensitivity:internal, dependency:light, revenue_impact:indirect, timeline_priority:mvp)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_bf072e69",
+      "size": 2,
+      "member_titles": [
+        "行业标准旅程模板库查询",
+        "模板引擎与样式管理"
+      ],
+      "shared_features": [
+        "actor:system",
+        "complexity:low",
+        "dependency:independent",
+        "pattern:crud",
+        "revenue_impact:supporting"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, complexity:low, dependency:independent, pattern:crud, revenue_impact:supporting)",
       "action": "extract_shared"
     },
     {
-      "id": "cluster_a4f13dbf",
+      "id": "cluster_89e7dfec",
       "size": 2,
       "member_titles": [
-        "规则定义与表达式引擎",
-        "查询条件构建器"
+        "PRD 文档存储与版本控制",
+        "需求文档管理"
       ],
       "shared_features": [
         "complexity:medium",
+        "data_sensitivity:sensitive",
+        "nfr:audit-trail",
+        "pattern:crud",
+        "pattern:versioning"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:sensitive, nfr:audit-trail, pattern:crud, pattern:versioning)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_368cabc2",
+      "size": 2,
+      "member_titles": [
+        "发票与税务管理",
+        "账单生成与结算"
+      ],
+      "shared_features": [
+        "actor:end-user",
+        "actor:finance-admin",
+        "complexity:medium",
+        "data_sensitivity:sensitive",
+        "dependency:heavy"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, actor:finance-admin, complexity:medium, data_sensitivity:sensitive, dependency:heavy)",
+      "action": "extract_shared"
+    },
+    {
+      "id": "cluster_d28b7b92",
+      "size": 2,
+      "member_titles": [
+        "原始数据格式转换与标准化",
+        "结构化日志解析与规范化"
+      ],
+      "shared_features": [
+        "actor:system-scheduler",
+        "complexity:medium",
         "data_sensitivity:internal",
-        "dependency:independent",
         "revenue_impact:supporting",
         "timeline_priority:mvp"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: complexity:medium, data_sensitivity:internal, dependency:independent, revenue_impact:supporting, timeline_priority:mvp)",
-      "action": "extract_shared"
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, complexity:medium, data_sensitivity:internal, revenue_impact:supporting, timeline_priority:mvp)",
+      "action": "keep_separate"
     },
     {
-      "id": "cluster_9538b71b",
+      "id": "cluster_74b1f3c3",
       "size": 2,
       "member_titles": [
-        "模板引擎与品牌定制",
-        "生成配置与个性化设置"
+        "异常流量检测与预警",
+        "异常检测模型引擎"
+      ],
+      "shared_features": [
+        "data_sensitivity:internal",
+        "dependency:light",
+        "nfr:low-latency",
+        "timeline_priority:phase-1",
+        "user_facing:internal"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: data_sensitivity:internal, dependency:light, nfr:low-latency, timeline_priority:phase-1, user_facing:internal)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_5f62520e",
+      "size": 2,
+      "member_titles": [
+        "增量数据拉取与去重合并",
+        "收入数据采集与存储"
+      ],
+      "shared_features": [
+        "actor:system-scheduler",
+        "nfr:data-consistency",
+        "nfr:idempotency",
+        "timeline_priority:mvp",
+        "user_facing:internal"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system-scheduler, nfr:data-consistency, nfr:idempotency, timeline_priority:mvp, user_facing:internal)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_c74d8be0",
+      "size": 2,
+      "member_titles": [
+        "技术栈对比分析",
+        "方案对比与结果展示"
       ],
       "shared_features": [
         "actor:end-user",
-        "data_sensitivity:internal",
-        "pattern:crud",
-        "revenue_impact:indirect",
-        "timeline_priority:phase-1"
-      ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, data_sensitivity:internal, pattern:crud, revenue_impact:indirect, timeline_priority:phase-1)",
-      "action": "extract_shared"
-    },
-    {
-      "id": "cluster_3040c8a9",
-      "size": 2,
-      "member_titles": [
-        "工时报表与效率分析",
-        "成本核算与预算跟踪"
-      ],
-      "shared_features": [
-        "actor:project-manager",
         "complexity:medium",
         "dependency:light",
-        "entity:team-member",
-        "entity:timesheet"
+        "revenue_impact:indirect",
+        "user_facing:user-facing"
       ],
-      "reason": "Embedding+Jaccard hybrid (shared tags: actor:project-manager, complexity:medium, dependency:light, entity:team-member, entity:timesheet)",
-      "action": "extract_shared"
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:end-user, complexity:medium, dependency:light, revenue_impact:indirect, user_facing:user-facing)",
+      "action": "keep_separate"
+    },
+    {
+      "id": "cluster_9339ec33",
+      "size": 2,
+      "member_titles": [
+        "UTM 参数解析与规范化服务",
+        "用户画像数据获取与规范化"
+      ],
+      "shared_features": [
+        "actor:system",
+        "complexity:low",
+        "data_sensitivity:internal",
+        "revenue_impact:supporting",
+        "timeline_priority:mvp"
+      ],
+      "reason": "Embedding+Jaccard hybrid (shared tags: actor:system, complexity:low, data_sensitivity:internal, revenue_impact:supporting, timeline_priority:mvp)",
+      "action": "keep_separate"
     }
   ]
 }

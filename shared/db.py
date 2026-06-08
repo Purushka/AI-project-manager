@@ -260,12 +260,10 @@ class Database:
             return self._row_to_node(row, conn)
 
     def get_children(self, node_id: str) -> list[Node]:
+        """Get child nodes using the parent_id column (single truth source)."""
         with self._connect() as conn:
             rows = conn.execute(
-                """SELECT n.* FROM nodes n
-                   JOIN edges e ON e.to_id = n.node_id
-                   WHERE e.from_id = ? AND e.edge_type = 'parent'
-                   ORDER BY n.node_id""",
+                "SELECT * FROM nodes WHERE parent_id = ? ORDER BY node_id",
                 (node_id,),
             ).fetchall()
             return [self._row_to_node(r, conn) for r in rows]
@@ -614,8 +612,9 @@ class Database:
 
     def _row_to_node(self, row: sqlite3.Row, conn: sqlite3.Connection) -> Node:
         node_id = row["node_id"]
+        # Children: use parent_id column (single truth source), NOT edges table
         children_rows = conn.execute(
-            "SELECT to_id FROM edges WHERE from_id = ? AND edge_type = 'parent'",
+            "SELECT node_id FROM nodes WHERE parent_id = ?",
             (node_id,),
         ).fetchall()
         dep_rows = conn.execute(
@@ -639,7 +638,7 @@ class Database:
             version=row["version"] if "version" in row.keys() else 1,
             compacted=row["compacted"] if "compacted" in row.keys() else "",
             constraints=row["constraints"] if "constraints" in row.keys() else "[]",
-            children_ids=[r["to_id"] for r in children_rows],
+            children_ids=[r["node_id"] for r in children_rows],
             dependency_ids=[r["to_id"] for r in dep_rows],
             shared_component_ids=[r["to_id"] for r in shared_rows],
             created_at=datetime.fromisoformat(row["created_at"]),

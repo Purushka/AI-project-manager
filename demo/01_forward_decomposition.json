@@ -1,7 +1,7 @@
 {
-  "rounds": 1,
-  "total_nodes_created": 0,
-  "total_nodes": 769,
+  "rounds": 5,
+  "total_nodes_created": 450,
+  "total_nodes": 451,
   "max_depth": 4,
   "parallel_workers": 8
 }

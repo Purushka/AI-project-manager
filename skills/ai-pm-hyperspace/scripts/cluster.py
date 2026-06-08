@@ -429,10 +429,12 @@ def embedding_cluster(
         ]
         if len(high_weight_shared) >= 3:
             strategy = MergeStrategy.MERGE_DUPLICATES
-        elif len(shared) >= 2:
+        elif len(high_weight_shared) >= 1:
+            # At least one high-signal axis shared → safe to extract
             strategy = MergeStrategy.EXTRACT_SHARED
         else:
-            strategy = MergeStrategy.EXTRACT_SHARED
+            # Only low-signal axes (data_sensitivity, user_facing, etc.) → reject
+            strategy = MergeStrategy.KEEP_SEPARATE
 
         clusters.append(Cluster(
             id=gid,
